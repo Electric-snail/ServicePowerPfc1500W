@@ -58,23 +58,49 @@ typedef struct {
     float f32OutMin;
 }PI_INC_CTRL_PARAM_T;
 
-typedef struct {
-    float f32Kp;
-    float f32Ki;
-    float f32Ts;
-    float f32KiTs;
-    float f32ErrN;
-    float f32ErrN_1;
-    float f32YN;
-    float f32YN_1;
+typedef struct{
     float f32Ref;
     float f32Fb;
-    float f32ErrMax;
-    float f32ErrMin;
-    float f32OutMax;
-    float f32OutMin;
-    float f32Test0;
-}PI_POS_CTRL_PARAM_T;
+}PI_POS_IN_T;
+
+typedef struct{
+    float f32Kp;
+    float f32KiTs;
+    float f32IntegrateMax;
+     float f32IntegrateMin;
+     float f32OutMax;
+     float f32OutMin;
+}PI_POS_COFF_T;
+
+typedef struct{
+    float f32Err;
+    float f32Integrate;
+}PI_POS_INNER_T;
+
+typedef struct{
+    float f32Out;
+}PI_POS_OUT_T;
+
+
+typedef struct {
+	PI_POS_IN_T 				stIn;
+	PI_POS_COFF_T			stCoff;
+	PI_POS_INNER_T 		stInner;
+	PI_POS_OUT_T           stOut;
+}PI_POS_T;
+
+typedef struct {
+    float f32Ref;
+    float f32Fb;
+    float f32Gain;
+}PI_POS_GAIN_IN_T;
+
+typedef struct {
+    PI_POS_GAIN_IN_T 		stIn;
+    PI_POS_COFF_T			stCoff;
+    PI_POS_INNER_T 		    stInner;
+    PI_POS_OUT_T            stOut;
+}PI_GAIN_POS_T;
 
 #define RefTargeSoftStart(RefVal, Step, CurVal)\
 {\
@@ -139,6 +165,6 @@ void Ctrl2z2p(CTRL_2Z2P_VARS_T * v, Ctrl2Z2PCoeffs* k);
     Ctrl2P2ZVars.out1 = Ctrl2P2ZVars.out;
 
 extern void Loop_2p2zCtrlTest(void);
-
-
+extern void ctrl_pi_position(PI_POS_T* p_stPI);
+extern void set_pi_position_integrate(PI_POS_T* p_stPI, float f32Value);
 #endif /* PUBLIC_PUBLIC_INC_DC_MATH_H_ */

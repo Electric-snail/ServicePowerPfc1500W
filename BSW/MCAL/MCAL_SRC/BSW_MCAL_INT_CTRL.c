@@ -7,6 +7,7 @@ Purpose :
 #include "MCAL_INC/BSW_MCAL_INT_CTRL.h"
 #include "MCAL_INC/BSW_MCAL_MEMCFG.h"
 #include "ISR_INC/BSW_ISR_CPUTIMER.H"
+#include "ISR_INC/BSW_ISR_ADC.H"
 
 const INT_PARAM_CFG gc_stIntParamCfg[] = REG_INT_PARAM_CFG_TAB;
 

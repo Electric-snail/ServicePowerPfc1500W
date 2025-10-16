@@ -83,11 +83,11 @@ void bsw_mcal_flash_init(void)
     // Minimum waitstates required for the flash operating at a given CPU rate
     // must be characterized by TI. Refer to the datasheet for the latest
     // information.
-#if (SYS_CPU_CLK_FRQ_M == 120)
+#if (SYS_CPU_CLK_FREQ_M == 120)
     Flash0CtrlRegs.FRDCNTL.bit.RWAIT = 0x05;
-#elif(SYS_CPU_CLK_FRQ_M == 100)
+#elif(SYS_CPU_CLK_FREQ_M == 100)
     Flash0CtrlRegs.FRDCNTL.bit.RWAIT = 0x02; //0x04 before
-#elif(SYS_CPU_CLK_FRQ_M == 80)
+#elif(SYS_CPU_CLK_FREQ_M == 80)
     Flash0CtrlRegs.FRDCNTL.bit.RWAIT = 0x03;
 #else
     Flash0CtrlRegs.FRDCNTL.bit.RWAIT = 0x05;

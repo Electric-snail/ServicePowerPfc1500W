@@ -10,122 +10,40 @@
 
 #ifndef DLLX64
 #include "MCAL/MCAL_INC/BSW_MCAL_ADC.h"
+#include "ENV_CFG/HARDWARE_ENV_CFG.H"
 #endif
 
-#define HW_ADC_REF_VOLT                   3.3f   /* ADC reference voltage*/
-#define SW_ADC_MAX_VAL                    4096.0f
 
-#define FULL_RANGE_HVIN_V                 1031.25f//986.84f
-#define FULL_RANGE_LVBAT_V                66.0f//
-#define FULL_RANGE_LVOUT_V                19.8f//20.497f
-#define FULL_RANGE_LVOUT_V_R              21.06f//19.8f
-#define FULL_RANGE_LVOUT_I                110.0f//73.3f
-#define FULL_RANGE_1V24_V                 3.3f//
-#define FULL_RANGE_HW_REV_V               3.3f//
+#define 	VIN_L_KP                              		 				(FULL_RANGE_VIN_L/4095)
+//#define 	VIN_L_OFFSET                     						(HW_OFFSET_VIN_L * FULL_RANGE_VIN_L/ HW_ADC_REF_VOLT)
 
-#define HW_OFFSET_HVIN_V_SAMPLE_POINT     0.0f      /* hardware offset Voltage for HVIN_V   */
-#define HW_OFFSET_LVBAT_V_SAMPLE_POINT    1.648f      /* hardware offset Voltage for LVBAT_V  */
-#define HW_OFFSET_LVOUT_V_SAMPLE_POINT    0.0f      /* hardware offset Voltage for LVOUT_V  */
-#define HW_OFFSET_LVOUT_V_R_SAMPLE_POINT  0.0f      /* hardware offset Voltage for LVOUT_V_R*/
-#define HW_OFFSET_LVOUT_I_SAMPLE_POINT    1.648f     /* hardware offset Current for LVOUT_I  */
-#define HW_OFFSET_1V24_V_SAMPLE_POINT     0.0f      /* hardware offset Voltage for 1V25_V   */
-#define HW_OFFSET_HW_REV_V_SAMPLE_POINT   0.0f      /* hardware    */
+#define 	VIN_N_KP                              						(FULL_RANGE_VIN_N/4095)
+//#define 	VIN_N_OFFSET                    		 				(HW_OFFSET_VIN_N * FULL_RANGE_VIN_N/ HW_ADC_REF_VOLT)
 
-#define HVIN_V_KP                         (FULL_RANGE_HVIN_V/ SW_ADC_MAX_VAL)
-#define HVIN_V_OFFSET                     (HW_OFFSET_HVIN_V_SAMPLE_POINT * FULL_RANGE_HVIN_V/ HW_ADC_REF_VOLT)
+#define 	VPFC_KP                               						(FULL_RANGE_VPFC/4095)
+#define 	VPFC_OFFSET                     						(HW_OFFSET_VPFC* FULL_RANGE_VPFC/ HW_ADC_REF_VOLT)
 
-#define LVBAT_V_KP                        (FULL_RANGE_LVBAT_V/ SW_ADC_MAX_VAL)
-#define LVBAT_V_OFFSET                    (HW_OFFSET_LVBAT_V_SAMPLE_POINT * FULL_RANGE_LVBAT_V/ HW_ADC_REF_VOLT)
+#define 	CUR_INDUCTOR_L_KP             				(FULL_RANGE_CUR_INDUCTOR_L/4095)
+#define 	CUR_INDUCTOR_L_OFFSET           		(HW_OFFSET_CUR_INDUCTOR_L *  FULL_RANGE_CUR_INDUCTOR_L/ HW_ADC_REF_VOLT)
 
-#define LVOUT_V_KP                        (FULL_RANGE_LVOUT_V/ SW_ADC_MAX_VAL)
-#define LVOUT_V_OFFSET                    (HW_OFFSET_LVOUT_V_SAMPLE_POINT * FULL_RANGE_LVOUT_V/ HW_ADC_REF_VOLT)
+#define 	CUR_INDUCTOR_H_KP             				(FULL_RANGE_CUR_INDUCTOR_H/4095)
+#define 	CUR_INDUCTOR_H_OFFSET         			 (HW_OFFSET_CUR_INDUCTOR_H *  FULL_RANGE_CUR_INDUCTOR_H/ HW_ADC_REF_VOLT)
 
-#define LVOUT_V_R_KP                      (FULL_RANGE_LVOUT_V_R/ SW_ADC_MAX_VAL)
-#define LVOUT_V_R_OFFSET                  (HW_OFFSET_LVOUT_V_R_SAMPLE_POINT * FULL_RANGE_LVOUT_V_R/ HW_ADC_REF_VOLT)
+#define 	IIN_L_KP             											(FULL_RANGE_IIN_L/4095)
+#define 	IIN_L_OFFSET           									(HW_OFFSET_IIN_L *  FULL_RANGE_IIN_L/ HW_ADC_REF_VOLT)
 
-#define LVOUT_I_KP                        (FULL_RANGE_LVOUT_I/ SW_ADC_MAX_VAL)
-#define LVOUT_I_OFFSET                    (HW_OFFSET_LVOUT_I_SAMPLE_POINT * FULL_RANGE_LVOUT_I/ HW_ADC_REF_VOLT)
+#define 	IIN_H_KP             											(FULL_RANGE_IIN_H/4095)
+#define 	IIN_H_OFFSET           									(HW_OFFSET_IIN_H *  FULL_RANGE_IIN_H/ HW_ADC_REF_VOLT)
 
-#define LV1V24_V_KP                       (FULL_RANGE_1V24_V/ SW_ADC_MAX_VAL)
-#define LV1V24_V_OFFSET                   (HW_OFFSET_1V24_V_SAMPLE_POINT * FULL_RANGE_1V24_V/ HW_ADC_REF_VOLT)
 
-#define HW_REV_V_KP                       (FULL_RANGE_HW_REV_V/ SW_ADC_MAX_VAL)
-#define HW_REV_V_OFFSET                   (HW_OFFSET_HW_REV_V_SAMPLE_POINT * FULL_RANGE_HW_REV_V/ HW_ADC_REF_VOLT)
+#define 		bsw_hal_calc_vin_l()    							((FLOAT32)AdcaResultRegs.ADCRESULT2    * 	VIN_L_KP    -  VIN_L_OFFSET)
+#define 		bsw_hal_calc_vin_n()    							((FLOAT32)AdccResultRegs.ADCRESULT2    * 	VIN_N_KP    -  VIN_N_OFFSET)
 
-#ifndef DLLX64
-#if (OVERSAMPLED == 0)
-#define u16GetLVOUT_V_AdcVal()          AdcaResultRegs.ADCRESULT1
-#define u16GetLVBAT_V_AdcVal()          AdcaResultRegs.ADCRESULT2
+#define 		bsw_hal_calc_iin_l()									((FLOAT32)AdcaResultRegs.ADCRESULT1    * 	IIN_L_KP    -  IIN_L_OFFSET)
+#define 		 bsw_hal_calc_iin_h()								((FLOAT32)AdccResultRegs.ADCRESULT1    * 	IIN_H_KP    -  IIN_H_OFFSET)
 
-#define u16GetLVOUT_I_AdcVal()          AdccResultRegs.ADCRESULT0
-#define u16GetLVOUT_V_R_AdcVal()        AdccResultRegs.ADCRESULT1
-#define u16GetHVIN_V_AdcVal()           AdccResultRegs.ADCRESULT2
-#define u16Get1V24_V_AdcVal()           AdccResultRegs.ADCRESULT4
-#else
-
-#endif
-#define u16GetHW_VER_AdcVal()               AdcaResultRegs.ADCRESULT0
-#define u16GetCASE_T_AdcVal()				AdcaResultRegs.ADCRESULT3
-#define u16GetLV_SEC_T_AdcVal()				AdcaResultRegs.ADCRESULT4
-#define u16GetHwWakeUp_AdcVal()				AdcaResultRegs.ADCRESULT5
-#define u16GetHV_PRI_T_AdcVal()             AdccResultRegs.ADCRESULT3
-#define BSW_HAL_GetHvInVoltVal()     \
-        ((FLOAT32)u16GetHVIN_V_AdcVal()    * HVIN_V_KP    - HVIN_V_OFFSET)
-#define BSW_HAL_GetLvBatVoltVal()     \
-        ((FLOAT32)u16GetLVBAT_V_AdcVal()   * LVBAT_V_KP   - LVBAT_V_OFFSET)
-#define BSW_HAL_GetLvOutVoltVal()     \
-        ((FLOAT32)u16GetLVOUT_V_AdcVal()   * LVOUT_V_KP   - LVOUT_V_OFFSET)
-#define BSW_HAL_GetLvOutRVoltVal()     \
-        ((FLOAT32)u16GetLVOUT_V_R_AdcVal() * LVOUT_V_R_KP - LVOUT_V_R_OFFSET)
-#define BSW_HAL_GetLvOutCurrVal()     \
-        ((FLOAT32)u16GetLVOUT_I_AdcVal()   * LVOUT_I_KP   - LVOUT_I_OFFSET)
-#define BSW_HAL_Get1V24VoltVal()     \
-        ((FLOAT32)u16Get1V24_V_AdcVal()    * LV1V24_V_KP  - LV1V24_V_OFFSET)
-#define BSW_HAL_GetHwVerVoltVal()     \
-        ((FLOAT32)u16GetHW_VER_AdcVal()    * HW_REV_V_KP  - HW_REV_V_OFFSET)
-#else
-typedef struct {
-	unsigned short u16HwVer;
-	unsigned short u16CaseT;
-	unsigned short u16SecT;
-	unsigned short u16WakeUp;
-	unsigned short u16PriT;
-	unsigned short u16LvVout;
-	unsigned short u16LvBat;
-	unsigned short u16LvIout;
-	unsigned short u16LvVoutR;
-	unsigned short u16HvVin;
-	unsigned short u16Vref1_24;
-}SIM_SAMPLE_ADC_T;
-extern SIM_SAMPLE_ADC_T g_stAdc;
-
-#define u16GetHW_VER_AdcVal()             g_stAdc.u16HwVer
-#define u16GetCASE_T_AdcVal()             g_stAdc.u16CaseT
-#define u16GetLV_SEC_T_AdcVal()           g_stAdc.u16SecT
-#define u16GetHwWakeUp_AdcVal()           g_stAdc.u16WakeUp
-#define u16GetHV_PRI_T_AdcVal()           g_stAdc.u16PriT
-
-#define u16GetLVOUT_V_AdcVal()            g_stAdc.u16LvVout  
-#define u16GetLVBAT_V_AdcVal()            g_stAdc.u16LvBat
-
-#define u16GetLVOUT_I_AdcVal()            g_stAdc.u16LvIout
-#define u16GetLVOUT_V_R_AdcVal()          g_stAdc.u16LvVoutR  
-#define u16GetHVIN_V_AdcVal()             g_stAdc.u16HvVin
-#define u16Get1V24_V_AdcVal()             g_stAdc.u16Vref1_24
-
-#define BSW_HAL_GetHvInVoltVal()     \
-        ((FLOAT32)u16GetHVIN_V_AdcVal()    * HVIN_V_KP    - HVIN_V_OFFSET)
-#define BSW_HAL_GetLvBatVoltVal()     \
-        ((FLOAT32)u16GetLVBAT_V_AdcVal()   * LVBAT_V_KP   - LVBAT_V_OFFSET)
-#define BSW_HAL_GetLvOutVoltVal()     \
-        ((FLOAT32)u16GetLVOUT_V_AdcVal()   * LVOUT_V_KP   - LVOUT_V_OFFSET)
-#define BSW_HAL_GetLvOutRVoltVal()     \
-        ((FLOAT32)u16GetLVOUT_V_R_AdcVal() * LVOUT_V_R_KP - LVOUT_V_R_OFFSET)
-#define BSW_HAL_GetLvOutCurrVal()     \
-        ((FLOAT32)u16GetLVOUT_I_AdcVal()   * LVOUT_I_KP   - LVOUT_I_OFFSET)
-#define BSW_HAL_Get1V24VoltVal()     \
-        ((FLOAT32)u16Get1V24_V_AdcVal()    * LV1V24_V_KP  - LV1V24_V_OFFSET)
-
-#endif
+#define 		bsw_hal_calc_vpfc()                     				((FLOAT32)AdcaResultRegs.ADCRESULT3    * 	VPFC_KP    -    VPFC_OFFSET)
+#define       bsw_hal_calc_cur_inductor_ave_l()      ((FLOAT32)AdcaResultRegs.ADCRESULT0    * 	CUR_INDUCTOR_L_KP    -    CUR_INDUCTOR_L_OFFSET)
+#define       bsw_hal_calc_cur_inductor_ave_h()      ((FLOAT32)AdccResultRegs.ADCRESULT0    * 	CUR_INDUCTOR_H_KP    -    CUR_INDUCTOR_H_OFFSET)
 
 #endif /* BSW_HAL_ADC_H_ */

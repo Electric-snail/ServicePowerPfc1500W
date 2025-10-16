@@ -48,7 +48,7 @@ SECTIONS
    .cinit                    : > FLASH_APP,  						PAGE = 0, ALIGN(8)
    .pinit              	   : >> FLASH_APP, 						PAGE = 0, ALIGN(8)
 //   .econst          	   : >> CONSTANTS, 	     			PAGE = 0, ALIGN(8)
-   .econst          	   	   : >> FLASH_APP, 						PAGE = 0, ALIGN(8)
+   .econst          	   	   : >> FLASH_APP, 				    PAGE = 0, ALIGN(8)
    .text               	   : >> FLASH_APP, 						PAGE = 0, ALIGN(8)
    .switch           	   : > FLASH_APP,  						PAGE = 0, ALIGN(8)
 
@@ -57,7 +57,7 @@ SECTIONS
    .esysmem     		   : > RAMLS1,   	PAGE = 1
    .cio                    : > RAMLS1,   	PAGE = 1
   .RING_BUFF_SECTION      : > RAMLS1,   								PAGE = 1
-  .Key_Location           : > APP_KEY_LOCATION,        				   	PAGE = 1, ALIGN(8)
+  .Key_Location           : > APP_KEY_LOCATION,        				PAGE = 1, ALIGN(8)
   GROUP
    {
        .TI.ramfunc

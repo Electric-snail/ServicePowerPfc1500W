@@ -145,16 +145,16 @@ union ADCINTOVFCLR_REG {
 };
 
 struct ADCINTSEL1N2_BITS {              // bits description
-    Uint16 INT1SEL:4;                   // 3:0 ADCINT1 EOC Source Select
-    Uint16 rsvd1:1;                     // 4 Reserved
-    Uint16 INT1E:1;                     // 5 ADCINT1 Interrupt Enable
-    Uint16 INT1CONT:1;                  // 6 ADCINT1 Continue to Interrupt Mode
-    Uint16 rsvd2:1;                     // 7 Reserved
-    Uint16 INT2SEL:4;                   // 11:8 ADCINT2 EOC Source Select
-    Uint16 rsvd3:1;                     // 12 Reserved
-    Uint16 INT2E:1;                     // 13 ADCINT2 Interrupt Enable
-    Uint16 INT2CONT:1;                  // 14 ADCINT2 Continue to Interrupt Mode
-    Uint16 rsvd4:1;                     // 15 Reserved
+    Uint16 INT1SEL:4;                   			// 3:0 ADCINT1 EOC Source Select
+    Uint16 rsvd1:1;                     					// 4 Reserved
+    Uint16 INT1E:1;                     				// 5 ADCINT1 Interrupt Enable
+    Uint16 INT1CONT:1;                 			 // 6 ADCINT1 Continue to Interrupt Mode
+    Uint16 rsvd2:1;                     					// 7 Reserved
+    Uint16 INT2SEL:4;                   			// 11:8 ADCINT2 EOC Source Select
+    Uint16 rsvd3:1;                    					 // 12 Reserved
+    Uint16 INT2E:1;                    				// 13 ADCINT2 Interrupt Enable
+    Uint16 INT2CONT:1;                 			 // 14 ADCINT2 Continue to Interrupt Mode
+    Uint16 rsvd4:1;                     					// 15 Reserved
 };
 
 union ADCINTSEL1N2_REG {

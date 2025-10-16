@@ -16,9 +16,9 @@
 #include "SYS_FSM/SYS_FSM_INF.h"
 
 /****** internal function declaration region ***********/
-void  power_stop_in(void);
-void  power_stop_exe(void);
-UINT8 power_stop_cond(UINT16 u16TrigEven);
+void  power_standby_in(void);
+void  power_standby_exe(void);
+UINT8 power_standby_cond(UINT16 u16TrigEven);
 
 void  power_soft_exe(void);
 UINT8 power_soft_cond(UINT16 u16TrigEven);
@@ -30,12 +30,12 @@ UINT8 power_run_cond(UINT16 u16TrigEven);
 
 /************ Variable definition region *********************************/
 
-//----------FSM name-----initial status id---------------------
-REG_FSM_OBJ(POWER_FSM,   PWR_STATUS_STOP,\
-//---fsm status id-------------------------fsm_in_func-------------fsm_exe_func---------------fsm_out_func-------------------fsm_cond_func;
-{PWR_STATUS_STOP,              power_stop_in,              power_stop_exe,              NULL,                             power_stop_cond},\
-{PWR_STATUS_SOFT,              NULL,                          power_soft_exe,              NULL,                             power_soft_cond},\
-{PWR_STATUS_RUN,                power_run_in,               power_run_exe,                power_run_out,                power_run_cond},\
+//-------------------fsm_name------------period-----offset---------init_state_id
+REG_FSM_OBJ(POWER_FSM, 		10, 				3, 		PWR_STATUS_STANDBY, \
+//---fsm status id-------------------------fsm_in_func-------------fsm_exe_func-------------fsm_out_func-------------------fsm_cond_func;
+{PWR_STATUS_STANDBY,           power_standby_in,             power_standby_exe,           NULL,                             power_standby_cond},\
+{PWR_STATUS_SOFT,              		NULL,                          		power_soft_exe,               	NULL,                             power_soft_cond},\
+{PWR_STATUS_RUN,                		power_run_in,               		power_run_exe,                	power_run_out,              power_run_cond},\
 )
 STATIC UINT16 gs_u16delay_cnt = 0;
 
@@ -86,7 +86,7 @@ void power_fsm_2ms_task(void){
 *  Others:
 *
 *************************************************/
-void  power_stop_in(void)
+void  power_standby_in(void)
 {
 }
 
@@ -103,7 +103,7 @@ void  power_stop_in(void)
 *  Others:
 *
 *************************************************/
-void  power_stop_exe(void)
+void  power_standby_exe(void)
 {
 }
 
@@ -120,9 +120,9 @@ void  power_stop_exe(void)
 *  Others:
 *
 *************************************************/
-UINT8 power_stop_cond(UINT16 u16TrigEven)
+UINT8 power_standby_cond(UINT16 u16TrigEven)
 {
-    return PWR_STATUS_STOP;
+    return PWR_STATUS_STANDBY;
 }
 
 

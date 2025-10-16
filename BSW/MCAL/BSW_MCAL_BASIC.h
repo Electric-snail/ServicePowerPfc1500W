@@ -37,8 +37,9 @@ enum MCAL_ID
     MCAL_CPU_TIMER,       //
     MCAL_CLA,             //
     MCAL_DMA,             //
-    MCAL_XBAR,            //
+	MCAL_CMPSS,
     MCAL_ADC,             //
+    MCAL_XBAR,            //
     MCAL_ePWM,            //
     MCAL_GPIO,            //
     MCAL_SPI,             //
@@ -53,17 +54,18 @@ enum MCAL_ID
 #define MCAL_DRV_REG_TAB          \
 {\
     {MCAL_RAM,    		            	1,    bsw_mcal_ram_init},  		\
-    {MCAL_FLASH,  		        	1,    bsw_mcal_flash_init},  		\
+    {MCAL_FLASH,  		        		1,    bsw_mcal_flash_init},  		\
     {MCAL_SYS,  		            		1,    bsw_mcal_sys_init},  		\
-    {MCAL_SP,  		               	 	1,    bsw_mcal_sp_init},  		\
+    {MCAL_SP,  		               	 		1,    bsw_mcal_sp_init},  		\
     {MCAL_SYS_CLOCK,  	    	1,    bsw_mcal_sys_clock_init},  	\
-    {MCAL_INT_CTR,  	        	1,    bsw_mcal_pie_ctrl_init},  	\
+    {MCAL_INT_CTR,  	        		1,    bsw_mcal_pie_ctrl_init},  	\
     {MCAL_CPU_TIMER,  	    	1,    bsw_mcal_cpu_timer_init},	\
     {MCAL_CLA,  		            		0,    NULL},  		\
     {MCAL_DMA,  		            	0,    NULL},  					\
-    {MCAL_XBAR,  		            	0,    NULL},  		\
-	{MCAL_ADC,    		            	0,    NULL},  		\
-	{MCAL_ePWM,   		        	0,    NULL}, 		\
+    {MCAL_CMPSS,  		            1,    bsw_mcal_cmpss_init},  		\
+	{MCAL_ADC,    		            	1,    bsw_mcal_adc_init},  		\
+    {MCAL_XBAR,  		            	1,    bsw_mcal_xbar_init},  		\
+	{MCAL_ePWM,   		        		1,    bsw_mcal_epwm_init}, 		\
     {MCAL_GPIO,   		            	1,   bsw_mcal_gpio_init}, 		\
     {MCAL_SPI,   		            		0,    NULL}, 		\
     {MCAL_SCI,   		            		1,    bsw_mcal_sci_init}, 		\

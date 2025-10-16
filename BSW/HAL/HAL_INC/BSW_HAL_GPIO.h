@@ -183,54 +183,9 @@ extern SIM_GPIOA_T g_stGpioA;
 extern SIM_GPIOB_T g_stGpioB;
 extern SIM_GPIOH_T g_stGpioH;
  //LAUNCHXL BOARD
-#define BSW_HAL_RED_ON()                                  g_stGpioB.Num35 = 0       
-#define BSW_HAL_RED_OFF()								  g_stGpioB.Num35 = 1
+#define BSW_HAL_YELLOW_ON()                      g_stGpioB.Num20 = 1
+#define BSW_HAL_YELLOW_OFF()                     g_stGpioB.Num20 = 0
 
-//OUTPUT
-//feed watchdog signal
-#define BSW_HAL_DSP_FEED_WD_H()                            g_stGpioB.Num46 = 1      
-#define BSW_HAL_DSP_FEED_WD_L()							   g_stGpioB.Num46 = 0      
-
-//CAN transceiver Standby mode control
-#define BSW_HAL_CAN_STB_MODE_DIS()						g_stGpioB.Num49 = 1     
-#define BSW_HAL_CAN_STB_MODE_EN()						g_stGpioB.Num49 = 0
-
-//Auxiliary source secondary enable
-#define BSW_HAL_DSP_SecAux_EN()							g_stGpioA.Num17 = 1 
-#define BSW_HAL_DSP_SecAux_DIS()						g_stGpioA.Num17 = 0 
-
-//Hardware protected reset
-#define BSW_HAL_HwProtect_Reset_EN()					g_stGpioA.Num25 = 1 
-#define BSW_HAL_HwProtect_Reset_DIS()					g_stGpioA.Num25 = 0
-
-//Fault wake-up of external BMU
-#define BSW_HAL_Fault_WakeUp_BMU_EN()					g_stGpioA.Num26 = 1 
-#define BSW_HAL_Fault_WakeUp_BMU_DIS()					g_stGpioA.Num26 = 0
-
-//Low voltage battery sampling enable
-#define BSW_HAL_LVDC_VBAT_SAMP_EN()						g_stGpioA.Num27 = 1 
-#define BSW_HAL_LVDC_VBAT_SAMP_DIS()					g_stGpioA.Num27 = 0
-
-//Auxiliary power supply enable unlock
-#define BSW_HAL_DSP_AUX_CLOSE_EN()						g_stGpioB.Num42 = 1  
-#define BSW_HAL_DSP_AUX_CLOSE_DIS()						g_stGpioB.Num42 = 0  
-
-//Low voltage B2B MOS enable control
-#define BSW_HAL_LVDC_B2B_MOS_EN()						g_stGpioA.Num28 = 1 
-#define BSW_HAL_LVDC_B2B_MOS_DIS()						g_stGpioA.Num28 = 0 
-
-//High voltage input voltage sampling enable
-#define BSW_HVDC_VIN_SAMP_EN()							g_stGpioH.Num224 = 1
-#define BSW_HVDC_VIN_SAMP_DIS()							g_stGpioH.Num224 = 0
-
-
-
-#define GPIO_ReadPin_HWP_LOCK_TZ							g_stGpioA.Num06
-#define GPIO_ReadPin_HW_VOUT_OVP							g_stGpioA.Num14
-#define GPIO_ReadPin_HW_VOUT_UVP							g_stGpioA.Num15
-#define GPIO_ReadPin_HW_IOUT_OCP							g_stGpioB.Num34
-#define GPIO_ReadPin_HVIN_OCP_SGNL							g_stGpioA.Num23
-#define GPIO_ReadPin_EX_HW_ONOFF_CMD                        g_stGpioA.Num22
 
 #endif
 

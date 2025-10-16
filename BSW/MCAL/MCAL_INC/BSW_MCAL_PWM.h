@@ -12,20 +12,16 @@ File name:       BSW_MCAL_PWM.h
 extern "C" {
 #endif
 
-#include <PUBLIC_INC/AUTO_REGISTER.H>
-#include "../MCAL/BSW_MCAL_BASIC.h"
-#include "../CHIP_PACK/common/include/F28x_Project.h"
+#include "SOFTWARE_ENV_CFG.H"
+#include "HARDWARE_ENV_CFG.H"
+#include "common/include/F28x_Project.h"
 
 
-
-#define COUNTER_UP                  0
-#define COUNTER_DOWN                0
-#define COUNTER_UP_DOWN             1
-//
-// Defines
-//
-
-//
+#define 		DCLOCK_BIT     					4
+#define 		TZCLRLOCK_BIT				3
+#define 		TZCFGLOCK_BIT               2
+#define 		GLLOCK_BIT               		1
+#define       HRLOCK_BIT						0
 // TBCTL (Time-Base Control)
 static inline void BSW_MACL_SetTBCLKSYNC(UINT16 flag)
 {
@@ -34,7 +30,7 @@ static inline void BSW_MACL_SetTBCLKSYNC(UINT16 flag)
     EDIS;                                   
 }
 
-#define BSW_MCAL_DisTBCLKSYNC()             \
+#define 	bsw_mcal_disable_tbclk_sync()             \
 do                                          \
 {                                           \
     EALLOW;                                 \
@@ -44,7 +40,7 @@ do                                          \
 
 
 
-#define BSW_MCAL_EnTBCLKSYNC()              \
+#define bsw_mcal_enable_tbclk_sync()              \
 do                                          \
 {                                           \
     EALLOW;                                 \
@@ -67,25 +63,18 @@ enum PWM_CHANNEL
     ePWM_MAX_CHANNEL,
 };
 
-//#define  CPU_CLOCK_FRQ          120000000.0f
-#define  PWM_CLOCK_DIV          1.0f
-#define  PWM_COUNTER_MODE       COUNTER_UP
-
-#define  LLC_PWM_FRQ           300000.0f
-#define  LLC_PWM_TBPRD         166//((unsigned int)((CPU_CLOCK_FRQ/PWM_CLOCK_DIV)/PSFP_PWM_FRQ)>>PWM_COUNTER_MODE)
-
-
 
 /*SYNCOSEL*/
-#define  TB_SYNC_SOFTWARE  0
-#define  TB_SYNC_SYCIN     0
-#define  TB_SYNC_CTR_ZERO  1
-#define  TB_SYNC_CTR_CMPB  2
-#define  TB_SYNC_EXTENDED  3
-#define  TB_SYNC_DISABLE2  4
-#define  TB_SYNC_CTR_CMPC  TB_SYNC_EXTENDED | (1<<2)
-#define  TB_SYNC_CTR_CMPD  TB_SYNC_EXTENDED | (2<<2)
-#define  TB_SYNC_RESERVED  TB_SYNC_RESERVED | (3<<2)
+#define  		TB_SYNC_SOFTWARE  					0
+
+#define  		TB_SYNC_SYCIN     							0
+#define  		TB_SYNC_CTR_ZERO  						1
+#define  		TB_SYNC_CTR_CMPB  					2
+#define  		TB_SYNC_EXTENDED  					3
+#define  		TB_SYNC_DISABLE2  						4
+#define  		TB_SYNC_CTR_CMPC  					TB_SYNC_EXTENDED | (1<<2)
+#define  		TB_SYNC_CTR_CMPD  					TB_SYNC_EXTENDED | (2<<2)
+#define  		TB_SYNC_RESERVED  						TB_SYNC_RESERVED | (3<<2)
 
 /*AQCSFRC*/
 /*CSFA/CSFB*/
@@ -94,27 +83,23 @@ enum PWM_CHANNEL
 #define AQ_RLDCSF_HIGH       0x2
 #define AQ_RLDCSF_DISABLED   0x3
 
-/* IN MODE bits*/
-#define DBA_ALL          0x0
-#define DBB_RED_DBA_FED  0x1
-#define DBA_RED_DBB_FED  0x2
-#define DBB_ALL          0x3
+
 
 /* SHDWDBCTLMODE bits*/
-#define DB_SHADOW     0x1
-#define DB_IMMEDIATE  0x0
+#define DB_CTR_RED_FED_SHADOW     			    0x1
+#define DB_CTR_RED_FED_IMMEDIATE  			0x0
 
 /* LOADDBCTLMODE bits*/
-#define DB_CTR_ZERO      0x0
-#define DB_CTR_PRD       0x1
-#define DB_CTR_ZERO_PRD  0x2
+#define DB_CNT_ZERO      0x0
+#define DB_CNT_PRD       0x1
+#define DB_CNT_ZERO_PRD  0x2
 #define DB_LD_DISABLE    0x3
 
 /*OUTSWAP bits */
-#define DB_AABB    0X0
-#define DB_AABA    0X1
-#define DB_ABBB    0X2
-#define DB_ABBA    0X3
+#define 		DB_AABB    			0X0
+#define 		DB_AABA    			0X1
+#define 		DB_ABBB    			0X2
+#define 		DB_ABBA    			0X3
 
 /*DCAHTRIPSEL bits */
 #define TRIPINPUT_NULL   0X0000
@@ -162,111 +147,143 @@ enum PWM_CHANNEL
 #define SYNCIN_INPUT16XBAR      0X19
 
 /*EPWMSYNCOUTEN   bits */
-#define SYNCOUTEN_DISABLE       0X0
-#define SYNCOUTEN_SW            0X1
-#define SYNCOUTEN_ZERO          0X2
-#define SYNCOUTEN_CMPB          0X4
-#define SYNCOUTEN_CMPC          0X8
-#define SYNCOUTEN_CMPD          0X10
-#define SYNCOUTEN_DCAEVT1       0X20
-#define SYNCOUTEN_DCBEVT1       0X40
+#define 		SYNCOUTEN_DISABLE       				0x00
+#define	 	SYNCOUTEN_SW            					0x01
+#define 		SYNCOUTEN_ZERO          				0x02
+#define 		SYNCOUTEN_CMPB          				0x04
+#define 		SYNCOUTEN_CMPC          				0x08
+#define 		SYNCOUTEN_CMPD          				0x10
+#define 		SYNCOUTEN_DCAEVT1       			0x20
+#define 		SYNCOUTEN_DCBEVT1       			0x40
 
 extern volatile struct EPWM_REGS *p_stPwmChannel[];
 
 #define HR_COM_DISABLE   0
 #define HR_COM_ENABLE    1
 
-
-#define LLC_PRI_PWM_CHANNEL       ePWM3_CHANNEL
-
-
-struct SYNC_CFG_OUT_IN_SRC{
-    Uint16           SYNC_OUT_VAL         :5;
-    Uint16           reserve              :11;
+enum EPWM_SYNC_IN_SRC{
+	   EPWM_SYNC_IN_NONE			 = 0x00,
+	   EPWM1_SYNCOUT      =  0x01,
+	   EPWM2_SYNCOUT      =  0x02,
+	   EPWM3_SYNCOUT      =  0x03,
+	   EPWM4_SYNCOUT      =  0x04,
+	   EPWM5_SYNCOUT      =  0x05,
+	   EPWM6_SYNCOUT      =  0x06,
+	   EPWM7_SYNCOUT      =  0x07,
 };
 
-struct EPWMx_CFG_TB{
-    enum PWM_CHANNEL emPwmChannel;
-    Uint16           TB_SYNCOSEL_VAL  :4;                 // 9:7 High Speed TBCLK Pre-scaler
-    Uint16           TB_PHSDIR_VAL    :2;                 // 12:10 Time Base Clock Pre-scaler
-    Uint16           TB_CTRMODE_VAL   :2;                 // 1:0 Counter Mode
-    Uint16           TB_PHSEN_VAL     :1;                 // 2 Phase Load Enable
-    Uint16           TB_PRDLD_VAL     :1;                 // 3 Active Period Load
-    Uint16           SYNCINSEL_VAL    :5;
-    Uint16           reserve          :1;
-    Uint16           SYNCOUTEN_VAL;
-    Uint16           u16PrdLdVal;
-    Uint16           u16PhaseVal;
+
+enum TB_COUNTER_MODE{
+      TB_COUNTER_UP     				=    0,
+      TB_COUNTER_DOWN        		=    1,
+     TB_COUNTER_UP_DOWN      =    2,
 };
 
-struct EPWMx_CFG_CC{
-    enum PWM_CHANNEL emPwmChannel;
-    Uint16           CC_SHDWAMODE_VAL   :1;
-    Uint16           CC_SHDWBMODE_VAL   :1;
-    Uint16           CC_LOADAMODE_VAL   :2;
-    Uint16           CC_LOADBMODE_VAL   :2;
-    Uint16           reserve            :10;
-    Uint16           u16CmpaVal;
-    Uint16           u16CmpbVal;
+enum PHS_DIR_EN{
+      PHS_DISABLE     				=    0,
+	  PHS_DIR_UP        				=    1,
+	  PHS_DIR_DOWN     			 =    2,
 };
 
-struct EPWMx_CFG_AQ{
-    enum PWM_CHANNEL emPwmChannel;
-    Uint32           AQ_CTLA_CAD_VAL   :2;
-    Uint32           AQ_CTLA_CAU_VAL   :2;
-    Uint32           AQ_CTLA_CBD_VAL   :2;
-    Uint32           AQ_CTLA_CBU_VAL   :2;
-    Uint32           AQ_CTLA_PRD_VAL   :2;
-    Uint32           AQ_CTLA_ZRO_VAL   :2;
-    Uint32           AQ_CTLB_CAD_VAL   :2;
-    Uint32           AQ_CTLB_CAU_VAL   :2;
-    Uint32           AQ_CTLB_CBD_VAL   :2;
-    Uint32           AQ_CTLB_CBU_VAL   :2;
-    Uint32           AQ_CTLB_PRD_VAL   :2;
-    Uint32           AQ_CTLB_ZRO_VAL   :2;
-    Uint32           reserve           :8;
+enum PRD_LOAD_MODE{
+	 PRD_LOAD_CTR_ZERO  = 0x0,
+	 PRD_LOAD_CTR_ZERO_AND_SYNC,
+	 PRD_LOAD_SYNC,
+	 PRD_LOAD_RVS,
 };
 
-struct EPWMx_CFG_DB{
-    enum PWM_CHANNEL emPwmChannel;
-    Uint16           DB_OUT_MODE_VAL        :2;
-    Uint16           DB_IN_MODE_VAL         :2;
-    Uint16           DB_OUTSWAP_VAL         :2;
-    Uint16           DB_POLSEL_VAL          :2;
-    Uint16           DB_SHDWDBCTLMODE_VAL   :1;
-    Uint16           DB_LOADDBCTLMODE_VAL   :2;
-    Uint16           reserve                :5;
-    Uint16           u16REDval;
-    Uint16           u16CFEDval;
+//can multiple combinations
+enum EPWM_SYNC_OUT{
+	EPWM_SYNC_OUT_NONE			=		0x0000,
+   EPWM_SYCN_SW                  			=		(1L  << 0),
+   EPWM_SYCN_ZERO                  		=		(1L  << 1),
+   EPWM_SYCN_CMPB                  		=	    (1L  << 2),
+   EPWM_SYCN_CMPC                 		=     (1L  << 3),
+   EPWM_SYCN_CMPD                  		=	   (1L  << 4),
+   EPWM_SYCN_OUT_DCAEVT1     =      (1L  << 5),
+   EPWM_SYCN_OUT_DCBEVT1    =       (1L  << 6),
 };
 
-struct EPWMx_CFG_TZ{
-    enum PWM_CHANNEL emPwmChannel;
-    Uint16           TZ_SEL_OSHT1_VAL       :1;
-    Uint16           TZ_SET_DCAEVT1_VAL     :1;
-    Uint16           TZ_SET_DCAEVT2_VAL     :1;
-    Uint16           TZ_DCSEL_DCAEVT1_VAL   :3;
-    Uint16           TZ_DCSEL_DCAEVT2_VAL   :3;
-    Uint16           TZ_CTL_TZA_VAL         :2;
-    Uint16           TZ_CTL_TZB_VAL         :2;
-    Uint16           reserve                :3;
+enum CC_LOAD_MODE{
+	CC_LOAD_CTR_ZERO,
+	CC_LOAD_CTR_PERIOD,
+	CC_LOAD_CTR_ZERO_OR_PERIOD,
+	CC_LOAD_SYNC,
+	CC_LOAD_SYNC_AND_CTR_ZERO,
+	CC_LOAD_SYNC_AND_CTR_PERIOD,
+	CC_LOAD_SYNC_AND_CTR_ZERO_OR_PERIOD,
 };
 
-struct EPWMx_CFG_ET{
-    enum PWM_CHANNEL emPwmChannel;
-    Uint16           ET_SOCASEL_VAL         :3;
-    Uint16           ET_INTSEL_VAL          :3;
-    Uint16           ET_SOCAPRD_VAL         :4;
-    Uint16           ET_INTPRD_VAL          :2;
-    Uint16           ET_SOCAEN_VAL          :1;
-    Uint16           ET_INTEN_VAL           :1;
-    Uint16           reserve                :4;
+enum ET_SOC_SEL{
+	ET_SOC_DCxEVT1_SOC = 0,
+	ET_SOC_CTR_ZERO,
+	ET_SOC_CTR_PERIOD,
+	ET_SOC_CTR_ZERO_PERIOD,
+	ET_SOC_CTRU_COMPA,
+	ET_SOC_CTRU_COMPC,
+	ET_SOC_CTRU_COMPB,
+	ET_SOC_CTRU_COMPD,
+	ET_SOC_CTRD_COMPA,
+	ET_SOC_CTRD_COMPC,
+	ET_SOC_CTRD_COMPB,
+	ET_SOC_CTRD_COMPD,
+	ET_SOC_DISABLE,
 };
 
-struct EPWMx_CFG_DC{
-    enum PWM_CHANNEL emPwmChannel;
-    Uint16           u16DC_DCAHTRIPSEL_VAL;
+enum ET_INT_SEL{
+	ET_INT_DISABLE 						= 0,
+	ET_INT_CTR_ZERO,
+	ET_INT_CTR_PERIOD,
+	ET_INT_CTR_ZERO_PERIOD,
+	ET_INT_CTRU_COMPA,
+	ET_INT_CTRU_COMPC,
+	ET_INT_CTRU_COMPB,
+	ET_INT_CTRU_COMPD,
+	ET_INT_CTRD_COMPA,
+	ET_INT_CTRD_COMPC,
+	ET_INT_CTRD_COMPB,
+	ET_INT_CTRD_COMPD,
 };
+
+enum ET_PRESCALE{
+	ET_ACTION_DISABLE = 0,
+	ET_FIRST_ACTION ,
+	ET_SECOND_ACTION,
+	ET_THIRD_ACTION,
+};
+
+enum PWM_TZ_ACTION{
+     FORCE_HIZ = 0x00,
+	 FORCE_HI  =  0x01,
+	 FORCE_LO =  0x02,
+	 FORCE_TOGGLE = 0x03,
+	 DO_NOTHING = 0x07,
+};
+
+enum PWM_CBC_CLR{
+	CBC_CLR_ZERO  = 0,
+	CBC_CLR_PERIOD,
+	CBC_CLR_ZERO_PERIOD,
+	CBC_CLR_NONE,
+};
+#define   	TZ_CBC_SEL_NONE      0
+#define       TZ_CBC_TZ1                  (1 << 0)
+#define       TZ_CBC_TZ2                  (1 << 1)
+#define       TZ_CBC_TZ3                  (1 << 2)
+#define       TZ_CBC_TZ4                  (1 << 3)
+#define       TZ_CBC_TZ5                  (1 << 4)
+#define       TZ_CBC_TZ6                  (1 << 5)
+#define       TZ_CBC_DCAEVT2      (1 << 6)
+#define       TZ_CBC_DCBEVT2      (1 << 7)
+#define   	TZ_OST_SEL_NONE      0
+#define       TZ_OST_TZ1                  (1 << 8)
+#define       TZ_OST_TZ2                  (1 << 9)
+#define       TZ_OST_TZ3                  (1 << 10)
+#define       TZ_OST_TZ4                  (1 << 11)
+#define       TZ_OST_TZ5                  (1 << 12)
+#define       TZ_OST_TZ6                  (1 << 13)
+#define       TZ_OST_DCAEVT1      (1 << 14)
+#define       TZ_OST_DCBEVT1      (1 << 15)
 
 
 struct EPWMx_CFG_HR{
@@ -286,94 +303,250 @@ struct EPWMx_CFG_HR{
 /*-------------------------SYNCOUT------------reserve*/
 #define EPWM_CFG_SYNCSELECT_TAB {EPWM1SYNCOUT,    0}
 
-/*--PWM_CHANNEL-----------SYNCOSEL-------PHSDIR---CTRMODE---------PHSEN--------PRDLD----SYNCINSEL_VAL-----reserve--SYNCOUTEN_VAL----u16PrdLdVal--u16PhaseVal*/
+
+struct EPWMx_CFG_TB{
+    enum PWM_CHANNEL 									emPwmChannel;
+    enum TB_COUNTER_MODE                       emCounterMode;
+    enum PHS_DIR_EN           								emPhsDirEn;
+    enum EPWM_SYNC_IN_SRC                       emSyncInSrc;
+    enum EPWM_SYNC_OUT          		            emSyncOut;
+    UINT16          													u16PrdShadowEnable;
+    enum PRD_LOAD_MODE                             emLoadMode;
+    UINT16          													u16PrdVal;
+    UINT16           													u16PhaseVal;
+};
+
+/*--emPwmChannel--------------------------emCounterMode--------------------emPhsDirEn------------emSyncInSrc---------------------------emSyncOut-------------------u16PrdShadowEnable-----------emLoadMode----------------------u16PrdVal------------------u16PhaseVal*/
 #define EPWM_CFG_TB_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL, TB_SYNC_SYCIN, TB_UP, TB_COUNT_UPDOWN, TB_DISABLE, TB_SHADOW, SYNCIN_DISABLE,      0,   SYNCOUTEN_DISABLE,  LLC_PWM_TBPRD,      0},\
+    {PFC_PWM_CHANNEL, 			TB_COUNTER_UP_DOWN,           PHS_DISABLE, 				EPWM_SYNC_IN_NONE, 	       		 EPWM_SYNC_OUT_NONE, 				1,				PRD_LOAD_CTR_ZERO,			PFC_PWM_TBPRD,                      0},\
 }
-/*-----PWM_CHANNEL----------SHDWAMODE---SHDWBMODE--LOADAMODE---LOADBMODE---reserve---u16CmpaVal---u16CmpbVal*/
+
+
+struct EPWMx_CFG_CC{
+    enum PWM_CHANNEL 					   emPwmChannel;
+    UINT16        										   u16ABCDShadowEnable;
+    enum CC_LOAD_MODE                   emLoadMode;
+    UINT32           										u32CmpaVal;
+    UINT32           										u32CmpbVal;
+    UINT16           										u16CmpcVal;
+    UINT16           										u16CmpdVal;
+};
+/*-----PWM_CHANNEL-----------------u16ABCDShadowEnable--------emLoadMode-------------------------------u32CmpaVal--------------------------------------u32CmpbVal---------------u16CmpCVal--------u16CmpDVal--------*/
 #define EPWM_CFG_CC_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL, CC_SHADOW, CC_SHADOW, CC_CTR_ZERO, CC_CTR_ZERO,   0,  40,   126},\
+    {PFC_PWM_CHANNEL, 		                1, 				               	CC_LOAD_CTR_ZERO, 			 (UINT32)PFC_PWM_TBPRD * 65536/2,   					           3UL* 65536,					0,								0},\
 }
 
-/*--PWM_CHANNEL---------------CTLA_CAD----CTLA_CAU----CTLA_CBD------CTLA_CBU-----CTLA_PRD-----CTLA_ZRO--------CTLB_CAD-----CTLB_CAU-----CTLB_CBD----CTLB_CBU--CTLB_PRD---CTLB_ZRO----reserve*/
+struct EPWMx_CFG_AQ{
+    enum PWM_CHANNEL emPwmChannel;
+    Uint32           AQ_CTLA_CAD   :2;
+    Uint32           AQ_CTLA_CAU   :2;
+    Uint32           AQ_CTLA_CBD   :2;
+    Uint32           AQ_CTLA_CBU   :2;
+    Uint32           AQ_CTLA_PRD   :2;
+    Uint32           AQ_CTLA_ZRO   :2;
+    Uint32           AQ_CTLB_CAD   :2;
+    Uint32           AQ_CTLB_CAU   :2;
+    Uint32           AQ_CTLB_CBD   :2;
+    Uint32           AQ_CTLB_CBU   :2;
+    Uint32           AQ_CTLB_PRD   :2;
+    Uint32           AQ_CTLB_ZRO   :2;
+    Uint32           reserve           :8;
+};
+
+/*--PWM_CHANNEL------------------CTLA_CAD------------CTLA_CAU-------------CTLA_CBD---------------CTLA_CBU-------------------CTLA_PRD--------------CTLA_ZRO---------------------CTLB_CAD-----------------CTLB_CAU-----------CTLB_CBD------------------CTLB_CBU-------------------CTLB_PRD---------------CTLB_ZRO---------reserve*/
 #define EPWM_CFG_AQ_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL, AQ_NO_ACTION,  AQ_CLEAR, AQ_NO_ACTION, AQ_NO_ACTION, AQ_NO_ACTION, AQ_SET,       AQ_NO_ACTION, AQ_NO_ACTION, AQ_CLEAR, AQ_NO_ACTION, AQ_SET, AQ_NO_ACTION, 0},\
+    {PFC_PWM_CHANNEL, 			AQ_SET,  			 		     AQ_CLEAR, 				   	AQ_NO_ACTION, 			AQ_NO_ACTION, 			AQ_NO_ACTION, 		   AQ_NO_ACTION,       		AQ_NO_ACTION, 			AQ_NO_ACTION, 			AQ_NO_ACTION, 			AQ_NO_ACTION, 				AQ_NO_ACTION, 		AQ_NO_ACTION, 			0},\
 }
 
-/*--------PWM_CHANNEL--------OUT_MODE-------IN_MODE---OUTSWAP---POLSEL---SHDWDBCTLMODE---LOADDBCTLMODE---reserve---u16REDval---u16CFEDval*/
+struct EPWMx_CFG_DB{
+    enum PWM_CHANNEL emPwmChannel;
+    Uint16           DB_OUT_MODE        											:2;
+    Uint16           DB_IN_MODE         												:2;
+    Uint16           DB_OUTSWAP         												:2;
+    Uint16           DB_POLSEL          											   		:2;
+    Uint16           DB_S8									   		  							:1;
+    Uint16           DB_SHDW_RED_FED_CTR_MODE   				:1;
+    Uint16           DB_LOAD_RED_FED_CTR_MODE    	            :2;
+    Uint16           reserve                					          							 :4;
+    Uint16           u16RedVal;
+    Uint16           u16Fedval;
+};
+
+/*--------PWM_CHANNEL-------------OUT_MODE------------IN_MODE--------------------OUTSWAP----------------POLSEL-------------DB_S8-- -------DB_SHDWDBCTLMODE---------LOAD_DB_RED_FED_MODE---------u16Redval---u16Fedval*/
 #define EPWM_CFG_DB_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL,  DB_FULL_ENABLE,  DBA_ALL, DB_AABB, DB_ACTV_HIC, DB_IMMEDIATE, DB_CTR_PRD,   0, 20, 20},\
+    {PFC_PWM_CHANNEL,  		   DB_DISABLE,  			 DBA_RED_DBB_FED, 		 	DB_AABB, 					DB_ACTV_HI, 				 	0,		     DB_CTR_RED_FED_SHADOW, 						DB_CNT_ZERO,  						00, 					00},\
 }
 
-/*-----PWM_CHANNEL----------SEL_OSHT1---SET_DCAEVT1---SET_DCAEVT2-----DCSEL_DCAEVT1---DCSEL_DCAEVT2---TZA----------TZB--------reserve------*/
+
+
+struct EPWMx_CFG_TZ{
+    enum PWM_CHANNEL 							emPwmChannel;
+    enum PWM_TZ_ACTION         				emDcaEvt1;
+    enum PWM_TZ_ACTION         				emDcaEvt2;
+    enum PWM_TZ_ACTION         				emDcbEvt1;
+    enum PWM_TZ_ACTION         				emDcbEvt2;
+    enum PWM_TZ_ACTION        				 emTza;
+    enum PWM_TZ_ACTION        				 emTzb;
+    enum PWM_CBC_CLR                           emCbcClrSel;
+    UINT16                                                      u16TzCbcSel;
+    UINT16                                                      u16TzOstSel;
+};
+
+//Note: the DCA/BEVT1/2 can directly to the TZ, or route through the CBC, or OST submode,
+//if using the first method, using the TZCTLDCA[DCAEVTxD,DCAEVTxU],  TZCTLDCB register to control, in order to simply, the DCAEVT1/DCAEVT2 on the up or down all the same.  this method is default disable
+//default using the TZCTL to control for TZ, DCAB, the TZCTL2 is ignored
+//if using the later method,  又有两种方式，一种方式是DCAEVT1/2 直接通过TZCTL[DCAEVT1/2]只作用在EPWMxA，DCBEVT1/2 直接通过TZCTL[DCBEVT1/2] 只作用在EPWMxB
+//另一种方式，是与TZx 一样，连接到CBC, 或者OST模块，但是DCA/BEVT1 只连接到OST模块，DCA/BEVT2只连接到CBC模块；但作用的是整个EPWM，包括EPWMA/EPWMB.
+//如果使能了第一种方式，即 emDcxEvtY != DO_NOTHING,  第二种方式最好不选择其作为对应的CBC或者OST功能
+//TZA, TZB mode configure the same.
+/*-----PWM_CHANNEL---------------- emDcaEvt1----------emDcaEvt2-------------- emDcbEvt1-----------emDcbEvt2----------emTza------------------emTzb------------- emCbcClrSel--------------u16TzCbcSel------------u16TzOstSel-----------*/
 #define EPWM_CFG_TZ_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL, TZ_DISABLE, TZ_DISABLE,  TZ_DISABLE,     TZ_DCAH_HI,     TZ_DCAH_HI,  TZ_FORCE_LO, TZ_FORCE_LO,  0},\
+    {PFC_PWM_CHANNEL, 			 DO_NOTHING,    	   DO_NOTHING,    	 DO_NOTHING,    	   DO_NOTHING, 	 	 FORCE_LO,  		DO_NOTHING,	 	CBC_CLR_PERIOD,		TZ_CBC_DCAEVT2,       TZ_OST_DCAEVT1},\
 }
 
-/*--PWM_CHANNEL-------------ET_SOCASEL---ET_INTSEL--ET_SOCAPRD---ET_INTPRD_---ET_SOCAEN---ET_INTEN---reserve*/
+struct EPWMx_CFG_ET{
+    enum PWM_CHANNEL 					 emPwmChannel;
+    enum ET_SOC_SEL       					 emEtSocaSel;
+    enum ET_PRESCALE                      emEtSocaPrescale;
+    enum ET_SOC_SEL       		             emEtSocbSel;
+    enum ET_PRESCALE                      emEtSocbPrescale;
+    enum ET_INT_SEL        				     emEtIntSel;
+    enum ET_PRESCALE     					 emEtIntPrescale;
+};
+/*--PWM_CHANNEL---------------------ET_SOCA_SEL---------------emEtSocaPrescale------------ emEtSocbSel----------emEtSocbPrescale--------------emEtIntSel-------------emEtIntPrescale----*/
 #define EPWM_CFG_ET_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL, ET_CTR_ZERO, ET_CTR_PRD,  ET_2ND,   ET_1ST,         0,          1,         0},\
+    {PFC_PWM_CHANNEL, 		ET_SOC_CTRD_COMPB, 	      ET_FIRST_ACTION,         ET_SOC_DISABLE,   	ET_ACTION_DISABLE,         ET_INT_DISABLE,         ET_ACTION_DISABLE},\
 }
 
-/*--PWM_CHANNEL----------u16DC_DCAHTRIPSEL_VAL---*/
+
+#define		DC_SEL_NONE       	0x0000
+#define		DC_SEL_TRIPIN1    	0x0001
+#define		DC_SEL_TRIPIN2	 	0x0002
+#define		DC_SEL_TRIPIN3	 	0x0004
+#define		DC_SEL_TRIPIN4	 	0x0008
+#define		DC_SEL_TRIPIN5	 	0x0010
+#define		DC_SEL_TRIPIN6	 	0x0020
+#define		DC_SEL_TRIPIN7	 	0x0040
+#define		DC_SEL_TRIPIN8	 	0x0080
+#define		DC_SEL_TRIPIN9		 0x0100
+#define		DC_SEL_TRIPIN10 		 0x0200
+#define		DC_SEL_TRIPIN11 		 0x0400
+#define		DC_SEL_TRIPIN12 		 0x0800
+#define		DC_SEL_TRIPIN14 		0x2000
+#define		DC_SEL_TRIPIN15		0x4000
+
+//I = ignore
+enum DCxEVT_CFG{
+	EVT_DISABLE = 0x00,
+	DCxHL_LI        = 0x01,
+	DCxHH_LI       = 0x02,
+	DCxHI_LL       =  0x03,
+	DCxHI_LH      =  0x04,
+	DCxHL_LH	  =  0x05,
+};
+
+
+#define   DCxEVT1_OUT_NONE              0
+#define   DCxEVT2_OUT_NONE              0
+//DCxEVT1_OUT_FORCE is default enable
+#define   DCxEVT1_OUT_FORCE             0
+#define   DCxEVT1_OUT_SOC          		(1 <<   0)
+#define    DCxEVT1_OUT_INT          		(1 <<   1)
+#define    DCxEVT1_OUT_SYNC     			(1 <<   2)
+//DCxEVT2_OUT_FORCE is default enable
+#define   DCxEVT2_OUT_FORCE             0
+#define    DCxEVT2_OUT_INT         			(1 <<   3)
+
+struct EPWMx_CFG_DC{
+    enum PWM_CHANNEL emPwmChannel;
+    UINT16       					  u16DCAH_SEL;
+    UINT16       					  u16DCAL_SEL;
+    UINT16       					  u16DCBH_SEL;
+    UINT16       					  u16DCBL_SEL;
+    enum DCxEVT_CFG     emDCAEVT1_CFG;
+    UINT16                            u16DcaEvt1Out;
+    enum DCxEVT_CFG     emDCAEVT2_CFG;
+    UINT16                            u16DcaEvt2Out;
+    enum DCxEVT_CFG     emDCBEVT1_CFG;
+    UINT16                            u16DcbEvt1Out;
+    enum DCxEVT_CFG     emDCBEVT2_CFG;
+    UINT16                            u16DcbEvt2Out;
+};
+
+//Even the DCAEVT1/2,   DCBEVT1/2 is defined by TZDSEL in the TZ submodule, but it defined in follow.
+/*--PWM_CHANNEL----------------DCAH_SEL--------------DCAL_SEL--------------DCBH_SEL----------DCBL_SEL--------DCAEVT1_CFG-------u16DcaEvt1Out--------------DCAEVT2_CFG--------u16DcaEvt2Out----------------DCBEVT1_CFG--------u16DcbEvt1Out-------------DCBEVT2_CFG------u16DcbEvt2Out--*/
 #define EPWM_CFG_DC_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL, TRIPINPUT_NULL|TRIPINPUT4},\
+	{PFC_PWM_CHANNEL, 		DC_SEL_TRIPIN4,       DC_SEL_TRIPIN5,	    DC_SEL_NONE,		DC_SEL_NONE,			DCxHH_LI,		  DCxEVT1_OUT_FORCE,			DCxHI_LH,		 DCxEVT1_OUT_FORCE,			EVT_DISABLE,	  DCxEVT1_OUT_NONE,			EVT_DISABLE,	  DCxEVT2_OUT_NONE},\
 }
 
-/*-------PWM_CHANNEL-----EDGMODE--CTLMODE---HRLOAD---EDGMODEB---CTLMODEB---HRLOADB---AUTOCONV--------TBPHSHRLOADE------HRPE---reserve */
+
+#define   DCAEVT1_SRC       0
+#define   DCAEVT2_SRC       0
+#define   DCBEVT1_SRC       0
+#define   DCBEVT2_SRC       0
+#define   DCEVTFILT_SRC    1
+
+
+enum DC_EVT_FILT_SRC{
+	FILT_DCAEVT1_SRC        =    0,
+	FILT_DCAEVT2_SRC	      =	 1,
+	FILT_DCBEVT1_SRC 	  =    2,
+	FILT_DCBEVT2_SRC  	 =	    3,
+};
+
+
+enum BLANK_START{
+	START_PERIOD	      				  		=	    0,
+	START_ZERO       		  				  		=      1,
+	START_ZERO_PERIOD       	 	 	=      2,
+	START_PULSE_ZERO  	         		=	    3,
+	START_PULSE_PERIOD                =	    4,
+	START_PULSE_CAU  	                    =	    5,
+	START_PULSE_CAD  	                    =	    6,
+	START_PULSE_CBU  	                    =	    7,
+	START_PULSE_CBD  	                    =	    8,
+	START_PULSE_CCU  	                    =	    9,
+	START_PULSE_CCD  	                    =	    10,
+	START_PULSE_CDU  	                    =	    11,
+	START_PULSE_CDD  	                    =	    12,
+};
+
+
+struct EPWMx_CFG_DC_FILT{
+    enum PWM_CHANNEL 			emPwmChannel;
+	UINT16   									u16DcaEvt1Src;
+	UINT16   									u16DcaEvt2Src;
+	UINT16  									u16DcbEvt1Src;
+	UINT16   									u16DcbEvt2Src;
+	enum DC_EVT_FILT_SRC 	emDcEvtFiltSrc;
+	enum BLANK_START      	   emBlankStart;
+	UINT16                                      u16Offset;
+	UINT16                                      u16BlankWindow;
+};
+//In the offset, the signal is valid
+/*--PWM_CHANNEL----------------- u16DcaEvt1Src----------u16DcaEvt2Src-------u16DcbEvt1Src----------u16DcbEvt2Src-----------emDcEvtFiltSrc-----------------emBlankStart-------------u16Offset--------u16BlankWindow-*/
+#define EPWM_CFG_DC_FILT_TAB  \
+{\
+    {PFC_PWM_CHANNEL, 		    DCAEVT1_SRC,         DCEVTFILT_SRC,	       DCBEVT1_SRC,		   DCBEVT2_SRC,			FILT_DCAEVT2_SRC,		START_PULSE_CAD,      		0,      					30},\
+}
+
+
+/*-------PWM_CHANNEL----------------EDGMODE--------CTLMODE-------------HRLOAD-------------EDGMODEB-----------CTLMODEB----------HRLOADB--------------AUTOCONV-----------TBPHSHRLOADE----------------HRPE------------------reserve */
 #define EPWM_CFG_HR_TAB  \
 {\
-    {LLC_PRI_PWM_CHANNEL, HR_FEP, HR_CMP, HR_CTR_ZERO, HR_FEP,  HR_CMP,   HR_CTR_PRD, HR_COM_ENABLE, HR_COM_DISABLE,HR_COM_DISABLE, 0},\
+    {PFC_PWM_CHANNEL, 		HR_FEP, 			   HR_CMP, 				HR_CTR_ZERO, 				HR_FEP,  					HR_CMP,   		HR_CTR_PRD, 			HR_COM_ENABLE, 		HR_COM_DISABLE,				HR_COM_DISABLE, 			0},\
 }
 
+extern volatile struct EPWM_REGS *gp_stPwmChannel[] ;
 
-
-#define LLC_PRI_PWM_TZ_FRC_P()   do{EALLOW; p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->TZFRC.bit.OST = 1;EDIS;}while(0)
-
-#define LLC_PRI_PWM_FLAG_CLEAR() do{EALLOW; p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->TZCLR.bit.OST = 1;\
-                                      p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->TZOSTCLR.bit.OST1 = 1;EDIS;}while(0)
-
-#if 1
-#if 0
-
-#define LLC_PRI_EPWM_OFF()       do{p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->AQCSFRC.bit.CSFA = AQ_RLDCSF_LOW; \
-                                    p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->AQCSFRC.bit.CSFB = AQ_RLDCSF_LOW;  \
-                                    p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->DBCTL.bit.OUT_MODE = DB_DISABLE;}while(0)
-
-#define LLC_PRI_EPWM_ON()        do{p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->AQCSFRC.bit.CSFA = AQ_CSFX_DISABLED; \
-                                    p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->AQCSFRC.bit.CSFB = AQ_CSFX_DISABLED;  \
-                                    p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;}while(0)
-
-#else
-
-#define LLC_PRI_EPWM_OFF()   do{EALLOW; p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->TZFRC.bit.OST = 1;EDIS;}while(0)
-
-#define LLC_PRI_EPWM_ON() do{EALLOW; p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->TZCLR.bit.OST = 1;\
-                                      p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->TZOSTCLR.bit.OST1 = 1;EDIS;}while(0)
-#endif
-#else
-
-#define  LLC_PRI_EPWM_OFF()  p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->AQCSFRC.all = 0x05
-#define LLC_PRI_EPWM_ON()    p_stPwmChannel[LLC_PRI_PWM_CHANNEL]->AQCSFRC.all = 0x00
-#endif
-
-
-static inline void EPWM_CLOSE(void)
-{
-    LLC_PRI_PWM_FLAG_CLEAR();
-  //  LLC_PRI_EPWM_OFF();
-}
-
-
-
-extern void bsw_mcal_sf_ePWM_init(void);
+extern void bsw_mcal_epwm_init(void);
 
 #ifdef __cpluslus
 }

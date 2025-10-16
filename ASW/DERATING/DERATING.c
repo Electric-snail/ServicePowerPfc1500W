@@ -5,7 +5,7 @@
  * Author:
  */
 
-#include <PUBLIC_INC/DF_MATH.H>
+#include "DF_MATH.H"
 #include "PUBLIC_INC/DC_MATH.h"
 #include "DERATING/DERATING.h"
 #include "SVC/BSW_SVC_BASIC.h"

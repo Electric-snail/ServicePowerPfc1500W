@@ -18,6 +18,7 @@
 //#include "MCAL_INC/BSW_MCAL_CLA.h"
 #include "MCAL_INC/BSW_MCAL_XBAR.h"
 #include "MCAL_INC/BSW_MCAL_PWM.h"
+#include "MCAL_INC/BSW_MCAL_CMPSS.h"
 #include "MCAL_INC/BSW_MCAL_ADC.h"
 #include "MCAL_INC/BSW_MCAL_GPIO.h"
 #include "MCAL_INC/BSW_MCAL_SCI.h"

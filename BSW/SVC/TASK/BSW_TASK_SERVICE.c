@@ -5,11 +5,11 @@
  *      Author: Hongbo.jiang
 **********************************************************************/
 #include "PUBLIC_INC/ASSERT.H"
-#include "MCAL_INC/BSW_MCAL_INT_CTRL.h"
-#include "HAL_INC/BSW_HAL_TIMER.h"
-#include "ISR_INC/BSW_ISR_ADC.h"
-#include "BSW_SVC_BASIC.h"
-#include "BSW_TASK_SERVICE.h"
+#include "MCAL_INC/BSW_MCAL_INT_CTRL.H"
+#include "HAL_INC/BSW_HAL_TIMER.H"
+#include "ISR_INC/BSW_ISR_CPUTIMER.H"
+#include "BSW_SVC_BASIC.H"
+#include "BSW_TASK_SERVICE.H"
 
 extern UINT32 TaskRegLoadStart;
 extern UINT16 TaskRegLoadSize;

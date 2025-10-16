@@ -7,7 +7,7 @@
 #ifndef ASW_BASIC_H_
 #define ASW_BASIC_H_
 
-
+#include "PUBLIC_INC/AUTO_REGISTER.H"
 
 typedef void  (*pf_asw_id_init)(void);
 

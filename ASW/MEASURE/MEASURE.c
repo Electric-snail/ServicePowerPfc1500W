@@ -5,7 +5,7 @@
  *      Author: hongbo.jiang
  */
 //#include "MCAL/MCAL_INC/BSW_MCAL_ADC.h"
-#include <PUBLIC_INC/DF_MATH.H>
+#include "DF_MATH.H"
 #include <PUBLIC_INC/MEM_HANDLE.H>
 #include "HAL_INC/BSW_HAL_ADC.h"
 #include "POWER_FSM/POWER_FSM.h"

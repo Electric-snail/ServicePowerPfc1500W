@@ -42,10 +42,10 @@ void bsw_mcal_sys_init(void)
     DevCfgRegs.SOFTPRES8.all                    = 0x00000001;                          //SPI_A in the reset status
     DevCfgRegs.SOFTPRES9.all                    = 0x00000003;                          //I2C_A,I2C_B in the reset status;
     DevCfgRegs.SOFTPRES10.all                   = 0x00000001;                          //CAN is in the reset status
-    DevCfgRegs.SOFTPRES13.all                   = 0;                                   //ADC_A, ADC_C in the work status
-    DevCfgRegs.SOFTPRES14.all                   = 0;                                   //CMPSS1 in the work status
-    DevCfgRegs.SOFTPRES21.all                   = 0;                                   //DCC0 is in the work status
-    DevCfgRegs.SOFTPRES27.all                   = 0x00000001;                          //EPG1 is in the reset status
+    DevCfgRegs.SOFTPRES13.all                   = 0;                                   		  //ADC_A, ADC_C in the work status
+    DevCfgRegs.SOFTPRES14.all                   = 0x0000000A;                        //CMPSS3 in the work status
+    DevCfgRegs.SOFTPRES21.all                   = 0;                                   		//DCC0 is in the work status
+    DevCfgRegs.SOFTPRES27.all                   = 0x00000001;                       //EPG1 is in the reset status
     DevCfgRegs.SOFTPRES28.all                   = 0;
     EDIS;
 

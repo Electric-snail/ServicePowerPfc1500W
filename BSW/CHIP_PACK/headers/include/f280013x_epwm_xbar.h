@@ -783,7 +783,7 @@ union TRIPLOCK_REG {
 };
 
 struct EPWM_XBAR_REGS {
-    union   TRIP4MUX0TO15CFG_REG             TRIP4MUX0TO15CFG;             // ePWM XBAR Mux Configuration for TRIP4
+    union   TRIP4MUX0TO15CFG_REG              TRIP4MUX0TO15CFG;             // ePWM XBAR Mux Configuration for TRIP4
     union   TRIP4MUX16TO31CFG_REG            TRIP4MUX16TO31CFG;            // ePWM XBAR Mux Configuration for TRIP4
     union   TRIP5MUX0TO15CFG_REG             TRIP5MUX0TO15CFG;             // ePWM XBAR Mux Configuration for TRIP5
     union   TRIP5MUX16TO31CFG_REG            TRIP5MUX16TO31CFG;            // ePWM XBAR Mux Configuration for TRIP5

@@ -90,70 +90,55 @@ enum GPIO_NUM
 #define    GPIO227_MUX_EPWM                3
 #define    GPIO230_MUX_EPWM                3
 
-#define    GPIO00_MUX_MCAN_RX              10
-#define    GPIO01_MUX_MCAN_TX              10
+#define    GPIO00_MUX_EPWM1_A               			  1
+#define    GPIO00_MUX_CANA_RX               			 2
+#define    GPIO00_MUX_OUTPUTXBAR7               3
+#define    GPIO00_MUX_SCIA_RX               			 5
+#define    GPIO00_MUX_I2CA_SDA               			6
+#define    GPIO00_MUX_SPIA_STE               			7
+#define    GPIO00_MUX_EQEP1_INDEX               13
+#define    GPIO00_MUX_EPWM3_A                       15
 
-#define    GPIO04_MUX_MCAN_TX              3
-#define    GPIO04_MUX_CANA_TX              6
-
-#define    GPIO05_MUX_MCAN_RX              5
-#define    GPIO05_MUX_CANA_RX              6
+#define    GPIO04_MUX_CANA_TX             			 6
 
 
-#define    GPIO08_MUX_SCI_RX               6
-#define    GPIO09_MUX_SCI_TX               6
+#define    GPIO05_MUX_CANA_RX              			 6
 
-#define    GPIO11_MUX_SCIB_RX              6
 
-#define    GPIO12_MUX_MCAN_RX              3
-#define    GPIO12_MUX_SCIB_TX                6
-#define    GPIO12_MUX_FSIRXA_D0            9
+#define    GPIO08_MUX_SCI_RX               				6
+#define    GPIO09_MUX_SCI_TX               				6
 
-#define    GPIO13_MUX_MCAN_TX              3
-#define    GPIO13_MUX_SCIB_RX                6
+#define    GPIO11_MUX_SCIB_RX              				6
 
-#define    GPIO20_MUX_CANA_TX              3
-#define    GPIO20_MUX_MCAN_TX              9
+#define    GPIO12_MUX_SCIB_TX               			 6
+#define    GPIO12_MUX_FSIRXA_D0            			9
 
-#define    GPIO21_MUX_CANA_RX              3
-#define    GPIO21_MUX_MCAN_RX              9
+#define    GPIO13_MUX_SCIB_RX                			6
 
-#define    GPIO30_MUX_CANA_RX              1
-#define    GPIO30_MUX_SPIB_SIMO            3
-#define    GPIO30_MUX_MCAN_RX              10
-#define    GPIO30_MUX_MCAN_RX              10
+#define    GPIO20_MUX_CANA_TX              			3
 
-#define    GPIO31_MUX_MCAN_TX              10
-#define    GPIO31_MUX_CANA_TX              1
-#define    GPIO31_MUX_SPIB_SOMI            3
-#define    GPIO31_MUX_MCAN_TX              10
+#define    GPIO21_MUX_CANA_RX              			3
 
-#define    GPIO32_MUX_SPIB_CLK             3
-#define    GPIO32_MUX_CANA_TX              10
+#define    GPIO30_MUX_CANA_RX              			1
+#define    GPIO30_MUX_SPIB_SIMO            			3
 
-#define    GPIO33_MUX_SPIB_STE             3
 
-#define    GPIO33_MUX_FSIRXA_CLK           9
-#define    GPIO33_MUX_CANA_RX              10
+#define    GPIO31_MUX_CANA_TX              			1
+#define    GPIO31_MUX_SPIB_SOMI           			 3
 
-#define    GPIO39_MUX_MCAN_RX              6
 
-#define    GPIO46_MUX_MCAN_TX              5
-#define    GPIO47_MUX_MCAN_RX              5
+#define    GPIO32_MUX_SPIB_CLK             			3
+#define    GPIO32_MUX_CANA_TX              			10
 
-#define    GPIO51_MUX_MCAN_RX              5
-#define    GPIO50_MUX_MCAN_TX              5
+#define    GPIO33_MUX_SPIB_STE             				3
 
-#define    GPIO57_MUX_MCAN_RX              3
-#define    GPIO56_MUX_MCAN_TX              3
+#define    GPIO33_MUX_FSIRXA_CLK           		9
+#define    GPIO33_MUX_CANA_RX              			10
 
-#define    GPIO61_MUX_MCAN_RX              3
-#define    GPIO60_MUX_MCAN_TX              3
-
-#define    GPIO11_MUX_SPIA_STE             7
-#define    GPIO12_MUX_SPIA_CLK             11
-#define    GPIO16_MUX_SPIA_SIMO            1
-#define    GPIO17_MUX_SPIA_SOMI            1
+#define    GPIO11_MUX_SPIA_STE            				 7
+#define    GPIO12_MUX_SPIA_CLK             			11
+#define    GPIO16_MUX_SPIA_SIMO            			1
+#define    GPIO17_MUX_SPIA_SOMI            			1
 
 #define    GpioNum(A)                       GPIO##A##_NUM
 

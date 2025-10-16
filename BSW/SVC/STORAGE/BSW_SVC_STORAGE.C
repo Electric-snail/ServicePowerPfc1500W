@@ -58,7 +58,7 @@ void storage_handle(void){
           }
           if(1 == WriteStorageData(p_u16DestAddr, p_u16SrcAddr,sizeof(gc_stStoreData)/sizeof(UINT16)))
               g_u16StoreFlag = 0;
-        StorageInit();
+          storage_init();
       }
 }
 

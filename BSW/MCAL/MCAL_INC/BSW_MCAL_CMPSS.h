@@ -7,87 +7,147 @@
 
 #ifndef BSW_MCAL_CMPSS_H_
 #define BSW_MCAL_CMPSS_H_
+#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
+#include "ENV_CFG/HARDWARE_ENV_CFG.h"
 
-#include "../CHIP_PACK/common/include/F28x_Project.h"
-#include "../ENV_CFG/HARDWARE_ENV_CFG.h"
-#include "../MCAL/BSW_MCAL_BASIC.h"
-#include "../MCAL/MCAL_INC/BSW_MCAL_CMPSS_COMM.h"
+enum  CMPSS_MODULE{
+    CMPSS1_ID = 0,
+	CMPSS2_ID,
+	CMPSS3_ID,
+	CMPSS4_ID,
+    CMPSS_ID_MAX
+};
 
-typedef enum{
-    CMPSS1 = 0,
-    CMPSS_MODULE_MAX
-}CMPSS_MODULE;
+enum RAMP_SRC{
+	EPWM1SYNCPER = 0,
+	EPWM2SYNCPER,
+	EPWM3SYNCPER,
+	EPWM4SYNCPER,
+	EPWM5SYNCPER,
+	EPWM6SYNCPER,
+	EPWM7SYNCPER,
+};
+
+enum BLANK_SRC{
+	EPWM1BLANK = 0,
+	EPWM2BLANK,
+	EPWM3BLANK,
+	EPWM4BLANK,
+	EPWM5BLANK,
+	EPWM6BLANK,
+	EPWM7BLANK,
+};
+
+//define the positive input / negative input gpio of any comss
+#define       CMP1H_P_AGPIO224						   0
+#define       CMP1H_P_AIO237						   		   1
+#define       CMP1H_P_AGPIO228                          2
+#define       CMP1H_P_AIO233						   		   3
+#define       CMP1H_P_AIO232						   		   4
+
+#define       CMP1H_N_AIO233						   		   0
+#define       CMP1H_N_AIO237						   		   1
+#define       CMP1H_N_DAC						   		       2
+
+#define       CMP1L_P_AGPIO224						      0
+#define       CMP1L_P_AIO237						   		   1
+#define       CMP1L_P_AGPIO228                            2
+#define       CMP1L_P_AIO233						   		   3
+#define       CMP1L_P_AIO232						   		   4
+
+#define       CMP1L_N_AIO233						   		   0
+#define       CMP1L_N_AIO237						   		   1
+#define       CMP1L_N_DAC						   		       2
+
+#define       CMP2L_N_DAC						   		         2
+#define       CMP2H_N_DAC						   		         2
+
+#define       CMP3H_P_AGPIO226						   		0
+#define       CMP3H_P_AIO244						   		    1
+#define       CMP3H_P_AIO231                          		2
+#define       CMP3H_P_AGPIO242						   		3
+#define       CMP3H_P_AIO239						   		    4
+
+#define       CMP3H_N_AGPIO242						   0
+#define       CMP3H_N_AIO244						   		   1
+#define       CMP3H_N_DAC						   		        2
+
+#define       CMP3L_P_AGPIO226						   		0
+#define       CMP3L_P_AIO244						   		    1
+#define       CMP3L_P_AIO231                          		    2
+#define       CMP3L_P_AGPIO242						   		3
+#define       CMP3L_P_AIO239						   		    4
+
+#define       CMP3L_N_AGPIO242						         0
+#define       CMP3L_N_AIO244						   		     1
+#define       CMP3L_N_DAC						   		         2
+
+
+#define       CMP4L_N_DAC						   		         2
+#define       CMP4H_N_DAC						   		         2
+
+#define       DAC_LOAD_SYNC_SYCCLK              				0
+#define       DAC_LOAD_SYNC_EPWMSYNCPER           1
+//There is no latch function for 	CMPOUT_ASYNC,CMPOUT_SYNC,  CMPOUT_FILT,
+enum         CMPOUT_SEL{
+	CMPOUT_ASYNC = 0,
+	CMPOUT_SYNC,
+	CMPOUT_FILT,
+	CMPOUT_FILT_LATCH,
+	CMPOUT_FILT_LATCH_OR_ASYNC,
+};
+
+enum     LATCH_CLEAR_SRC{
+	LAT_CLR_RAMP_OR_SW = 0,
+	LAT_CLR_SW,
+};
 
 typedef struct{
-    CMPSS_MODULE emCmpssModule;
-    UINT16       CMPxPMXSEL_H;
-    UINT16       CMPxPMXSEL_L;
-}ASYSCTL_CMPMXSEL;
-
-typedef struct{
-    CMPSS_MODULE emCmpssModule;
-    UINT16       SwloadCLKSelect;
-    UINT16       DACHVALA_SRC;
-    UINT16       DACLVALA_SRC;
-    UINT16       CmpHiVal;   //12bits
-    UINT16       CmpLoVal;  //12bits
-}CMPSS_DAC_CFG;
-
-typedef struct{
-    CMPSS_MODULE emCmpssModule       ;
-    UINT16 CTRIPFILT_ClkPreScal_H    ;
-    UINT16 CTRIPFILT_InSel_H      : 3;
-    UINT16 CTRIPFILT_SampWin_H    : 6;
-    UINT16 CTRIPFILT_Thrshld_H    : 6;
-    UINT16 CTRIPFILT_Init_H       : 1;
-    UINT16 CTRIPFILT_ClkPreScal_L    ;
-    UINT16 CTRIPFILT_InSel_L      : 3;
-    UINT16 CTRIPFILT_SampWin_L    : 6;
-    UINT16 CTRIPFILT_Thrshld_L    : 6;
-    UINT16 CTRIPFILT_Init_L       : 1;
-}CMPSS_FIL_CFG;
-
-typedef struct{
-    CMPSS_MODULE emCmpssModule;
-    UINT16 COMPCTL_CMPINSRC_H     :1 ;
-    UINT16 COMPCTL_CMPOUTINV_H    :1 ;
-    UINT16 COMPCTL_CTRIPSEL_H     :2 ;
-    UINT16 COMPCTL_CTRIPOUTSEL_H  :2 ;
-    UINT16 COMPCTL_ASYNCEN_H      :1 ;
-    UINT16 COMPCTL_RSV            :1 ;
-    UINT16 COMPCTL_CMPINSRC_L     :1 ;
-    UINT16 COMPCTL_CMPOUTINV_L    :1 ;
-    UINT16 COMPCTL_CTRIPSEL_L     :2 ;
-    UINT16 COMPCTL_CTRIPOUTSEL_L  :2 ;
-    UINT16 COMPCTL_ASYNCEN_L      :1 ;
-    UINT16 COMPCTL_CMPDACEN       :1 ;
-    COMPHYS_TYPEHYST emCOMPHYSCTL_HYSTSET;
-}CMPSS_CTL_CFG;
-
-/*---emCmpssModule-----CMPHPMXSEL----CMPLPMXSEL*/
-#define  ASYSCTL_CMPMXSEL_TAB  \
+	enum  CMPSS_MODULE 					emCmpssModule;
+    UINT16                          						u16DacOutEnable;
+    UINT16                                      			u16RampGenEnable;
+    enum RAMP_SRC                    			emRampOrClearLatchSrc;      // if the latch output signal is not selected by using emCmpOutSel, it doesn't effect the comparator output. or the comparator output latch clear source is not from ramp source,   it is ignored.
+    UINT16                          						u16DacLoadSycnSrc;            //if the RampGen Enable, this word is ignored. the DAC is load immediately
+    UINT16                          						u16BlankEnable;
+    UINT16                          						u16BlankSrc;                       //if the u16BlankEnable == 0, the word is ignored
+	enum     	LATCH_CLEAR_SRC       	emLatchClearSrc;      // if the latch output signal is not selected by using emCmpOutSel, it is ignored
+}CMPSS_CFG_T;
+/*---emCmpssModule--------u16DacOutEnable--------u16RampGenEnable-----------    emRampOrClearLatchSrc----------u16DacLoadSycnSrc-----------u16BlankEnable-----------emBlankSrc--------------emLatchClearSrc-----*/
+#define  CMPSS_CFG_TAB  \
 {\
-    {CMPSS1,             1,             1},\
-}  //TRM Table 15-2. Analog Pins and Internal Connections   //A3 A7/C3
-
-/*---emCmpssModule----emSwloadCLKSelec------------emDACHSrc-----------------emDACHSrc------------CmpHiVal------------------CmpLoVal*/
-#define CMPSS_DAC_CFG_TAB \
-{\
-    {CMPSS1,          SWLOADSEL_SYSCLK,      DACHVALA_SRC_DACxVALAS,  DACHVALA_SRC_DACxVALAS,       2048,                     10},\
+    {CMPSS1_ID,            					 0,             					0,												EPWM1SYNCPER,					DAC_LOAD_SYNC_SYCCLK,		         0,                        EPWM1BLANK,			LAT_CLR_SW},\
+    {CMPSS3_ID,            					 0,             					0,												EPWM1SYNCPER,					DAC_LOAD_SYNC_SYCCLK,		         0,                         EPWM1BLANK,			LAT_CLR_SW},\
 }
 
-/*---emCmpssModule---CTRIPFILT_ClkPreScal_H--CTRIPFILT_InSel_H--CTRIPFILT_SampWin_H--CTRIPFILT_Thrshld_H--CTRIPFILT_Init_H--CmpFilLVotThrshold*/
-#define CMPSS_FIL_CFG_TAB \
+enum CMP_MODULE{
+	    CMP1_H_ID = 0x00,
+	    CMP1_L_ID  = 0x10,
+	    CMP2_H_ID = 0x01,
+	    CMP2_L_ID  = 0x11,
+	    CMP3_H_ID = 0x02,
+	    CMP3_L_ID  = 0x12,
+	    CMP4_H_ID = 0x03,
+	    CMP4_L_ID  = 0x13,
+};
+
+typedef struct{
+	enum  CMP_MODULE 		   								emCmpModule;
+	UINT16       															u16PosSrc;
+	UINT16      															u16NegSrc;
+	UINT16      															u16DacValue;
+	UINT16      															u16OutInvEnable;
+	enum     CMPOUT_SEL   									emOutToEpwmSel;
+	enum     CMPOUT_SEL   									emOutToOutputSel;
+}CMPSS_CMP_CFG_T;
+
+
+//---emCmpModule---------u16PosSrc--------------------------u16NegSrc-----------u16DacValue----------u16OutInv------emOutToEpwmSel-----------------emOutToOutputSel---------------
+#define CMPSS_CMP_CFG_TAB \
 {\
-    {CMPSS1,         2,                 15,                10,                2,                  15,              10},\
+    {CMP1_L_ID,         		 CMP1L_P_AGPIO224,         CMP1L_N_DAC,			2048,      					0,		         CMPOUT_SYNC,		   				CMPOUT_SYNC},\
+    {CMP3_L_ID,         		 CMP3L_P_AIO244,        		  CMP3L_N_DAC,			2048,      					0,		         CMPOUT_FILT_LATCH,		   	CMPOUT_FILT_LATCH},\
 }
 
-/*-emCmpssModule--COMPCTL_CMPINSRC_H--COMPCTL_CMPOUTINV_H--COMPCTL_CTRIPSEL_H---COMPCTL_CTRIPOUTSEL_H--COMPCTL_ASYNCEN_H--COMPCTL_RSV--COMPCTL_CMPINSRC_L--COMPCTL_CMPOUTINV_L--COMPCTL_CTRIPSEL_L---COMPCTL_CTRIPOUTSEL_L--COMPCTL_ASYNCEN_L--COMPCTL_CMPDACEN--emCOMPHYSCTL_HYSTSET*/
-#define CMPSS_CTL_CFG_TAB \
-{\
-    {CMPSS1,  CMPINSRC_IN_DAC,   CMPOUTINV_NOTINV,     CTRIPxSEL_DFILT,     CTRIPxSEL_DFILT,      ASYNC_ORDFILTLATCH_DIS,   0,     CMPINSRC_IN_DAC,   CMPOUTINV_NOTINV,     CTRIPxSEL_DFILT,     CTRIPxSEL_DFILT,      ASYNC_ORDFILTLATCH_DIS,   COMPDAC_EN,    COMPHYS_2xTypeHyst},\
-}
-
-extern void bsw_mcal_sf_cmpss_init(void);
+extern void bsw_mcal_cmpss_init(void);
 
 #endif /*BSW_MCAL_CMPSS_H_ */

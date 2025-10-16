@@ -68,7 +68,7 @@ enum SysCtl_MCANCLK_DIV
 #define        SYS_CLK_OUT_FREQ_120M_INDEX    		3
 
 //the clock configure zoon
-#define         SRC_CLK_FREQ_M                            	10.0f
+#define         SRC_CLK_FREQ_M                            	   10.0f
 #define         SYS_CLK_SRC_IN 									INT_OSC2_SRC
 #define         SYS_CLK_OUT_FREQ_INDEX               SYS_CLK_OUT_FREQ_120M_INDEX
 #define         SYSCTL_LSPCLK_PRESCALE         		SYSCTL_LSPCLK_PRESCALE_4

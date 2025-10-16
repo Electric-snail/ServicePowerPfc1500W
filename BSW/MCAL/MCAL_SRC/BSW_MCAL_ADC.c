@@ -11,7 +11,7 @@ Purpose :
 #include <BSW/CHIP_PACK/common/include/F28x_Project.h>
 //#include <BSW/ENV_CFG/HARDWARE_ENV_CFG.h>
 
-const ADC_MODULE_CFG gc_stAdcSysCfg[] = REG_ADC_MODULE_CFG_TAB;
+const ADC_MODULE_CFG gc_stAdcSysCfg[]                = REG_ADC_MODULE_CFG_TAB;
 const struct ADCx_CFG_SOC gc_stAdcSocCfgParam[] =  ADC_CFG_SOC_TAB;
 
 extern float g_f32SysClkFreq;
@@ -278,43 +278,92 @@ static void InitAdcSoc(struct ADCx_CFG_SOC stAdcSocCfgParam)
     EDIS;
 }
 UINT16 u16AdcPrescale = 0;
-void AdcModuleInit(enum ADC_MODULE emAdcModule, UINT16 u16IntEnable, UINT16 u16IntSrc, float f32AdcClkFreq){
+void AdcModuleInit(const ADC_MODULE_CFG *p_stAdcSysCfg){
 
     float  f32SysClkFreq  = SYS_CLK_GetSysClkFreq();
 
-    if(f32AdcClkFreq <= 0.0f)
+    if(p_stAdcSysCfg->f32AdcClkFreq <= 0.0f)
         return;
-    u16AdcPrescale = (UINT16)(f32SysClkFreq/f32AdcClkFreq);
+    u16AdcPrescale = (UINT16)(f32SysClkFreq/p_stAdcSysCfg->f32AdcClkFreq);
 
-    if(u16AdcPrescale > 8)  u16AdcPrescale = (8U - 1U) << 1;
+    if(u16AdcPrescale > 8)  			u16AdcPrescale = (8U - 1U) << 1;
 
-    else if(u16AdcPrescale == 0) u16AdcPrescale = 0;
-    else u16AdcPrescale = (u16AdcPrescale - 1U) << 1;
+    else if(u16AdcPrescale == 0) 	u16AdcPrescale = 0;
+    else 												u16AdcPrescale = (u16AdcPrescale - 1U) << 1;
 
     EALLOW;
-    switch(emAdcModule){
+    switch(p_stAdcSysCfg->emAdcModule){
        case ADC_ADCA_MODULE:
            AdcaRegs.ADCCTL2.bit.PRESCALE    = u16AdcPrescale;
            AdcaRegs.ADCCTL1.bit.INTPULSEPOS = 1;
            AdcaRegs.ADCCTL1.bit.ADCPWDNZ    = 1;
-           if(u16IntEnable == 1)
+           if(p_stAdcSysCfg->emADCINT1_SRC != ADCINT_DISABLE)
            {
-              AdcaRegs.ADCINTSEL1N2.bit.INT1SEL  = u16IntSrc;/* End of SOC9 will set INT1 flag */
-              AdcaRegs.ADCINTSEL1N2.bit.INT1E    = 1;/* Enable INT1 flag */
-              AdcaRegs.ADCINTSEL1N2.bit.INT1CONT = 0;/* continuous mode */
-              AdcaRegs.ADCINTFLGCLR.bit.ADCINT1  = 1;/* make sure INT1 flag is cleared */
+              AdcaRegs.ADCINTSEL1N2.bit.INT1SEL  		= p_stAdcSysCfg->emADCINT1_SRC;
+              AdcaRegs.ADCINTSEL1N2.bit.INT1E    			= 1;/* Enable INT1 flag */
+              AdcaRegs.ADCINTSEL1N2.bit.INT1CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdcaRegs.ADCINTFLGCLR.bit.ADCINT1  	= 1;/* make sure INT1 flag is cleared */
+           }
+
+           if(p_stAdcSysCfg->emADCINT2_SRC != ADCINT_DISABLE)
+           {
+              AdcaRegs.ADCINTSEL1N2.bit.INT2SEL  		= p_stAdcSysCfg->emADCINT2_SRC;
+              AdcaRegs.ADCINTSEL1N2.bit.INT2E    			= 1;/* Enable INT1 flag */
+              AdcaRegs.ADCINTSEL1N2.bit.INT2CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdcaRegs.ADCINTFLGCLR.bit.ADCINT2  	= 1;/* make sure INT1 flag is cleared */
+           }
+
+           if(p_stAdcSysCfg->emADCINT3_SRC != ADCINT_DISABLE)
+           {
+              AdcaRegs.ADCINTSEL3N4.bit.INT3SEL  		= p_stAdcSysCfg->emADCINT3_SRC;
+              AdcaRegs.ADCINTSEL3N4.bit.INT3E    			= 1;/* Enable INT1 flag */
+              AdcaRegs.ADCINTSEL3N4.bit.INT3CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdcaRegs.ADCINTFLGCLR.bit.ADCINT3  	= 1;/* make sure INT1 flag is cleared */
+           }
+
+           if(p_stAdcSysCfg->emADCINT4_SRC != ADCINT_DISABLE)
+           {
+              AdcaRegs.ADCINTSEL3N4.bit.INT4SEL  		= p_stAdcSysCfg->emADCINT4_SRC;
+              AdcaRegs.ADCINTSEL3N4.bit.INT4E    			= 1;/* Enable INT1 flag */
+              AdcaRegs.ADCINTSEL3N4.bit.INT4CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdcaRegs.ADCINTFLGCLR.bit.ADCINT4  	= 1;/* make sure INT1 flag is cleared */
            }
            break;
        case ADC_ADCC_MODULE:
            AdccRegs.ADCCTL2.bit.PRESCALE    = u16AdcPrescale;
            AdccRegs.ADCCTL1.bit.INTPULSEPOS = 1;
            AdccRegs.ADCCTL1.bit.ADCPWDNZ    = 1;
-           if(u16IntEnable == 1)
+
+           if(p_stAdcSysCfg->emADCINT1_SRC != ADCINT_DISABLE)
            {
-              AdccRegs.ADCINTSEL1N2.bit.INT1SEL  = u16IntSrc;   /* End of SOC9 will set INT1 flag */
-              AdccRegs.ADCINTSEL1N2.bit.INT1E    = 1;           /* Enable INT1 flag */
-              AdccRegs.ADCINTSEL1N2.bit.INT1CONT = 0;           /* continuous mode */
-              AdccRegs.ADCINTFLGCLR.bit.ADCINT1  = 1;           /* make sure INT1 flag is cleared */
+              AdccRegs.ADCINTSEL1N2.bit.INT1SEL  		= p_stAdcSysCfg->emADCINT1_SRC;
+              AdccRegs.ADCINTSEL1N2.bit.INT1E    			= 1;/* Enable INT1 flag */
+              AdccRegs.ADCINTSEL1N2.bit.INT1CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdccRegs.ADCINTFLGCLR.bit.ADCINT1  	= 1;/* make sure INT1 flag is cleared */
+           }
+
+           if(p_stAdcSysCfg->emADCINT2_SRC != ADCINT_DISABLE)
+           {
+              AdccRegs.ADCINTSEL1N2.bit.INT2SEL  		= p_stAdcSysCfg->emADCINT2_SRC;
+              AdccRegs.ADCINTSEL1N2.bit.INT2E    			= 1;/* Enable INT1 flag */
+              AdccRegs.ADCINTSEL1N2.bit.INT2CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdccRegs.ADCINTFLGCLR.bit.ADCINT2  	= 1;/* make sure INT1 flag is cleared */
+           }
+
+           if(p_stAdcSysCfg->emADCINT3_SRC != ADCINT_DISABLE)
+           {
+              AdccRegs.ADCINTSEL3N4.bit.INT3SEL  		= p_stAdcSysCfg->emADCINT3_SRC;
+              AdccRegs.ADCINTSEL3N4.bit.INT3E    			= 1;/* Enable INT1 flag */
+              AdccRegs.ADCINTSEL3N4.bit.INT3CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdccRegs.ADCINTFLGCLR.bit.ADCINT3  	= 1;/* make sure INT1 flag is cleared */
+           }
+
+           if(p_stAdcSysCfg->emADCINT4_SRC != ADCINT_DISABLE)
+           {
+              AdccRegs.ADCINTSEL3N4.bit.INT4SEL  		= p_stAdcSysCfg->emADCINT4_SRC;
+              AdccRegs.ADCINTSEL3N4.bit.INT4E    			= 1;/* Enable INT1 flag */
+              AdccRegs.ADCINTSEL3N4.bit.INT4CONT 	= 0;/* only clear the flag, then interrupt again */
+              AdccRegs.ADCINTFLGCLR.bit.ADCINT4  	= 1;/* make sure INT1 flag is cleared */
            }
            break;
        default:break;
@@ -323,7 +372,7 @@ void AdcModuleInit(enum ADC_MODULE emAdcModule, UINT16 u16IntEnable, UINT16 u16I
     DELAY_US(ADC_USDELAY);//ADC_USDELAY
 }
 
-void bsw_mcal_sf_adc_init(void)
+void bsw_mcal_adc_init(void)
 {
      unsigned int i = 0;
      const ADC_MODULE_CFG *p_stAdcSysCfg = gc_stAdcSysCfg;
@@ -331,8 +380,7 @@ void bsw_mcal_sf_adc_init(void)
      for(i = 0; i < sizeof(gc_stAdcSysCfg)/sizeof(ADC_MODULE_CFG); i++)
      {
          SetVREF(p_stAdcSysCfg->emAdcModule,p_stAdcSysCfg->emAdcRefMode, p_stAdcSysCfg->emAdcRefVolt);
-         AdcModuleInit(p_stAdcSysCfg->emAdcModule,p_stAdcSysCfg->u16IntEnable,\
-                       p_stAdcSysCfg->u16IntSrc,p_stAdcSysCfg->f32AdcClkFreq);
+         AdcModuleInit(p_stAdcSysCfg);
          p_stAdcSysCfg++;
      }
 

@@ -6,16 +6,6 @@
  */
 #include "PUBLIC_INC/DC_MATH.H"
 
-FLOAT32 Loop_PiCtrl(PI_Ctrl_T *PI, FLOAT32 errVal)
-{
-    FLOAT32 errDiff;
-
-    errDiff    = errVal - PI->OldErr;
-    PI->Out   += (PI->Kp * errDiff) + (PI->Ki * errVal);
-    PI->OldErr = errVal;
-
-    return (PI->Out);
-}
 /*
 *Function name:    Ctrl2z3p **************************
  * Input variable:    CTRL_2z3_VARS_T *: 2z2p控制器的变量数据结构体指针;
@@ -123,13 +113,10 @@ void ctrl_pi_inc(PI_INC_CTRL_PARAM_T * p_stPI)
 
     f32Temp += (p_stPI->f32Ki* p_stPI->f32Ts) * p_stPI->f32ErrN;
 
-    f32Temp += p_stPI->f32YN_1;
-    if (f32Temp > p_stPI->f32OutMax)   f32Temp = p_stPI->f32OutMax;
-    if (f32Temp < p_stPI->f32OutMin)   f32Temp = p_stPI->f32OutMin;
-    p_stPI->f32YN = f32Temp;
-    p_stPI->f32YN_1 = p_stPI->f32YN;
+    p_stPI->f32YN += f32Temp;
+    if (p_stPI->f32YN > p_stPI->f32OutMax)   p_stPI->f32YN = p_stPI->f32OutMax;
+    if (p_stPI->f32YN < p_stPI->f32OutMin)   p_stPI->f32YN = p_stPI->f32OutMin;
     p_stPI->f32ErrN_1 = p_stPI->f32ErrN;
-
 }
 
 /*Function name:    ctrl_pi_position **************************
@@ -146,27 +133,62 @@ void ctrl_pi_inc(PI_INC_CTRL_PARAM_T * p_stPI)
  *                               p_stPI->f32Ts 对应控制算法周期. 为常数.
  */
 
-void ctrl_pi_position(PI_POS_CTRL_PARAM_T *p_stPI)
+void ctrl_pi_position(PI_POS_T *p_stPI)
 {
-    float f32Temp = 0;
+    p_stPI->stInner.f32Err = p_stPI->stIn.f32Ref - p_stPI->stIn.f32Fb;
 
-    p_stPI->f32ErrN = p_stPI->f32Ref - p_stPI->f32Fb;
+    p_stPI->stInner.f32Integrate += p_stPI->stCoff.f32KiTs * p_stPI->stInner.f32Err;
 
-    if (p_stPI->f32ErrN > p_stPI->f32ErrMax)  p_stPI->f32ErrN = p_stPI->f32ErrMax;
+    if (p_stPI->stInner.f32Integrate > p_stPI->stCoff.f32IntegrateMax)
+    	p_stPI->stInner.f32Integrate = p_stPI->stCoff.f32IntegrateMax;
+    if (p_stPI->stInner.f32Integrate < p_stPI->stCoff.f32IntegrateMin)
+    	p_stPI->stInner.f32Integrate = p_stPI->stCoff.f32IntegrateMin;
 
-    if (p_stPI->f32ErrN < p_stPI->f32ErrMin)  p_stPI->f32ErrN = p_stPI->f32ErrMin;
+    p_stPI->stOut.f32Out = p_stPI->stInner.f32Integrate +  p_stPI->stCoff.f32Kp * p_stPI->stInner.f32Err;
 
-    f32Temp = p_stPI->f32Kp *(p_stPI->f32ErrN - p_stPI->f32ErrN_1);
+    if (p_stPI->stOut.f32Out > p_stPI->stCoff.f32OutMax)
+    	p_stPI->stOut.f32Out = p_stPI->stCoff.f32OutMax;
+    if (p_stPI->stOut.f32Out < p_stPI->stCoff.f32OutMin)
+    	p_stPI->stOut.f32Out = p_stPI->stCoff.f32OutMin;
+}
 
-    f32Temp += (p_stPI->f32Ki* p_stPI->f32Ts) * p_stPI->f32ErrN;
+/*Function name:    ctrl_pi_gian_position **************************
+ * Input variable:    PI_INC_CTRL_PARAM_T *: 增量式控制器的变量数据结构体指针;
+ *Describle:            实现增量式控制器软件算法;
+ *                          差分方程如下:
+ *                          Y(n)     (Kp + Ki*Ts) - Kp*Z^-1
+ *                          ----- =----------------------------------
+ *                          X(n)                 1-Z^-1
+ *
+ *                         直接可以比较 S域的传递函数 PI(s) = kp + ki/s 进行分析
+ *                         其中p_stPI->f32Kp 对应kp,
+ *                               p_stPI->f32Ki 对应ki
+ *                               p_stPI->f32Ts 对应控制算法周期. 为常数.
+ */
 
-    f32Temp += p_stPI->f32YN_1;
-    if (f32Temp > p_stPI->f32OutMax)   f32Temp = p_stPI->f32OutMax;
-    if (f32Temp < p_stPI->f32OutMin)    f32Temp = p_stPI->f32OutMin;
-    p_stPI->f32YN = f32Temp;
-    p_stPI->f32YN_1 = p_stPI->f32YN;
-    p_stPI->f32ErrN_1 = p_stPI->f32ErrN;
+void ctrl_pi_gain_position(PI_GAIN_POS_T* p_stPI)
+{
+    p_stPI->stInner.f32Err = (p_stPI->stIn.f32Ref - p_stPI->stIn.f32Fb) * p_stPI->stIn.f32Gain;
 
+    p_stPI->stInner.f32Integrate += p_stPI->stCoff.f32KiTs * p_stPI->stInner.f32Err;
+
+    if (p_stPI->stInner.f32Integrate > p_stPI->stCoff.f32IntegrateMax)
+        p_stPI->stInner.f32Integrate = p_stPI->stCoff.f32IntegrateMax;
+    if (p_stPI->stInner.f32Integrate < p_stPI->stCoff.f32IntegrateMin)
+        p_stPI->stInner.f32Integrate = p_stPI->stCoff.f32IntegrateMin;
+
+    p_stPI->stOut.f32Out = p_stPI->stInner.f32Integrate + p_stPI->stCoff.f32Kp * p_stPI->stInner.f32Err;
+
+    if (p_stPI->stOut.f32Out > p_stPI->stCoff.f32OutMax)
+        p_stPI->stOut.f32Out = p_stPI->stCoff.f32OutMax;
+    if (p_stPI->stOut.f32Out < p_stPI->stCoff.f32OutMin)
+        p_stPI->stOut.f32Out = p_stPI->stCoff.f32OutMin;
+}
+
+void set_pi_position_integrate(PI_POS_T* p_stPI, float f32Value) {
+    float f32Temp;
+    f32Temp = f32Value > p_stPI->stCoff.f32IntegrateMax ? p_stPI->stCoff.f32IntegrateMax : f32Value;
+    p_stPI->stInner.f32Integrate = f32Temp < p_stPI->stCoff.f32IntegrateMin ? p_stPI->stCoff.f32IntegrateMin : f32Temp;
 }
 
 void set_pi_integrate(PI_INC_CTRL_PARAM_T *p_stPI, float f32Value) {

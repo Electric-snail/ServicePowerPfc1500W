@@ -153,10 +153,10 @@ extern "C" {
 //
 // ZRO, PRD, CAU, CAD, CBU, CBD bits
 //
-#define AQ_NO_ACTION  0x0
-#define AQ_CLEAR      0x1
-#define AQ_SET        0x2
-#define AQ_TOGGLE     0x3
+#define AQ_NO_ACTION  			0x0
+#define AQ_CLEAR      				0x1
+#define AQ_SET        					0x2
+#define AQ_TOGGLE     				0x3
 
 //
 // DBCTL (Dead-Band Control) Register
@@ -181,10 +181,10 @@ extern "C" {
 //
 // IN MODE bits
 //
-#define DBA_ALL          0x0
+#define DBA_ALL          				0x0
 #define DBB_RED_DBA_FED  0x1
 #define DBA_RED_DBB_FED  0x2
-#define DBB_ALL          0x3
+#define DBB_ALL          				0x3
 
 //
 // PCCTL (PWM chopper control) Register

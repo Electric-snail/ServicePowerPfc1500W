@@ -59,9 +59,9 @@ void InitPeripheralClocksUser(void)
     CpuSysRegs.PCLKCR13.bit.ADC_C = 1;
 
     CpuSysRegs.PCLKCR14.bit.CMPSS1 = 1;
-    CpuSysRegs.PCLKCR14.bit.CMPSS2 = 1;
+    CpuSysRegs.PCLKCR14.bit.CMPSS2 = 0;
     CpuSysRegs.PCLKCR14.bit.CMPSS3 = 1;
-    CpuSysRegs.PCLKCR14.bit.CMPSS4 = 1;
+    CpuSysRegs.PCLKCR14.bit.CMPSS4 = 0;
 
     CpuSysRegs.PCLKCR21.bit.DCC0  	= 1;
 

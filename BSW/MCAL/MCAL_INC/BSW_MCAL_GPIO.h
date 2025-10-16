@@ -106,19 +106,19 @@ struct GPIO_CFG_PARAM{
     enum GPIO_INT_Type    emIntType;
     enum GPIO_OUTPUT_DATA emOutputDataType;
 };
-#if defined (MCAN)
-#define GPIO_0_MODE
-#else
 
-#endif
-
-
-/*--GPIO_NUM--------------GPIO_CORE---------GPIO_DIR--u16OutValue-------flag------------------GPIO_MUX---u16IntEna--u16AnalogEnable--emIntType---emOutputDataType*/
+/*--GPIO_NUM-----------------------------------------GPIO_CORE---------GPIO_DIR---------u16OutValue------------flag-----------------------------------GPIO_MUX---------------u16IntEna--u16AnalogEnable--emIntType---emOutputDataType*/
 #define GPIO_CFG_PARAM_TAB                \
 {\
-	 {GPIO_SCIB_RX,                  GPIO_CORE_CPU1,     GPIO_IN,                0,         GPIO_PUSHPULL|GPIO_PULLUP,     GPIO_MUX_SCIB_RX,                  0,             0,          GPIO_INT_INVALID,       GPIO_LOW},\
-	 {GPIO_SCIB_TX,                  GPIO_CORE_CPU1,     GPIO_OUT,            0,         GPIO_PUSHPULL|GPIO_PULLUP,      GPIO_MUX_SCIB_TX,                  0,             0,           GPIO_INT_INVALID,       GPIO_LOW},\
-	 {GPIO_LED_YELLOW,         GPIO_CORE_CPU1,     GPIO_OUT,            0,          GPIO_PUSHPULL|GPIO_PULLUP,     GPIO_IO,                                      0,             0,          GPIO_INT_INVALID,       GPIO_HIGH},\
+	 {GPIO_SCIB_RX,                  						GPIO_CORE_CPU1,     	GPIO_IN,                		0,         	GPIO_PULLUP,     								  GPIO_MUX_SCIB_RX,                  0,             0,          GPIO_INT_INVALID,       GPIO_LOW},\
+	 {GPIO_SCIB_TX,                  						GPIO_CORE_CPU1,     	GPIO_OUT,            		0,         	GPIO_PUSHPULL,     							  GPIO_MUX_SCIB_TX,                  0,             0,           GPIO_INT_INVALID,       GPIO_LOW},\
+	 {GPIO_LED_YELLOW,         						GPIO_CORE_CPU1,     	GPIO_OUT,            		0,          	GPIO_PUSHPULL,     							  GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,       GPIO_HIGH},\
+	 {GPIO_PWM_PFC_DRV,      						GPIO_CORE_CPU1,  		GPIO_OUT,   			 		0,  		  	GPIO_PUSHPULL,             					  GPIO_MUX_EPWM1_A,               0,             0,           GPIO_INT_INVALID,       GPIO_LOW},\
+     {GPIO_ADC_PRI_TEMP,      						GPIO_CORE_CPU1, 		 GPIO_IN,					    0,  			GPIO_PULLUP,                 					  GPIO_IO,         								 0,       		 1,     		GPIO_INT_INVALID,   	GPIO_LOW},\
+	 {GPIO_ADC_VIN_L,    								GPIO_CORE_CPU1, 		 GPIO_IN,					    0,  			GPIO_PULLUP,                 					  GPIO_IO,         								 0,       		 1,     		GPIO_INT_INVALID,   	GPIO_LOW},\
+	 {GPIO_ADC_VIN_N,     							GPIO_CORE_CPU1, 		 GPIO_IN,					    0,  			GPIO_PULLUP,                 					  GPIO_IO,         								 0,       			1,     	GPIO_INT_INVALID,   	GPIO_LOW},\
+	 {GPIO_ADC_PFC_I_SENSE_L,    			GPIO_CORE_CPU1, 		 GPIO_IN,					    0,  			GPIO_PULLUP,                 					  GPIO_IO,         								 0,       		 1,     		GPIO_INT_INVALID,   	GPIO_LOW},\
+	 {GPIO_ADC_PFC_I_SENSE_H,     		    GPIO_CORE_CPU1, 		 GPIO_IN,					    0,  			GPIO_PULLUP,                 					  GPIO_IO,         								 0,       			1,     	GPIO_INT_INVALID,   	GPIO_LOW},\
 }
 
 #define PIN_AIO_224           224

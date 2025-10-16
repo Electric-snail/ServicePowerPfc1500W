@@ -16,13 +16,13 @@ Purpose :         1. Define macro
 extern "C" {
 #endif
 
-#include "../MCAL/BSW_MCAL_BASIC.h"
-#include <PUBLIC_INC/AUTO_REGISTER.H>
-#include "../CHIP_PACK/common/include/F28x_Project.h"
+#include "MCAL/BSW_MCAL_BASIC.h"
+#include "PUBLIC_INC/AUTO_REGISTER.H"
+#include "common/include/F28x_Project.h"
 // Definitions for ADCSOC Acquisition Prescale
-#define ADC_SOC_ACQPS                   6
-#define ADC_SOC_ACQPS_MIN               20
-#define ADC_SOC_ACQPS_MAX               512
+#define ADC_SOC_ACQPS                   				6
+#define ADC_SOC_ACQPS_MIN               		20
+#define ADC_SOC_ACQPS_MAX               		512
 
 // Definitions for Delay times of completed config ADC
 #define ADC_USDELAY                     1000L  //Delay timer 1ms
@@ -134,13 +134,13 @@ extern "C" {
 #define ADCA15                          AdcaResultRegs.ADCRESULT15  /* SOC15 -- A9 -- Temperature2         */
 
 
-
-#define ADCC0                           AdccResultRegs.ADCRESULT0   /* SOC0 -- C0 -- */
-#define ADCC1                           AdccResultRegs.ADCRESULT1   /* SOC1 -- C1 -- */
-#define ADCC2                           AdccResultRegs.ADCRESULT2   /* SOC2 -- C2 -- */
-#define ADCC3                           AdccResultRegs.ADCRESULT3   /* SOC3 -- C0 -- */
-#define ADCC4                           AdccResultRegs.ADCRESULT4   /* SOC4 -- C1 -- */
-#define ADCC5                           AdccResultRegs.ADCRESULT5   /* SOC5 -- C2 --  */
+/*
+#define ADCC0                           AdccResultRegs.ADCRESULT0
+#define ADCC1                           AdccResultRegs.ADCRESULT1
+#define ADCC2                           AdccResultRegs.ADCRESULT2
+#define ADCC3                           AdccResultRegs.ADCRESULT3
+#define ADCC4                           AdccResultRegs.ADCRESULT4
+#define ADCC5                           AdccResultRegs.ADCRESULT5
 #define ADCC6                           AdccResultRegs.ADCRESULT6
 #define ADCC7                           AdccResultRegs.ADCRESULT7
 #define ADCC8                           AdccResultRegs.ADCRESULT8
@@ -151,7 +151,7 @@ extern "C" {
 #define ADCC13                          AdccResultRegs.ADCRESULT13
 #define ADCC14                          AdccResultRegs.ADCRESULT14
 #define ADCC15                          AdccResultRegs.ADCRESULT15
-
+*/
 //*****************************************************************************
 //
 // Values that can be passed to ADC_forceMultipleSOC() as socMask parameter.
@@ -427,82 +427,76 @@ typedef enum
 // read result
 #define BSW_MCAL_GetAdcResult(ADCxNum)        ADCxNum
 
+enum ADCINT_SRC{
+	ADCINT_EOC0  	= 0,
+	ADCINT_EOC1,
+	ADCINT_EOC2	,
+	ADCINT_EOC3,
+	ADCINT_EOC4,
+	ADCINT_EOC5,
+	ADCINT_EOC6,
+	ADCINT_EOC7,
+	ADCINT_EOC8,
+	ADCINT_EOC9,
+	ADCINT_EOC10,
+	ADCINT_EOC11,
+	ADCINT_EOC12,
+	ADCINT_EOC13,
+	ADCINT_EOC14,
+	ADCINT_EOC15,
+	ADCINT_DISABLE,
+};
+
 typedef struct
 {
     enum ADC_MODULE         emAdcModule;
-    ADC_ReferenceMode       emAdcRefMode;
-    ADC_ReferenceVoltage    emAdcRefVolt;
-    float                   f32AdcClkFreq;
-    UINT16                  u16IntEnable;
-    UINT16                  u16IntSrc;
+    ADC_ReferenceMode           emAdcRefMode;
+    ADC_ReferenceVoltage       emAdcRefVolt;
+    float                  					   f32AdcClkFreq;
+    enum ADCINT_SRC          emADCINT1_SRC;
+    enum ADCINT_SRC          emADCINT2_SRC;
+    enum ADCINT_SRC          emADCINT3_SRC;
+    enum ADCINT_SRC          emADCINT4_SRC;
+    UINT16                  			   u16IntSrc;
 }ADC_MODULE_CFG;
 
+
+
+/*---emAdcModule--------------------emAdcRefMode-------------------------emAdcRefVolt--------------------------f32AdcClkFreq(MHz)---------- emADCINT1_SRC---------- emADCINT2_SRC----- emADCINT3_SRC----- emADCINT4_SRC*/
+#define  REG_ADC_MODULE_CFG_TAB  \
+{\
+    {ADC_ADCA_MODULE,  			ADC_REFERENCE_INTERNAL,  			ADC_REFERENCE_3_3V,    			20.0,   								ADCINT_EOC3,   				ADCINT_DISABLE,				ADCINT_DISABLE,			ADCINT_DISABLE,},\
+    {ADC_ADCC_MODULE,  			ADC_REFERENCE_INTERNAL,  			ADC_REFERENCE_3_3V,    			20.0,  			 					ADCINT_DISABLE,   			ADCINT_DISABLE,				ADCINT_DISABLE,			ADCINT_DISABLE,},\
+}
+
+/*--ADCx_MODULE-------------------------------ADC_SOCNumber---------------------ADC_Trigger--------------------------------ADC_Channel-----------------------------------u16AqcPs*/
 struct ADCx_CFG_SOC{
-    enum ADC_MODULE emAdcx_modele;
-    ADC_SOCNumber   emAdcx_socNum;
-    ADC_Trigger     emAdcx_trigSel;
-    ADC_Channel     emAdcx_chSel;
-    Uint16          u16AqcPs;
+    enum ADC_MODULE 	emAdcx_modele;
+    ADC_SOCNumber   			emAdcx_socNum;
+    ADC_Trigger     					emAdcx_trigSel;
+    ADC_Channel    				 emAdcx_chSel;
+    Uint16          						u16AqcPs;
 };
 
-/*---emAdcModule----------emAdcRefMode-----------emAdcRefVolt-------f32AdcClkFreq(MHz)---u16IntEnable---u16IntSrc*/
-#if  VREFHIX_EX_EN
-#define  REG_ADC_MODULE_CFG_TAB  \
-{\
-    {ADC_ADCA_MODULE,  ADC_REFERENCE_EXTERNAL,  ADC_REFERENCE_3_3V,    20.0,   1,   4},\
-    {ADC_ADCC_MODULE,  ADC_REFERENCE_EXTERNAL,  ADC_REFERENCE_3_3V,    20.0,   0,   0},\
-}
-#else
-#define  REG_ADC_MODULE_CFG_TAB  \
-{\
-    {ADC_ADCA_MODULE,  ADC_REFERENCE_INTERNAL,  ADC_REFERENCE_3_3V,    20.0,   1,   4},\
-    {ADC_ADCC_MODULE,  ADC_REFERENCE_INTERNAL,  ADC_REFERENCE_3_3V,    20.0,   0,   0},\
-}
-#endif
-/*--ADCx_MODULE------ADC_SOCNumber-----ADC_Trigger--ADC_Channel----u16AqcPs*/
 #if (OVERSAMPLED == 0)
 #define ADC_CFG_SOC_TAB  \
 {\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER0, ADC_TRIGGER_CPU1_TINT0,   ADCA_HW_VER,     20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER1, ADC_TRIGGER_CPU1_TINT0,   ADCA_OUT_V,      20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER2, ADC_TRIGGER_CPU1_TINT0,   ADCA_BAT_V,      20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER3, ADC_TRIGGER_CPU1_TINT0,   ADCA_CASE_T,     20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER4, ADC_TRIGGER_CPU1_TINT0,   ADCA_LVSEC_T,    20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER5, ADC_TRIGGER_CPU1_TINT0,   ADCA_HW_WAKEUP,  20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER0, ADC_TRIGGER_CPU1_TINT0,   ADCC_OUT_I,      20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER1, ADC_TRIGGER_CPU1_TINT0,   ADCC_OUT_V_R,    20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER2, ADC_TRIGGER_CPU1_TINT0,   ADCC_HVIN_V,     20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER3, ADC_TRIGGER_CPU1_TINT0,   ADCC_HVPRI_T,    20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER4, ADC_TRIGGER_CPU1_TINT0,   ADCC_1V24_V,     20},\
+    {ADC_ADCA_MODULE, 						ADC_SOC_NUMBER0, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCA_PFC_I_SENSE_L,     							20},\
+    {ADC_ADCA_MODULE, 						ADC_SOC_NUMBER1, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCA_IIN_L	,      											    20},\
+    {ADC_ADCA_MODULE, 						ADC_SOC_NUMBER2, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCA_VIN_L,      											20},\
+    {ADC_ADCA_MODULE, 						ADC_SOC_NUMBER3, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCA_VPFC_BUS,      									20},\
+    {ADC_ADCC_MODULE, 						ADC_SOC_NUMBER0, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCC_PFC_I_SENSE_H,      						    20},\
+    {ADC_ADCC_MODULE, 						ADC_SOC_NUMBER1, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCC_IIN_H,    										        20},\
+    {ADC_ADCC_MODULE, 						ADC_SOC_NUMBER2, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCC_VIN_N,     											20},\
+    {ADC_ADCC_MODULE, 						ADC_SOC_NUMBER3, 				 ADC_TRIGGER_EPWM1_SOCA,   				ADCC_PRI_TEMP,     										20},\
 }
 #else
 #define ADC_CFG_SOC_TAB  \
 {\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER0, ADC_TRIGGER_CPU1_TINT0,   ADCA_OUT_V,      20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER1, ADC_TRIGGER_CPU1_TINT0,   ADCA_HW_VER,     20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER2, ADC_TRIGGER_CPU1_TINT0,   ADCA_OUT_V,      20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER3, ADC_TRIGGER_CPU1_TINT0,   ADCA_BAT_V,      20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER4, ADC_TRIGGER_CPU1_TINT0,   ADCA_OUT_V,      20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER5, ADC_TRIGGER_CPU1_TINT0,   ADCA_CASE_T,     20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER6, ADC_TRIGGER_CPU1_TINT0,   ADCA_OUT_V,      20},\
-    {ADC_ADCA_MODULE, ADC_SOC_NUMBER7, ADC_TRIGGER_CPU1_TINT0,   ADCA_LVSEC_T,    20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER0, ADC_TRIGGER_CPU1_TINT0,   ADCC_OUT_I,      20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER1, ADC_TRIGGER_CPU1_TINT0,   ADCC_OUT_V_R,    20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER2, ADC_TRIGGER_CPU1_TINT0,   ADCC_OUT_I,      20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER3, ADC_TRIGGER_CPU1_TINT0,   ADCC_HVIN_V,     20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER4, ADC_TRIGGER_CPU1_TINT0,   ADCC_OUT_I,      20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER5, ADC_TRIGGER_CPU1_TINT0,   ADCC_HVPRI_T,    20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER6, ADC_TRIGGER_CPU1_TINT0,   ADCC_OUT_I,      20},\
-    {ADC_ADCC_MODULE, ADC_SOC_NUMBER7, ADC_TRIGGER_CPU1_TINT0,   ADCC_1V24_V,     20},\
 }
 #endif
 
-#define ADC_INT_SEL_EOCX               ADC_INT_SEL_EOC3
-#define ADC_PRIORITY_SOC0_SOCX_HIGH    ADC_PRIORITY_SOC0_SOC10_HIGH
-
-extern void bsw_mcal_sf_adc_init(void);
-
-
+extern void bsw_mcal_adc_init(void);
 
 #ifdef __cplusplus
 }

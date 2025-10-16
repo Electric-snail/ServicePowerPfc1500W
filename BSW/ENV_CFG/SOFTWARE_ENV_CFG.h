@@ -73,24 +73,29 @@ typedef enum
 #define HWREGB(x)                                                             \
         __byte((int16_t *)(x),0)
 
-#define     LITTLE_END                      0
-#define     BIG_END                         1
+#define     LITTLE_END                      		0
+#define     BIG_END                         			1
 
 #define     TYPE_8_BYTE_SIZE                2
 #define     MCU_MEM_STORE_MODE              LITTLE_END
 #define     ENABLE_PARAM_CFG                (1)
 #define     STACK_LEN                       (1024)
 
+#define bsw_mcal_enable_global_int()            		 EINT
+#define bsw_mcal_disable_global_int()                  DINT
+
 //Unit --> us
-#define     CTR_FRQ                         80000.0f
-#define     CTR_PERIOD                      (1.0f/CTR_FRQ)
+//120000/(2*65) = 923
+#define    PFC_PWM_TBPRD      			923UL
+#define     CTR_FRQ                         		65000.0f
+#define     CTR_PERIOD                        (1.0f/CTR_FRQ)
 
 
 //Communication macro software definition
-#define 	SCIA_MODULE          			1
-#define 	SCIB_MODULE          			2
-#define 	CANA_MODULE          	    3
-#define 	CANB_MODULE          		4
+#define 	  SCIA_MODULE          			1
+#define 	  SCIB_MODULE          			2
+#define 	  CANA_MODULE          	    3
+#define 	  CANB_MODULE          		4
 #define     MCAN_MODULE                5
 #define     FSIA_MODULE                   6
 #define     I2CA_MODULE                   7

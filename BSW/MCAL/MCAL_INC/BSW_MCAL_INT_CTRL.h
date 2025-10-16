@@ -69,7 +69,7 @@ typedef struct{
 #define REG_INT_PARAM_CFG_TAB                               \
 {\
     {&IsrCpuTimer2,     INT_X14,      INT_Y_INVALID},     	\
-  /*  {&adcA1ISR,              INT_X1,         INT_Y1},*/            \
+    {&adcA1ISR,              INT_X1,         INT_Y1},            \
 }
 
 extern void bsw_mcal_pie_ctrl_init(void);

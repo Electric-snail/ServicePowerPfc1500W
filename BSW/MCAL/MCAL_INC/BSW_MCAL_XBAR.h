@@ -8,144 +8,219 @@
 #ifndef BSW_MCAL_MCAL_INC_BSW_MCAL_XBAR_H_
 #define BSW_MCAL_MCAL_INC_BSW_MCAL_XBAR_H_
 
-#include <BSW/MCAL/MCAL_INC/BSW_MCAL_GPIO_DEF.h>
-#include <BSW/MCAL/BSW_MCAL_BASIC.h>
-#include <BSW/ENV_CFG/HARDWARE_ENV_CFG.h>
+#include "MCAL_INC/BSW_MCAL_GPIO_DEF.H"
+#include "MCAL/BSW_MCAL_BASIC.H"
+#include "ENV_CFG/HARDWARE_ENV_CFG.H"
 
-#define XBAR_MUX00                     0 //!< Mask for X-BAR mux 0
-#define XBAR_MUX01                     1 //!< Mask for X-BAR mux 1
-#define XBAR_MUX02                     2 //!< Mask for X-BAR mux 2
-#define XBAR_MUX03                     3 //!< Mask for X-BAR mux 3
-#define XBAR_MUX04                     4 //!< Mask for X-BAR mux 4
-#define XBAR_MUX05                     5 //!< Mask for X-BAR mux 5
-#define XBAR_MUX06                     6 //!< Mask for X-BAR mux 6
-#define XBAR_MUX07                     7 //!< Mask for X-BAR mux 7
-#define XBAR_MUX08                     8 //!< Mask for X-BAR mux 8
-#define XBAR_MUX09                     9 //!< Mask for X-BAR mux 9
-#define XBAR_MUX10                     10 //!< Mask for X-BAR mux 10
-#define XBAR_MUX11                     11 //!< Mask for X-BAR mux 11
-#define XBAR_MUX12                     12 //!< Mask for X-BAR mux 12
-#define XBAR_MUX13                     13 //!< Mask for X-BAR mux 13
-#define XBAR_MUX14                     14 //!< Mask for X-BAR mux 14
-#define XBAR_MUX15                     15 //!< Mask for X-BAR mux 15
-#define XBAR_MUX16                     16 //!< Mask for X-BAR mux 16
-#define XBAR_MUX17                     17 //!< Mask for X-BAR mux 17
-#define XBAR_MUX18                     18 //!< Mask for X-BAR mux 18
-#define XBAR_MUX19                     19 //!< Mask for X-BAR mux 19
-#define XBAR_MUX20                     20 //!< Mask for X-BAR mux 20
-#define XBAR_MUX21                     21 //!< Mask for X-BAR mux 21
-#define XBAR_MUX22                     22 //!< Mask for X-BAR mux 22
-#define XBAR_MUX23                     23 //!< Mask for X-BAR mux 23
-#define XBAR_MUX24                     24 //!< Mask for X-BAR mux 24
-#define XBAR_MUX25                     25 //!< Mask for X-BAR mux 25
-#define XBAR_MUX26                     26 //!< Mask for X-BAR mux 26
-#define XBAR_MUX27                     27 //!< Mask for X-BAR mux 27
-#define XBAR_MUX28                     28 //!< Mask for X-BAR mux 28
-#define XBAR_MUX29                     29 //!< Mask for X-BAR mux 29
-#define XBAR_MUX30                     30 //!< Mask for X-BAR mux 30
-#define XBAR_MUX31                     31 //!< Mask for X-BAR mux 31
-
-#define ADCAEVT1                       2
-#define INPUTXBAR1                     1
-#define INPUTXBAR4_XBAR_MUX7           1
-#define CMP3_CTRIP_H_OR_L_XBAR_MUX4    1
-
-#define  TRIPX_INV_H_ACTIVE            0x00
-#define  TRIP4_INV                     0x01   //low  active
-#define  TRIP5_INV                     0x02
-#define  TRIP7_INV                     0x04
-#define  TRIP8_INV                     0x08
-#define  TRIP9_INV                     0x10
-#define  TRIP10_INV                    0x20
-#define  TRIP11_INV                    0x40
-#define  TRIP12_INV                    0x80
-
-#define  XINT_DISABLED                 0
-#define  XINT_ENABLED                  1
-
-#define  XINT_POLARITY_DEF_NEGATIVE    0
-#define  XINT_POLARITY_POSITIVE        1
-#define  XINT_POLARITY_NEGATIVE        2
-#define  XINT_POLARITY_ALL             3
-typedef enum
+enum XBAR_INPUT_ID
 {
-    XBAR_INPUT1,            //!< ePWM[TZ1], ePWM[TRIP1], X-BARs, eCAPs
-    XBAR_INPUT2,            //!< ePWM[TZ2], ePWM[TRIP2], X-BARs, eCAPs
-    XBAR_INPUT3,            //!< ePWM[TZ3], ePWM[TRIP3], X-BARs, eCAPs
-    XBAR_INPUT4,            //!< ADC wrappers, X-BARs, XINT1, eCAPs
-    XBAR_INPUT5,            //!< EXTSYNCIN1, X-BARs, XINT2, eCAPs
-    XBAR_INPUT6,            //!< EXTSYNCIN2, ePWM[TRIP6], X-BARs, XINT3, eCAPs
-    XBAR_INPUT7,            //!< X-BARs, eCAPs
-    XBAR_INPUT8,            //!< X-BARs, eCAPs
-    XBAR_INPUT9,            //!< X-BARs, eCAPs
-    XBAR_INPUT10,           //!< X-BARs, eCAPs
-    XBAR_INPUT11,           //!< X-BARs, eCAPs
-    XBAR_INPUT12,           //!< X-BARs, eCAPs
-    XBAR_INPUT13,           //!< XINT4, X-BARs, eCAPs
-    XBAR_INPUT14,           //!< XINT5, X-BARs, eCAPs
-    XBAR_INPUT15,           //!< eCAPs
-    XBAR_INPUT16            //!< eCAPs
-} XBAR_InputNum;
-
-typedef enum
-{
-    XBAR_TRIP4  = 0,        //!< TRIP4 of the ePWM X-BAR
-    XBAR_TRIP5  = 4,        //!< TRIP5 of the ePWM X-BAR
-    XBAR_TRIP7  = 8,        //!< TRIP7 of the ePWM X-BAR
-    XBAR_TRIP8  = 12,        //!< TRIP8 of the ePWM X-BAR
-    XBAR_TRIP9  = 16,        //!< TRIP9 of the ePWM X-BAR
-    XBAR_TRIP10 = 20,       //!< TRIP10 of the ePWM X-BAR
-    XBAR_TRIP11 = 24,       //!< TRIP11 of the ePWM X-BAR
-    XBAR_TRIP12 = 28        //!< TRIP12 of the ePWM X-BAR
-} XBAR_TripNum;
-
-typedef enum
-{
-    XINT1  = 0,        //!< INPUT4
-    XINT2  = 1,        //!< INPUT5
-    XINT3  = 2,        //!< INPUT6
-    XINT4  = 3,        //!< INPUT13
-    XINT5  = 4,        //!< INPUT4
-} XINTx_Num;
-
-struct XBAR_INPUTNUM_CFG_PARAM{
-    XBAR_InputNum         emInputSelect;
-    enum GPIO_NUM         emGpioNum;
+    XBAR_INPUT1_ID = 0x00,
+    XBAR_INPUT2_ID,
+    XBAR_INPUT3_ID,
+    XBAR_INPUT4_ID,
+    XBAR_INPUT5_ID,
+    XBAR_INPUT6_ID,
+    XBAR_INPUT7_ID,
+    XBAR_INPUT8_ID,
+    XBAR_INPUT9_ID,
+    XBAR_INPUT10_ID,
+    XBAR_INPUT11_ID,
+    XBAR_INPUT12_ID,
+    XBAR_INPUT13_ID,
+    XBAR_INPUT14_ID,
+    XBAR_INPUT15_ID,
+    XBAR_INPUT16_ID,
 };
 
+enum XBAR_INPUT_SRC
+{
+	INPUT_SRC_GPIO0  = 0x00,
+	INPUT_SRC_GPIO1 = 0x01,
+	INPUT_SRC_GPIO2  = 0x02,
+	INPUT_SRC_GPIO3 = 0x03,
+	INPUT_SRC_GPIO4  = 0x04,
+	INPUT_SRC_GPIO5 = 0x05,
+	INPUT_SRC_GPIO6  = 0x06,
+	INPUT_SRC_GPIO7 = 0x07,
+	INPUT_SRC_GPIO8  = 0x08,
+	INPUT_SRC_GPIO9 = 0x09,
+	INPUT_SRC_GPIO10  = 0x10,
+	INPUT_SRC_GPIO11 = 0x11,
+	INPUT_SRC_GPIO12  = 0x12,
+	INPUT_SRC_GPIO13 = 0x13,
+	INPUT_SRC_GPIO14  = 0x14,
+	INPUT_SRC_GPIO15 = 0x15,
+	INPUT_SRC_GPIO16  = 0x16,
+	INPUT_SRC_GPIO17 = 0x17,
+	INPUT_SRC_GPIO18  = 0x18,
+	INPUT_SRC_GPIO19 = 0x19,
+	INPUT_SRC_GPIO20  = 0x20,
+	INPUT_SRC_GPIO21 = 0x21,
+	INPUT_SRC_GPIO22  = 0x22,
+	INPUT_SRC_GPIO23 = 0x23,
+	INPUT_SRC_GPIO24  = 0x24,
+	INPUT_SRC_GPIO25 = 0x25,
+	INPUT_SRC_GPIO26  = 0x26,
+	INPUT_SRC_GPIO27 = 0x27,
+	INPUT_SRC_GPIO28  = 0x28,
+	INPUT_SRC_GPIO29 = 0x29,
+	INPUT_SRC_GPIO30  = 0x30,
+	INPUT_SRC_GPIO31 = 0x31,
+	INPUT_SRC_GPIO32  = 0x32,
+	INPUT_SRC_GPIO33 = 0x33,
+	INPUT_SRC_GPIO34  = 0x34,
+	INPUT_SRC_GPIO35 = 0x35,
+	INPUT_SRC_GPIO36  = 0x36,
+	INPUT_SRC_GPIO37 = 0x37,
+	INPUT_SRC_GPIO38  = 0x38,
+	INPUT_SRC_GPIO39 = 0x39,
+};
+
+//the destination of input xbar is fixed to different modules, different modules can select it as the input.
+struct XBAR_INPUT_CFG_PARAM{
+	enum 			XBAR_INPUT_ID         emXbarInputId;
+	enum			XBAR_INPUT_SRC     emXbarIputSrc;
+};
+
+
+enum XBAR_EPWM_TRIP_ID
+{
+    XBAR_EPWM_TRIP4  = 0,        //!< TRIP4 of the ePWM X-BAR
+    XBAR_EPWM_TRIP5,        //!< TRIP5 of the ePWM X-BAR
+    XBAR_EPWM_TRIP7,        //!< TRIP7 of the ePWM X-BAR
+    XBAR_EPWM_TRIP8,        //!< TRIP8 of the ePWM X-BAR
+    XBAR_EPWM_TRIP9,        //!< TRIP9 of the ePWM X-BAR
+    XBAR_EPWM_TRIP10,       //!< TRIP10 of the ePWM X-BAR
+    XBAR_EPWM_TRIP11,       //!< TRIP11 of the ePWM X-BAR
+    XBAR_EPWM_TRIP12,        //!< TRIP12 of the ePWM X-BAR
+};
+
+
+
+
+
+enum   XBAR_EPWM_SRC{
+	EPWM_CMPSS1_CTRIPH = 0x0000,
+	EPWM_CMPSS1_CTRIPH_OR_CTRIPL,
+	EPWM_ADCAEVT1,
+	EPWM_ECAP1_OUT,
+	EPWM_CMPSS1_CTRIPL = 0x0100,
+	EPWM_INPUTXBAR1,
+	EPWM_RVS12,
+	EPWM_ADCCEVT1,
+	EPWM_CMPSS2_CTRIPH = 0x0200,
+	EPWM_CMPSS2_CTRIPH_OR_CTRIPL,
+	EPWM_ADCAEVT2,
+	EPWM_ECAP2_OUT,
+	EPWM_CMPSS2_CTRIPL = 0x0300,
+	EPWM_INPUTXBAR2,
+	EPWM_RVS32,
+	EPWM_ADCCEVT2,
+	EPWM_CMPSS3_CTRIPH = 0x0400,
+	EPWM_CMPSS3_CTRIPH_OR_CTRIPL,
+	EPWM_ADCAEVT3,
+	EPWM_RVS43,
+	EPWM_CMPSS3_CTRIPL = 0x0500,
+	EPWM_INPUTXBAR3,
+	EPWM_RVS52,
+	EPWM_ADCCEVT3,
+	EPWM_CMPSS4_CTRIPH = 0x0600,
+	EPWM_CMPSS4_CTRIPH_OR_CTRIPL,
+	EPWM_ADCAEVT4,
+	EPWM_RVS63,
+	EPWM_CMPSS4_CTRIPL = 0x0700,
+	EPWM_INPUTXBAR4,
+	EPWM_RVS72,
+	EPWM_ADCCEVT4,
+	EPWM_SRC_INVALID 				= 0xFFFF,
+};
+
+//fix defined	one trip only egiht input source
 struct XBAR_EPWM_CFG_PARAM{
-    XBAR_TripNum         emTripNum;
-    UINT16               MUXES_NUM_VAL   :5;
-    UINT16               MUXES_VAL       :2;
-    UINT16               MUX_ENABLE_VAL  :1;
-    UINT16               TRIPOUTINV_VAL  :8;
+	enum 					XBAR_EPWM_TRIP_ID		emEpwmTripId;
+	UINT16              u16OutInvEnable;
+    enum                  XBAR_EPWM_SRC             emXbarEpwmSrc0;
+    enum                  XBAR_EPWM_SRC             emXbarEpwmSrc1;
+    enum                  XBAR_EPWM_SRC             emXbarEpwmSrc2;
+    enum                  XBAR_EPWM_SRC             emXbarEpwmSrc3;
 };
 
-struct XINTx_CFG_PARAM{
-    XINTx_Num         emXintSelect;
-    UINT16            CR_ENABLE_VAL   :1;
-    UINT16            CR_POLARITY_VAL :2;
-    UINT16            reserve         :13;
+
+enum XBAR_OUTPUT_ID
+{
+    XBAR_OUTPUT1_ID = 0x00,
+    XBAR_OUTPUT2_ID,
+    XBAR_OUTPUT3_ID,
+    XBAR_OUTPUT4_ID,
+    XBAR_OUTPUT5_ID,
+    XBAR_OUTPUT6_ID,
+    XBAR_OUTPUT7_ID,
+    XBAR_OUTPUT8_ID,
 };
 
-/*--emInputSelect-----emGpioNum--*/
-#define INPUT_XBAR_CFG_TAB  \
-{\
-   /* {XBAR_INPUT4, GPIO_HW_Protect_Lock},*/\
-}
-/*--emTripNum----MUXES_NUM_VAL--MUXES_VAL-----------------MUX_ENABLE_VAL--TRIPOUTINV_VAL-*/
+enum XBAR_OUTPUT_SRC
+{
+	OUTPUT_CMPSS1_CTRIPOUTH = 0x0000,
+	OUTPUT_CMPSS1_CTRIPOUTH_OR_CTRIPOUTL,
+	OUTPUT_ADCAEVT1,
+	OUTPUT_ECAP1_OUT,
+	OUTPUT_CMPSS1_CTRIPOUTL = 0x0100,
+	OUTPUT_INPUTXBAR1,
+	OUTPUT_RVS12,
+	OUTPUT_ADCCEVT1,
+	OUTPUT_CMPSS2_CTRIPOUTH = 0x0200,
+	OUTPUT_CMPSS2_CTRIPOUTH_OR_CTRIPOUTL,
+	OUTPUT_ADCAEVT2,
+	OUTPUT_ECAP2_OUT,
+	OUTPUT_CMPSS2_CTRIPOUTL = 0x0300,
+	OUTPUT_INPUTXBAR2,
+	OUTPUT_RVS32,
+	OUTPUT_ADCCEVT2,
+	OUTPUT_CMPSS3_CTRIPOUTH = 0x0400,
+	OUTPUT_CMPSS3_CTRIPOUTH_OR_CTRIPOUTL,
+	OUTPUT_ADCAEVT3,
+	OUTPUT_RVS43,
+	OUTPUT_CMPSS3_CTRIPOUTL = 0x0500,
+	OUTPUT_INPUTXBAR3,
+	OUTPUT_RVS52,
+	OUTPUT_ADCCEVT3,
+	OUTPUT_CMPSS4_CTRIPOUTH = 0x0600,
+	OUTPUT_CMPSS4_CTRIPOUTH_OR_CTRIPOUTL,
+	OUTPUT_ADCAEVT4,
+	OUTPUT_RVS63,
+	OUTPUT_CMPSS4_CTRIPOUTL = 0x0700,
+	OUTPUT_INPUTXBAR4,
+	OUTPUT_RVS72,
+	OUTPUT_ADCCEVT4,
+	OUTPUT_SRC_INVALID 				= 0xFFFF,
+};
+
+//the destination of output xbar is to gpio, and the different OUTPUT_XBAR id to fix different gpio,  using the gpio mux function to select.
+struct XBAR_OUTPUT_CFG_PARAM{
+	enum 			XBAR_OUTPUT_ID         emXbarOutputId;
+	UINT16      u16OutLatchEnable;
+	UINT16      u16OutInvEnable;
+	enum			XBAR_OUTPUT_SRC     emXbarOutputSrc0;
+	enum			XBAR_OUTPUT_SRC     emXbarOutputSrc1;
+	enum			XBAR_OUTPUT_SRC     emXbarOutputSrc2;
+	enum			XBAR_OUTPUT_SRC     emXbarOutputSrc3;
+};
+
+/*--emInputSelect------------------u16OutInvEnable-------------------emXbarEpwmSrc0--------------------emXbarEpwmSrc1----------------emXbarEpwmSrc2-----------------emXbarEpwmSrc3------------*/
 #define EPWM_XBAR_CFG_TAB  \
 {\
-    {XBAR_TRIP4, XBAR_MUX07,   INPUTXBAR4_XBAR_MUX7,         1,            TRIPX_INV_H_ACTIVE},\
-    {XBAR_TRIP4, XBAR_MUX04,   CMP3_CTRIP_H_OR_L_XBAR_MUX4,  1,            TRIPX_INV_H_ACTIVE},\
+	{XBAR_EPWM_TRIP4,						0,										EPWM_CMPSS3_CTRIPL,			EPWM_SRC_INVALID ,				EPWM_SRC_INVALID ,				EPWM_SRC_INVALID },\
+	{XBAR_EPWM_TRIP5,						0,										EPWM_CMPSS1_CTRIPL,			EPWM_SRC_INVALID ,				EPWM_SRC_INVALID ,				EPWM_SRC_INVALID },\
 }
 
-/*--XINTx_Num----CR_ENABLE_VAL-----CR_POLARITY_VAL--------reserve-*/
-#define XINTX_CFG_TAB  \
+#define INPUT_XBAR_CFG_TAB \
 {\
-    {XINT1,      XINT_ENABLED,  XINT_POLARITY_POSITIVE,       0}\
 }
 
-extern void BSW_MCAL_xBarInit(void);
+#define OUTPUT_XBAR_CFG_TAB  \
+{\
+}
+
+extern void bsw_mcal_xbar_init(void);
 
 #endif /* BSW_MCAL_MCAL_INC_BSW_MCAL_XBAR_H_ */

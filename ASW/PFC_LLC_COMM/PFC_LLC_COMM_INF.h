@@ -10,6 +10,7 @@
 
 extern INT8 g_i8PfcPowerStatusTest;
 
+
 /* signal status */
 typedef enum {
     WORK_MODE_STANDBY = 0,
@@ -207,14 +208,8 @@ extern void pfc_llc_comm_rx_hander(void *p_stAplDmTemp);
 #define u16_get_test_val3H()             (g_unPfcSlowRxMsg.bits.Test3ValueH)
 
 #define u16_get_acFrequency_hz()         (g_unPfcSlowRxMsg.bits.AcFreqHzL + (g_unPfcSlowRxMsg.bits.AcFreqHzH << 8))
-#define u16_get_Vbus_avg()               (g_unPfcSlowRxMsg.bits.VbusAvgL + (g_unPfcSlowRxMsg.bits.IbusAvgH << 8))
+#define u16_get_Vbus_avg()                   (g_unPfcSlowRxMsg.bits.VbusAvgL + (g_unPfcSlowRxMsg.bits.IbusAvgH << 8))
 
-#define  u16_get_pfc_power_status(PFC_POWER_STATUS)       \
-         {\
-           if(g_i8PfcPowerStatusTest > 0){\
-               PFC_POWER_STATUS = g_i8PfcPowerStatusTest;\
-           }else{\
-               PFC_POWER_STATUS = g_unPfcSlowRxMsg.bits.b4PsmState;\
-           }\
-         }
+#define    u16_loop_work_mode()         0
+
 #endif /* _PFC_LLC_COMM_INF_H_ */

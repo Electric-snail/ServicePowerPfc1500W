@@ -19,7 +19,7 @@ float f32VoltRaw;
 float g_f32VoltLpf;
 
 REG_CFG_ITEM_F32(VOUT_RAW,		f32VoltRaw,    		VAR_WR,			0,			-1000000,			1000000);
-REG_CFG_ITEM_F32(VOUT_LPF,      g_f32VoltLpf,  		VAR_RD,		0,			-1000000,			1000000);
+REG_CFG_ITEM_F32(VOUT_LPF,      	g_f32VoltLpf,  		VAR_RD,		0,			-1000000,			1000000);
 
 /******************* Global Variable Decration *******************/
 int main(void)
