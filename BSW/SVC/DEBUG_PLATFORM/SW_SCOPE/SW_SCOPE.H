@@ -8,15 +8,11 @@
 #ifndef BSW_DEBUGPLATFORM_SW_SCOPE_H_
 #define BSW_DEBUGPLATFORM_SW_SCOPE_H_
 
-#include <PUBLIC_INC/RING_ARRAY.H>
+#include "PUBLIC_INC/RING_ARRAY.H"
+#include "DEBUG_PLATFORM/DBG_BASIC.H"
 
-#define  SCOPE_VAR_MAX_ITEM_CNT        			6
 #define  SCOPE_STOP_CMD                         				0
 #define  SCOPE_RUN_CMD                          				1
-
-#if(SCOPE_VAR_MAX_ITEM_CNT > 6)
-#error"The SCOPE_VAR_MAX_ITEM_CNT must below 7"
-#endif
 
 typedef struct{
     UINT16   ul8VarCnt:        	  8;

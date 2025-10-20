@@ -29,6 +29,10 @@ Copyright Notice:
 
 #ifndef  DLLX64
 #pragma  CODE_SECTION(adcA1ISR, ".TI.ramfunc");
+#pragma  DATA_SECTION(g_stAnaPhyRaw, 		".CtrlVariableSector");
+#pragma  DATA_SECTION(gs_stSogi, 					".CtrlVariableSector");
+#pragma  DATA_SECTION(gs_stVpfcNotchFilt, ".CtrlVariableSector");
+#pragma  DATA_SECTION(gs_stOrthPll, 			".CtrlVariableSector");
 #endif
 
 
@@ -48,12 +52,11 @@ volatile SOGI_OBJ_T   					gs_stSogi;
 volatile NOTCH_OBJ_2TH_T	    gs_stVpfcNotchFilt;
 volatile ORTH_PLL_OBJ_T  		    gs_stOrthPll;
 
-volatile float                  g_f32VpfcIsrLpf = 0.0f;
+volatile float                  		g_f32VpfcIsrLpf = 0.0f;
 unsigned short				         g_u16PllFirstStart  = 1;
 volatile unsigned short         g_u16FaultDetetFlag = 0;
 unsigned short						g_u16LoopWorkMode =  LOOP_INVALID_MODE;
 float										g_f32OpenDuty = 0.0f;
-
 void adc_isr_init(void)
 {
 	gs_stSogi.stCoff.f32Kp = 1.414f;

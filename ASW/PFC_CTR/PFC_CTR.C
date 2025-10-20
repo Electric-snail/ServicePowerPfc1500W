@@ -12,12 +12,17 @@
 #include "MEASURE/MEASURE.h"
 #include "PUBLIC_INC/DC_MATH.H"
 
+#ifndef  DLLX64
+#pragma  DATA_SECTION(gs_stVpfcPiCtrl, ".CtrlVariableSector");
+#pragma  DATA_SECTION(gs_stIacPiGainCtrl, ".CtrlVariableSector");
+#endif
+
 STATIC PI_POS_T				    gs_stVpfcPiCtrl;
 STATIC PI_GAIN_POS_T		gs_stIacPiGainCtrl;
 STATIC float							    gs_f32FeedCoff;
 PFC_CTR_OUT						g_stPfcOut;
-float						g_f32VpfcPiKpFast;
-float						g_f32VpfcPiKiTsFast;
+//float						g_f32VpfcPiKpFast;
+//float						g_f32VpfcPiKiTsFast;
 float						g_f32VpfcPiKpSlow;
 float						g_f32VpfcPiKiTsSlow;
 float                       g_f32PowerOpenSet = 0;
@@ -28,15 +33,15 @@ void 	pfc_controller_init(void){
 		gs_stVpfcPiCtrl.stCoff.f32OutMax				= 3500.0f;   //output is the input power,maximum the input power
 		gs_stVpfcPiCtrl.stCoff.f32OutMin				= -1000.0f;
 
-		g_f32VpfcPiKpFast									= 500;
-		g_f32VpfcPiKiTsFast									= 5 * 2*3.1415926f * 5 * CTR_PERIOD;
+	//	g_f32VpfcPiKpFast									    = 100;
+	//	g_f32VpfcPiKiTsFast									= 5 * 2*3.1415926f * 5 * CTR_PERIOD;
 
-		g_f32VpfcPiKpSlow									= 50.0f;
-		g_f32VpfcPiKiTsSlow									= 5 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+		g_f32VpfcPiKpSlow									    = 50.0f;
+		g_f32VpfcPiKiTsSlow									= 6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
 
-		gs_stVpfcPiCtrl.stCoff.f32Kp						= 70.0f;
-		gs_stVpfcPiCtrl.stCoff.f32KiTs						= 50.0f * CTR_PERIOD;
-		gs_stVpfcPiCtrl.stInner.f32Integrate				= 0;
+		gs_stVpfcPiCtrl.stCoff.f32Kp						= g_f32VpfcPiKpSlow;
+		gs_stVpfcPiCtrl.stCoff.f32KiTs					= g_f32VpfcPiKiTsSlow;
+		gs_stVpfcPiCtrl.stInner.f32Integrate			= 0;
 		gs_stVpfcPiCtrl.stInner.f32Err						= 0;
 
 		gs_stIacPiGainCtrl.stCoff.f32IntegrateMax			= 0.95f;
@@ -85,8 +90,8 @@ void 	pfc_controller(void){
 			//gs_stVpfcPiCtrl.stCoff.f32Kp = (f32VpfcErrAbs - 10) * 10 + 50.0f;
 			//gs_stVpfcPiCtrl.stCoff.f32KiTs  = (f32VpfcErrAbs - 10) * 1 + 5 * 2 * 3.1415926f * 5 * CTR_PERIOD;
 		}*/
-		gs_stVpfcPiCtrl.stCoff.f32Kp	= 50.0f;
-		gs_stVpfcPiCtrl.stCoff.f32KiTs	= 1 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+		gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
+		gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
 
 		ctrl_pi_position(&gs_stVpfcPiCtrl);
 
@@ -104,7 +109,7 @@ void 	pfc_controller(void){
 
 		//gs_stIacPiGainCtrl.stIn.f32Ref	= gs_stVpfcPiCtrl.stOut.f32Out*ABSF(f32VacPll)/(f32VinRms * f32VinRms) + f32XCapCompI;
 
-		if(g_u16LoopWorkMode 	== LOOP_VOLT_OPEN_IL_CLOSE){
+		if(u16_get_loop_mode() 	== LOOP_VOLT_OPEN_IL_CLOSE){
 		       gs_stIacPiGainCtrl.stIn.f32Ref	= g_f32PowerOpenSet * ABSF(f32VacPll)/(f32VinRms * f32VinRms);
 		}
 

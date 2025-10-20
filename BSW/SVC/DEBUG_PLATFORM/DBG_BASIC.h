@@ -7,13 +7,6 @@
 #ifndef _DBG_BASIC_H_
 #define _DBG_BASIC_H_
 
-#include <PUBLIC_INC/LIST.H>
-
-#include "DEBUG_PLATFORM/DATA_REC/DATA_REC.h"
-#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.h"
-#include "DEBUG_PLATFORM/COMM_TEST/COMM_TEST.H"
-
-
 enum VAR_TYPE
 {
     eu_int8     = 0x10,
@@ -25,11 +18,14 @@ enum VAR_TYPE
     eu_fp32     = 0x16,
 };
 
-#define  ENABLE_PARAM_CFG               (1)
-#define  DATA_REC_MAX_CNT               12
-#define  VAR_NAME_CHAR_MAX_LEN_BYTE     32
-#define  SCOPE_VAR_MAX_ITEM_CNT         6
+#define  ENABLE_PARAM_CFG               					(1)
+#define  DATA_REC_MAX_CNT               					12
+#define  VAR_NAME_CHAR_MAX_LEN_BYTE     	32
+#define  SCOPE_VAR_MAX_ITEM_CNT         			6
 
+#if(SCOPE_VAR_MAX_ITEM_CNT > 6)
+#error"The SCOPE_VAR_MAX_ITEM_CNT must below 7"
+#endif
 
 #if(DATA_REC_MAX_CNT > 12)
 #error the maximum counter of data record variable must be less than 13

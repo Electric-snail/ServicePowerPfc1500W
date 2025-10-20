@@ -80,18 +80,18 @@ typedef struct
 /*---emSwDiagId-----------------u16ErrCnt-------u16RcvrCnt------f32PrtctThreshold------f32RcvrThreshold*/
 #define DIAG_PARAM_TAB          \
 {\
-    { VIN_RMS_OVP_ID,               5,           10,            45,                    265 },\
-    { VIN_RMS_UVP_ID,               5,           10,             25,                     85 },\
+    { VIN_RMS_OVP_ID,               5,           10,            270,                    265 },\
+    { VIN_RMS_UVP_ID,               5,           10,             80,                     85 },\
     { VIN_OFP_ID,                   		 5,           10,             75,                     70 },\
     { VIN_UFP_ID,              	         5,           10,             40,                     45 },\
     { VPFC_OVP_HW_ID,             1,           0,              0.5,                    0 },\
-    { IL_CBBP_ID,                			30,          0,              0.5,                    0 },\
-    { VPFC_FAST_OVP_ID,          10,          0,              220,                    0 },\
-    { VPFC_SLOW_OVP_ID,          20,          0,             200,                    0},\
-    { VPFC_FAST_UVP_ID,            5,           0,              15,                     0},\
-    { VPFC_SLOW_UVP_ID,          20,          0,              10,                     0},\
-    { IN_OPP_ID,                    			5,           0,              800,                   0 },\
-    { IN_RMS_OCP_ID,               		5,           0,              10,                     0 },\
+    { IL_CBBP_ID,                			100,          0,              0.5,                    0 },\
+    { VPFC_FAST_OVP_ID,          10,          0,              430,                    0 },\
+    { VPFC_SLOW_OVP_ID,          20,          0,            420,                    0},\
+    { VPFC_FAST_UVP_ID,            5,           0,              280,                     0},\
+    { VPFC_SLOW_UVP_ID,          20,          0,             260,                     0},\
+    { IN_OPP_ID,                    			5,           0,              1000,                   0 },\
+    { IN_RMS_OCP_ID,               		5,           0,              15,                     0 },\
 };
 
 #define  ASW_DiagSWFaultOverNoRecv(Flag, PhysVal, PrtctThreshold, u8Count, ERR_CNT)  \

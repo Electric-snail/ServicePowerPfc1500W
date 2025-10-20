@@ -23,6 +23,7 @@ typedef struct
 	{diagnostic_init,			1},\
 /*	{sys_fsm_init,		    1},			 */   \
 	{power_fsm_init,	    1},			      \
+	{vpfc_mgt_init,	    	1},			      \
 }
 
 

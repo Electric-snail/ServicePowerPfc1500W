@@ -54,7 +54,7 @@ void diagnostic_init(void){
 void diagnostic_fast_task(void) {
 	float f32IlCbcFlg = (float)read_pfc_drv_dcaevt2_flag();
 	clr_pfc_drv_deaevt2_flag();
-//	ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1IlCbbp, f32IlCbcFlg, gc_stSwdiagCfgParam[IL_CBBP_ID].f32PrtctThreshold, g_u16SwDiagCount[IL_CBBP_ID], gc_stSwdiagCfgParam[IL_CBBP_ID].u16ErrCnt);
+	ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1IlCbbp, f32IlCbcFlg, gc_stSwdiagCfgParam[IL_CBBP_ID].f32PrtctThreshold, g_u16SwDiagCount[IL_CBBP_ID], gc_stSwdiagCfgParam[IL_CBBP_ID].u16ErrCnt);
 
 	if(read_vpfc_hw_ovp_flag() == 1){
 		g_stDiagStatus.unNoRecvFault.bits.b1VfpcHwOvp = 1;

@@ -141,11 +141,11 @@ typedef struct{
 }CMPSS_CMP_CFG_T;
 
 
-//---emCmpModule---------u16PosSrc--------------------------u16NegSrc-----------u16DacValue----------u16OutInv------emOutToEpwmSel-----------------emOutToOutputSel---------------
+//---emCmpModule---------u16PosSrc--------------------------u16NegSrc--------------------------------------u16DacValue--------------------------------------u16OutInv------emOutToEpwmSel-----------------emOutToOutputSel---------------
 #define CMPSS_CMP_CFG_TAB \
 {\
-    {CMP1_L_ID,         		 IL_CBB_CMP_IO,         				  CMP1L_N_DAC,			346,      					0,		         CMPOUT_SYNC,		   				CMPOUT_SYNC},\
-    {CMP3_L_ID,         		 VPFC_OVP_CMP_IO,        		  CMP3L_N_DAC,			964,      					0,		         CMPOUT_FILT_LATCH,		   	CMPOUT_FILT_LATCH},\
+    {CMP1_L_ID,         		 IL_CBB_CMP_IO,         				  CMP1L_N_DAC,			(IL_CBC_VALUE*4095/FULL_RANGE_IIN_H),      					0,		         CMPOUT_SYNC,		   				CMPOUT_SYNC},\
+    {CMP3_L_ID,         		 VPFC_OVP_CMP_IO,        		  CMP3L_N_DAC,			(VPFC_HW_OVP*4095/FULL_RANGE_VPFC),      					0,		         CMPOUT_FILT_LATCH,		   	CMPOUT_FILT_LATCH},\
 }
 
 extern void bsw_mcal_cmpss_init(void);

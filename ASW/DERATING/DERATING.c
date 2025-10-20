@@ -18,27 +18,10 @@ float g_f32PowerLimitTest = 0.0f;
 
 void derating_init(void)
 {
-    g_f32PowerDeratingActive = 300.0f;
-}
-
-static float TempDeratingProc(void)
-{
-    // 温度大于100°时从300W->100W
-    // 温度小于95°时从100W->300W
-    // 根据NTC - 314的温度，当NTC - 314的温度达到100°C时，MDCDC的最大功率有300W – > 100W
-    // 当NTC - 314的温度恢复到95°C时，MDCDC的最大功率有100W – > 300W
-}
-
-static float VoltageDeratingProc(void)
-{
+    g_f32PowerDeratingActive = 2000.0f;
 }
 
 void derating_task_20ms(void)
-{
-}
-
-
-float GetPowerDeratingPower(void)
 {
 }
 

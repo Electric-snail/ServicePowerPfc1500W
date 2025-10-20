@@ -21,6 +21,7 @@ PAGE 0:
 PAGE 1:
    BOOT_RSVD                	: origin = 0x00000002, length = 0x00000126
    RAMM0            		    	: origin = 0x00000128, length = 0x000002D8
+   //Why is it not the 0x400?
    RAMM1            		    	: origin = 0x00000400, length = 0x000003F8
    RAMLS0_0                    	: origin = 0x00008000, length = 0x00001000
    // Combine two sections RAMLS0_2 RAMLS0_3
@@ -43,21 +44,24 @@ SECTIONS
    /*
     * ROM sections
     */
-   codestart       		   : > BEGIN_APP,			 			PAGE = 0, ALIGN(4)
-   .reset              	   : > RESET,            						PAGE = 0, TYPE = DSECT // not used
-   .cinit                    : > FLASH_APP,  						PAGE = 0, ALIGN(8)
-   .pinit              	   : >> FLASH_APP, 						PAGE = 0, ALIGN(8)
-//   .econst          	   : >> CONSTANTS, 	     			PAGE = 0, ALIGN(8)
-   .econst          	   	   : >> FLASH_APP, 				    PAGE = 0, ALIGN(8)
-   .text               	   : >> FLASH_APP, 						PAGE = 0, ALIGN(8)
-   .switch           	   : > FLASH_APP,  						PAGE = 0, ALIGN(8)
+   codestart       		   : > BEGIN_APP,			 									PAGE = 0, ALIGN(4)
+   .reset              	   : > RESET,            												PAGE = 0, TYPE = DSECT // not used
+   .cinit                    : > FLASH_APP,  												PAGE = 0, ALIGN(8)
+   .pinit              	   : >> FLASH_APP, 												PAGE = 0, ALIGN(8)
+//   .econst          	   : >> CONSTANTS, 	     									PAGE = 0, ALIGN(8)
+   .econst          	   	   : >> FLASH_APP, 				    						PAGE = 0, ALIGN(8)
+   .text               	   : >> FLASH_APP, 												PAGE = 0, ALIGN(8)
+   .switch           	   : > FLASH_APP,  												PAGE = 0, ALIGN(8)
 
+   /* LSRAM0 */
+   .SCOPE_BUFF_SECTION  :>RAMLS0_0,  	    						PAGE = 1
    /* LSRAM1 */
-   .ebss              	   : > RAMLS1,  	PAGE = 1
-   .esysmem     		   : > RAMLS1,   	PAGE = 1
-   .cio                    : > RAMLS1,   	PAGE = 1
-  .RING_BUFF_SECTION      : > RAMLS1,   								PAGE = 1
-  .Key_Location           : > APP_KEY_LOCATION,        				PAGE = 1, ALIGN(8)
+   .ebss              	   						: > RAMLS1,  								PAGE = 1
+   .esysmem     		   					: > RAMLS1,   								PAGE = 1
+   .cio                    						: > RAMLS1,   								PAGE = 1
+  .RING_BUFF_SECTION       : > RAMLS1,   								PAGE = 1
+
+  .Key_Location          			    : > APP_KEY_LOCATION,        				PAGE = 1, ALIGN(8)
   GROUP
    {
        .TI.ramfunc

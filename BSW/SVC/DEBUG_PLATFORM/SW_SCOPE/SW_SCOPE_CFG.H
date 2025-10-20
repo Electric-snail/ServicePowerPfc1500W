@@ -8,14 +8,17 @@
 #ifndef SCOPE_EXTERN_VAR_DECLAR
 #define SCOPE_EXTERN_VAR_DECLAR
 #include "ISR_INC/BSW_ISR_ADC.H"
+#include "PUBLIC_INC/DC_MATH.H"
 extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
+extern 	PI_POS_T				    							gs_stVpfcPiCtrl;
+extern    PI_GAIN_POS_T									gs_stIacPiGainCtrl;
 #endif
 
 //蹇呴』涓�4锛� 8锛� 12锛�16锛�20锛�24鏈�灏忓叕鍊嶆暟銆�
-#define SW_SCOPE_CASH_SIZE           (1680*2)
+#define SW_SCOPE_CASH_SIZE           (120*34)
 
-#if(SW_SCOPE_CASH_SIZE%1680 != 0)
-#error"the SW_SCOPE_CACHE_SIZE must be times of 1680"
+#if(SW_SCOPE_CASH_SIZE%120 != 0)
+#error"the SW_SCOPE_CACHE_SIZE must be times of 120"
 #elif(SW_SCOPE_CASH_SIZE > 5120)
 #endif
 
@@ -38,9 +41,12 @@ extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
 
 //-------------name------------------------------startup_mode------------cache_size
 SW_SCOPE_START(PFC_SCOPE,		 STARTUP_GUI,  SW_SCOPE_CASH_SIZE)
-SW_SCOPE_ITEM( gs_stOrthPll.stOut.f32SigAlpha)
-SW_SCOPE_ITEM(gs_stOrthPll.stOut.f32SigBeta)
-SW_SCOPE_ITEM(gs_stVpfcNotchFilt.stOut.f32Out)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Ref)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Fb)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stOut.f32Out)
+SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Ref)
+SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Fb)
+SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IlAve)
 //SW_SCOPE_ITEM(g_stAnaPhyRaw.f32VinN)
 //SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IinL)
 //SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IlAveL)

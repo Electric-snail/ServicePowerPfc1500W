@@ -67,6 +67,7 @@
 
 
 #define    HW_ADC_REF_VOLT										3.3f
+
 #define 	 FULL_RANGE_VIN_L										535.182f
 #define 	VIN_N_OFFSET                     								-0.7f
 
@@ -76,16 +77,18 @@
 #define 	 FULL_RANGE_VPFC										509.465f
 #define 	 HW_OFFSET_VPFC                      						0.0f
 
-#define 	 FULL_RANGE_CUR_INDUCTOR_L								35.455f
-#define 	 HW_OFFSET_CUR_INDUCTOR_L								0.017f
+#define 	 FULL_RANGE_CUR_INDUCTOR_L							35.455f
+#define 	 HW_OFFSET_CUR_INDUCTOR_L								0.064f
 
 #define 	 FULL_RANGE_CUR_INDUCTOR_H								70.91f
-#define 	 HW_OFFSET_CUR_INDUCTOR_H								0.0085f
+#define 	 HW_OFFSET_CUR_INDUCTOR_H								0.032f
 
 #define 	 FULL_RANGE_IIN_L										35.455f
-#define 	 HW_OFFSET_IIN_L                						0.017f
+#define 	 HW_OFFSET_IIN_L                						0.064f
 
-#define 	 FULL_RANGE_IIN_H										70.91f
-#define 	 HW_OFFSET_IIN_H                						0.0085f
+#define 	 FULL_RANGE_IIN_H									70.91f
+#define 	 HW_OFFSET_IIN_H                						0.032f
 
+#define    IL_CBC_VALUE												20.0f
+#define   VPFC_HW_OVP												440.0f
 #endif /* BSW_BASIC_HARDWARE_BASIC_ENV_H_ */

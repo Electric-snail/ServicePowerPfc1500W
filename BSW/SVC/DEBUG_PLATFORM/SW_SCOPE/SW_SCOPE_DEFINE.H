@@ -8,7 +8,7 @@
     #undef 	SW_SCOPE_START
     #undef 	SW_SCOPE_ITEM
     #undef 	SW_SCOPE_END
-	#pragma DATA_SECTION(g_ua16ScopeBuff, ".RING_BUFF_SECTION");
+	#pragma DATA_SECTION(g_ua16ScopeBuff, ".SCOPE_BUFF_SECTION");
 	#define SW_SCOPE_START(name,startup_mode,cache_size)      UINT16 g_ua16ScopeBuff[cache_size] = {0};	\
                                                  SW_SCOPE_CTRL_OBJ     		g_stScopeCtrlInfo;    			\
 												 SW_SCOPE_GUI_CFG_ITEM 	g_stGuiCfgSwScope;
@@ -36,7 +36,7 @@
 												  void sw_scope_##name##_item(void){                     						\
 	                                              float     f32Temp;                                                            \
                                                   UINT16    *p_u16Temp = NULL;                                                  \
-                                                  UINT16  	ua16RecBuf[((SCOPE_VAR_MAX_ITEM_CNT * VAR_NAME_CHAR_MAX_LEN_BYTE + 1) >> 1)]={0};        	\
+                                                  UINT16  	ua16RecBuf[120]	=	{0};        	\
                                                   FRAME_PROTOCOL_FORMAT st_ScopeItemFrame = {0};  								\
                                                   UINT16 *p_ua16RecBuffTemp = ua16RecBuf;										\
                                                   SCOPE_ITEM_INFO  *p_cfg_item  = NULL;   		    							\
@@ -66,7 +66,7 @@
                                                   rec_w_index += 4;		                     														  \
                                                   p_cfg_item 										   = (SCOPE_ITEM_INFO *)p_ua16RecBuffTemp;        \
                                                   u8CharNum											   = strlen(p_u8PackName);				          \
-                                                  if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= ((SCOPE_VAR_MAX_ITEM_CNT * VAR_NAME_CHAR_MAX_LEN_BYTE + 1) >> 1)) return;   \
+                                                  if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= 120) return;   \
                                                   p_cfg_item->bits.uh8NameLen     = u8CharNum; 								\
                                                   rec_w_index++;															\
                                                   for(i = 0; i < u8CharNum;i+= 2){							       			\
@@ -75,7 +75,7 @@
                                                   }
      #define SW_SCOPE_ITEM(var)              p_u8PackName  = #var;														\
 		                                          u8CharNum									    = strlen(p_u8PackName);	    \
-		                                          if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= ((SCOPE_VAR_MAX_ITEM_CNT * VAR_NAME_CHAR_MAX_LEN_BYTE + 1) >> 1)) return;      \
+		                                          if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= 120)    return;      \
 											      p_VarName = (SCOPE_VAR_NAME  *)(ua16RecBuf + rec_w_index);				\
 												  p_VarName->bits.uh8NameLen   = u8CharNum;     							\
 												  p_VarName->bits.ul8Index     = max_var_item;          	                \
@@ -157,7 +157,7 @@
 													}
  #define SW_SCOPE_ITEM(var) 				   	 u8VarNum++;  
  #define SW_SCOPE_END()                          g_stScopeCtrlInfo.u8Enable = 0;\
-													if((u8VarNum < SCOPE_VAR_MAX_ITEM_CNT)||(u8VarNum > 0)){\
+													if((u8VarNum <=  SCOPE_VAR_MAX_ITEM_CNT)||(u8VarNum > 0)){\
 														g_stScopeCtrlInfo.u8VarChannelNum = u8VarNum;\
 														if(g_stGuiCfgSwScope.u8TrigIndex < g_stScopeCtrlInfo.u8VarChannelNum)\
 															g_stScopeCtrlInfo.u8Enable = 1;\

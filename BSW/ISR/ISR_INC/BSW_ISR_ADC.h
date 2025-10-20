@@ -67,6 +67,8 @@ extern volatile float                  g_f32VpfcIsrLpf;
 
 extern INTERRUPT void adcA1ISR(void);
 
+#define   u16_get_loop_mode()            g_u16LoopWorkMode
+
 extern void adc_isr_init(void);
 
 #ifdef __cplusplus
