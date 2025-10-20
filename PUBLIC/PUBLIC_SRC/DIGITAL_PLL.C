@@ -1,4 +1,4 @@
-#include <PUBLIC_INC/DIGITAL_PLL.H>
+#include  "PUBLIC_INC/DIGITAL_PLL.H"
 
 /**************************************************************************************************
   Function:       sogi_set_central_freq
@@ -9,7 +9,7 @@
   Return:         
   Others:         
 **************************************************************************************************/
-void sogi_set_freq_1p(SOGI_OBJ_T *pst_sogi, float f32Freq)
+void sogi_set_freq_1p(VOLATILE		SOGI_OBJ_T *pst_sogi, float f32Freq)
 {
     pst_sogi->stCoff.f32Wn      = 2.0f * 3.1415926f * f32Freq;
 }
@@ -46,7 +46,7 @@ void sogi_set_freq_1p(SOGI_OBJ_T *pst_sogi, float f32Freq)
   Return:         
   Others:         
 **************************************************************************************************/
-void sogi_proc_1p(SOGI_OBJ_T *pst_sogi)
+void sogi_proc_1p(VOLATILE	SOGI_OBJ_T *pst_sogi)
 {
     float kp_out_tmp;
     float err_tmp;
@@ -114,7 +114,7 @@ void sogi_proc_1p(SOGI_OBJ_T *pst_sogi)
   Return:
   Others:
 **************************************************************************************************/
-void orth_pll_proc_1p(ORTH_PLL_OBJ_T  *pst_OrthPll)
+void orth_pll_proc_1p(VOLATILE	ORTH_PLL_OBJ_T  *pst_OrthPll)
 {
 	float f32OutXTemp, f32OutYTemp, f32ErrTemp;
     f32OutXTemp 								= (pst_OrthPll->stCoff.f32CosOmegT * pst_OrthPll->stOut.f32SigAlpha - pst_OrthPll->stCoff.f32SinOmegT * pst_OrthPll->stOut.f32SigBeta);

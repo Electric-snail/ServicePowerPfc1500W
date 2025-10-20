@@ -9,7 +9,7 @@
 #define     _DLL_STACK_DLL_SCI_H_
 
 #include "ENV_CFG/SOFTWARE_ENV_CFG.H"
-#include "DP_STACK/DPStackCfg.h"
+#include "DP_STACK/DP_STACK_CFG.H"
 
 
 #if(DP_SCIA_ENABLE == 1)

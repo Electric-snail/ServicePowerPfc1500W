@@ -8,30 +8,35 @@
 #ifndef BSW_SVC_BASIC_H_
 #define BSW_SVC_BASIC_H_
 
-#include <PUBLIC_INC/AUTO_REGISTER.H>
-#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
-#include "MCAL/BSW_MCAL_BASIC.h"
-#include "TASK/BSW_TASK_SERVICE.h"
-#include "DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER.H"
+#include "../ENV_CFG/SOFTWARE_ENV_CFG.h"
 
-typedef void  (*pf_svc_id_init)(void);
+typedef void(*SvcInitType)(void);
 
 typedef struct
 {
-    const char     *svc_name;
-    pf_svc_id_init  svc_id_init;
-    UINT8           svc_id_status;
-}SVC_INIT_OBJ;
+	SvcInitType pf_svc_init;    // Task process entity pointer
+	UINT8       enable;			  // Task enable word
+}SVC_INIT_ITEM_T;
 
-#define REG_SVC_SECTION  __attribute__ ((used,section(".SVC_REG_SECTION")))
-
-#define REG_SVC_INIT_ITEM(name,p_user_data)  const AUTO_REG_OBJ _auto_reg_##name REG_SVC_SECTION = {#name,AUTO_REG_SVC_INIT,p_user_data};
-
-///-------device
-#define REG_SVC_INIT(svc_name,init)                                                                      \
-                static SVC_INIT_OBJ svc_init_##svc_name = {#svc_name,init,0};\
-                REG_SVC_INIT_ITEM(svc_name,(void*)&svc_init_##svc_name)
-
+#ifndef DLLX64
+#define SVC_INIT_TAB \
+{\
+  {bsw_svc_vScheInit,			1},\
+  {apl_init,                    			1},\
+  {param_core_init,             	1},\
+  {storage_init,                		1},\
+/*  {sfra_init,                   1},*/\
+  {sw_scope_init,               	1},\
+  {adc_isr_init,						1},\
+}
+#else
+#define SVC_INIT_TAB \
+{\
+  {bsw_svc_vScheInit,			1},\
+  {storage_init,			    1},\
+  {adc_isr_init,				1},\
+}
+#endif
 extern void bsw_svc_init(void);
 
 

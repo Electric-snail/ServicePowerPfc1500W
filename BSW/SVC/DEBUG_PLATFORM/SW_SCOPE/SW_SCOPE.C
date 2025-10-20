@@ -8,12 +8,11 @@
 #include "BSW_SVC_BASIC.H"
 #include "DEBUG_PLATFORM/DBG_BASIC.H"
 #include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
-#include "DP_STACK/DPStackBasic.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DP_STACK/APL/APL_STACK.H"
 #include "PUBLIC_INC/MEM_HANDLE.H"
-#include "TASK/BSW_TASK_SERVICE.H"
 #include "string.h"
 
 RING_ITEM g_stScopeRingCtrl = {0};
@@ -132,7 +131,7 @@ void sw_scope_task(void)
 	}
 }
 
-REG_TASK(sw_scope_task,1,1,0);
+//REG_TASK(sw_scope_task,1,1,0);
 
 void scope_get_data_cmd_action(void){
     FRAME_PROTOCOL_FORMAT st_ScopeDataFrame = {0};
@@ -177,7 +176,7 @@ void SwScopeCmdSetLink(void *p_stAplDmTemp){
                 #define GEN_SW_SCOPE_RUN_CMD_CALL
                         #include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_CFG.H"
                 #undef GEN_SW_SCOPE_RUN_CMD_CALL
-        }
+      }
         break;
         case SW_SCOPE_GET_DATA_ID:{
             scope_get_data_cmd_action();

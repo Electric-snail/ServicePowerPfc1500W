@@ -7,12 +7,12 @@
 #include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_DEFINE.H"
 #ifndef SCOPE_EXTERN_VAR_DECLAR
 #define SCOPE_EXTERN_VAR_DECLAR
-extern float f32VoltRaw;
-extern float g_f32VoltLpf;
+#include "ISR_INC/BSW_ISR_ADC.H"
+extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
 #endif
 
-//必须为4， 8， 12，16，20，24最小公倍数。
-#define SW_SCOPE_CASH_SIZE           1680
+//蹇呴』涓�4锛� 8锛� 12锛�16锛�20锛�24鏈�灏忓叕鍊嶆暟銆�
+#define SW_SCOPE_CASH_SIZE           (1680*2)
 
 #if(SW_SCOPE_CASH_SIZE%1680 != 0)
 #error"the SW_SCOPE_CACHE_SIZE must be times of 1680"
@@ -24,7 +24,6 @@ extern float g_f32VoltLpf;
 
 #define STARTUP_ITSELF              0
 #define STARTUP_GUI                 1
-
 //Unit --> ms
 #define SW_SCOPE_TASK_PERIOD        1
 
@@ -37,9 +36,14 @@ extern float g_f32VoltLpf;
 #define TRIGG_METHOD                FALLING_EDGE
 #endif
 
-//-------------name------startup_mode----cache_size
-SW_SCOPE_START(LLC_SCOPE, STARTUP_GUI,  SW_SCOPE_CASH_SIZE)
-SW_SCOPE_ITEM(f32VoltRaw)
-SW_SCOPE_ITEM(g_f32VoltLpf)
+//-------------name------------------------------startup_mode------------cache_size
+SW_SCOPE_START(PFC_SCOPE,		 STARTUP_GUI,  SW_SCOPE_CASH_SIZE)
+SW_SCOPE_ITEM( gs_stOrthPll.stOut.f32SigAlpha)
+SW_SCOPE_ITEM(gs_stOrthPll.stOut.f32SigBeta)
+SW_SCOPE_ITEM(gs_stVpfcNotchFilt.stOut.f32Out)
+//SW_SCOPE_ITEM(g_stAnaPhyRaw.f32VinN)
+//SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IinL)
+//SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IlAveL)
+//SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Fb)
 SW_SCOPE_END()
 

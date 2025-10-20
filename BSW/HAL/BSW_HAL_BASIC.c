@@ -10,7 +10,7 @@
 #include "HAL/BSW_HAL_BASIC.h"
 
 
-void BSW_HAL_Init(void)
+void bsw_hal_init(void)
 {
     //BswHalAdcInit();
     //BSW_MCAL_Flash_API_Init();

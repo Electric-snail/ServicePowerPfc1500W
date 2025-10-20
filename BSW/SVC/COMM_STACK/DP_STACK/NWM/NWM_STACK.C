@@ -8,8 +8,8 @@
 #include "PUBLIC_INC/LINE_BUFF.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 
-#include "DP_STACK/DPStackBasic.h"
-#include "DP_STACK/DPStackCfg.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
+#include "DP_STACK/DP_STACK_CFG.H"
 
 UINT16  g_au16DllScicRxMsgBuff[100] = {0};
 //extern UINT16  g_au16DllScibRxMsgBuff[100];
@@ -110,7 +110,7 @@ void Nwm_Rx_Frame(void){
     UINT16 *p_u16Data;
     INT16 i16FrameRxStatus;
     UINT8 i;
-    UINT16 u16DataLen = 0;
+//jackey    UINT16 u16DataLen = 0;
     const LINK_HAL_ITEM *p_stLinkHalItem = NULL;
     for(i = 0; i < (sizeof(gc_stLinkItemTab)/sizeof(LINK_HAL_ITEM)); i++){
         p_stLinkHalItem = &gc_stLinkItemTab[i];

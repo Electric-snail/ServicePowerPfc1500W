@@ -5,7 +5,7 @@
  *      Author: xj8r1j
  */
 #include    "BSW_SVC_BASIC.h"
-#include    "DP_STACK/DPStackBasic.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
 
 UINT16 g_u16BootLoadFlg = 0;
 UINT32 g_u32CLLCJumpBoot;

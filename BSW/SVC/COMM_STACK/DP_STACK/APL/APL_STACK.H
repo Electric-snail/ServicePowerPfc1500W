@@ -54,4 +54,7 @@ typedef struct
 	{PARAM_CALIB_CMD_SET,   ParamCalibCmdSetLink},\
 }
 
+extern void apl_init(void);
+extern void apl_main(void);
+
 #endif /* BSW_SVC_APIPROTOCOLSTACK_APIPROTOCOLSTACK_H_ */

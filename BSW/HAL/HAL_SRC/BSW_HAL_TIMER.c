@@ -1,5 +1,5 @@
 
-#include "../HAL_INC/BSW_HAL_TIMER.h"
+#include "HAL_INC/BSW_HAL_TIMER.h"
 
 #if(MEASURE_TIME_TEST == 1)
 unsigned short g_u16TimerLockFlag = 0;

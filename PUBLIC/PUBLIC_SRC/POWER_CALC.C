@@ -4,19 +4,16 @@
  *  Created on: 2025.9.30
  *      Author: Administrator
  */
-#include "PUBLIC_INC/POWER_CALC.H"
-#include "ENV_CFG/SOFTWARE_ENV_CFG.H"
-
-#pragma CODE_SECTION(RmsCal, ".TI.ramfunc");
-
+#include    "PUBLIC_INC/POWER_CALC.H"
+#include    "SOFTWARE_ENV_CFG.H"
 #define  	AC_MIN_FRQ_CNT             (CTR_FRQ/(2*5.0f))
-#define   AC_MAX_FRQ_CNT			 (CTR_FRQ/(2*100.0f))
+#define     AC_MAX_FRQ_CNT			   (CTR_FRQ/(2*100.0f))
 
 void RmsCal(RMS_CALC_OBJ_T *p_stRmsObj){
     float f32Temp;
     if(p_stRmsObj->stIn.i16Pol != p_stRmsObj->stInner.i16LastPol){ //换相了；
         if(p_stRmsObj->stInner.u16N >= AC_MAX_FRQ_CNT){  //小于1/4个周期，舍去
-            p_stRmsObj->stOut.f32Rms = __sqrtf(p_stRmsObj->stInner.f32SqartSum/p_stRmsObj->stInner.u16N);
+            p_stRmsObj->stOut.f32Rms = SQRTF(p_stRmsObj->stInner.f32SqartSum / p_stRmsObj->stInner.u16N);
         }
         p_stRmsObj->stInner.u16N             = 0;
         p_stRmsObj->stInner.i16LastPol      = p_stRmsObj->stIn.i16Pol;
@@ -26,14 +23,34 @@ void RmsCal(RMS_CALC_OBJ_T *p_stRmsObj){
         p_stRmsObj->stInner.f32SqartSum += f32Temp;
         p_stRmsObj->stInner.u16N++;
         if(p_stRmsObj->stInner.u16N > AC_MIN_FRQ_CNT){  //It is the DC type
-        	p_stRmsObj->stOut.f32Rms 				= __sqrtf(p_stRmsObj->stInner.f32SqartSum/p_stRmsObj->stInner.u16N);
+            p_stRmsObj->stOut.f32Rms = SQRTF(p_stRmsObj->stInner.f32SqartSum / p_stRmsObj->stInner.u16N);
             p_stRmsObj->stInner.u16N             		= 0;
             p_stRmsObj->stInner.f32SqartSum   	= 0.0f;
         }
     }
 }
 
-#pragma CODE_SECTION(PolFrqCalc, ".TI.ramfunc");
+void AveCal(AVE_CALC_OBJ_T* p_stAveObj) {
+    if (p_stAveObj->stIn.i16Pol != p_stAveObj->stInner.i16LastPol) { //换相了；
+        if (p_stAveObj->stInner.u16N >= AC_MAX_FRQ_CNT) {  //小于1/4个周期，舍去
+            p_stAveObj->stOut.f32Ave = p_stAveObj->stInner.f32Sum / p_stAveObj->stInner.u16N;
+        }
+        p_stAveObj->stInner.u16N        = 0;
+        p_stAveObj->stInner.i16LastPol  = p_stAveObj->stIn.i16Pol;
+        p_stAveObj->stInner.f32Sum      = 0.0f;
+    }
+    else {
+        p_stAveObj->stInner.f32Sum += p_stAveObj->stIn.f32Var;
+        p_stAveObj->stInner.u16N++;
+        if (p_stAveObj->stInner.u16N > AC_MIN_FRQ_CNT) {  //It is the DC type
+            p_stAveObj->stOut.f32Ave    = p_stAveObj->stInner.f32Sum / p_stAveObj->stInner.u16N;
+            p_stAveObj->stInner.u16N    = 0;
+            p_stAveObj->stInner.f32Sum  = 0.0f;
+        }
+    }
+}
+
+
 void PolFrqCalc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         if(p_stPolFrqObj ->stIn.f32VarTrans  > 0){
         	p_stPolFrqObj->stInner.u16PosN ++;
@@ -42,7 +59,7 @@ void PolFrqCalc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         		p_stPolFrqObj->stInner.u16NegN = 0;
         	}else if(p_stPolFrqObj->stInner.u16PosN > 5){
         		p_stPolFrqObj->stOut.f32Frq        = (float)CTR_FRQ/(2 * p_stPolFrqObj->stInner.u16NegN);
-        		p_stPolFrqObj->stOut.u16InType  = AC_TYPE;
+        		p_stPolFrqObj->stOut.u16Type  = AC_TYPE;
         		p_stPolFrqObj->stInner.u16NegN = 0;
         	}
         }else{
@@ -56,7 +73,7 @@ void PolFrqCalc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         	}
         }
         if((p_stPolFrqObj->stInner.u16NegN > AC_MIN_FRQ_CNT)	||	(p_stPolFrqObj->stInner.u16PosN > AC_MIN_FRQ_CNT)){
-        	p_stPolFrqObj->stOut.u16InType = DC_TYPE;
+        	p_stPolFrqObj->stOut.u16Type = DC_TYPE;
         }
 }
 

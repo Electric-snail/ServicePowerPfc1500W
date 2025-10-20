@@ -21,4 +21,6 @@ extern volatile unsigned short              g_u16StoreFlag;
 #define get_calib_store_addr()              (&g_stStoreData.stCalibData)
 #define set_store_flag()                         g_u16StoreFlag = 1
 
+extern		void 	storage_init(void);
+
 #endif /* BSW_SVC_STORAGE_BSW_STORAGE_H_ */

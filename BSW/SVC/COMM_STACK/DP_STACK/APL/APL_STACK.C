@@ -4,14 +4,14 @@
  *  Created on: 2022-07-18
  *      Author: Hongbo.jiang
  */
+#include <DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER_CTRL.H>
 #include <DP_STACK/DLL/DLL_STACK.H>
 #include "common/include/F28x_Project.h"
 #include "BSW_SVC_BASIC.h"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DP_STACK/APL/APL_STACK.H"
-#include "DP_STACK/DPStackBasic.h"
-#include "DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER.H"
+#include "DP_STACK/DP_STACK_BASIC.H"
 #include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
 #include "DEBUG_PLATFORM/DATA_REC/DATA_REC.H"
 #include "DEBUG_PLATFORM/BOOTLOAD/BOOTLOAD.H"
@@ -76,9 +76,5 @@ void apl_main(void)
     NWM_Handle();   //Call the NWM layer handler function to call the frame receive and error management.
 }
 
-
-REG_TASK(apl_main,1,3,1);
-
-REG_SVC_INIT(DPCommStack,apl_init);
 
 

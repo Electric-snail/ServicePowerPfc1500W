@@ -97,7 +97,7 @@ typedef struct {
 
 typedef struct {
     PI_POS_GAIN_IN_T 		stIn;
-    PI_POS_COFF_T			stCoff;
+    PI_POS_COFF_T				stCoff;
     PI_POS_INNER_T 		    stInner;
     PI_POS_OUT_T            stOut;
 }PI_GAIN_POS_T;
@@ -166,5 +166,7 @@ void Ctrl2z2p(CTRL_2Z2P_VARS_T * v, Ctrl2Z2PCoeffs* k);
 
 extern void Loop_2p2zCtrlTest(void);
 extern void ctrl_pi_position(PI_POS_T* p_stPI);
+extern void ctrl_pi_gain_position(PI_GAIN_POS_T* p_stPI);
 extern void set_pi_position_integrate(PI_POS_T* p_stPI, float f32Value);
+
 #endif /* PUBLIC_PUBLIC_INC_DC_MATH_H_ */

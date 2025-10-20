@@ -70,5 +70,6 @@ extern   UINT32 g_u32SysTimerMs;
 #define  REC_TIME_STAMP   			g_u32SysTimerMs
 
 extern void DataLogCmdSetLink(void *p_stAplDmTemp);
+extern void data_rec_task(void);
 
 #endif /* BSW_DEBUGPLATFORM_DATA_RECORD_H_ */

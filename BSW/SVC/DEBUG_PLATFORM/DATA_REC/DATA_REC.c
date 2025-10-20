@@ -9,7 +9,7 @@
 #include "DEBUG_PLATFORM/DBG_BASIC.H"
 #include "DEBUG_PLATFORM/DATA_REC/DATA_REC.h"
 #include "TASK/BSW_TASK_SERVICE.H"
-#include "DP_STACK/DPStackBasic.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DP_STACK/APL/APL_STACK.H"
@@ -27,9 +27,7 @@ unsigned short  g_u16DataRecRun = 0;
 #undef GEN_DATA_REC_CFG_ENTITY
 
 #if(DATA_REC_AUTO_TX_ENABLE == 1)
-#define GEN_DATA_REC_REG_TASK
-	#include "DEBUG_PLATFORM/DATA_REC/DATA_REC_CFG.h"
-#undef GEN_DATA_REC_REG_TASK
+REG_TASK(data_rec_task,    1,   100,   79)
 #endif
 
 void DataLogCmdSetLink(void *p_stAplDmTemp){

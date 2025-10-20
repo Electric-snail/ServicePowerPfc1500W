@@ -7,29 +7,27 @@
 #ifndef ASW_BASIC_H_
 #define ASW_BASIC_H_
 
-#include "PUBLIC_INC/AUTO_REGISTER.H"
-
-typedef void  (*pf_asw_id_init)(void);
+typedef void(*AswInitType)(void);
 
 typedef struct
 {
-    const char     			*asw_name;
-    pf_asw_id_init  			 asw_id_init;
-    unsigned char           asw_id_status;
-}ASW_INIT_OBJ;
+	AswInitType         pf_asw_init;    // Task process entity pointer
+	unsigned short      enable;			  // Task enable word
+}ASW_INIT_ITEM_T;
 
-#define REG_ASW_SECTION  __attribute__ ((used,section(".ASW_REG_SECTION")))
+#define ASW_INIT_ITEM_TAB   \
+{\
+    {pfc_controller_init,	1},       \
+/*	{derating_init,			1},        */     \
+	{measure_init,			1},               \
+	{diagnostic_init,			1},\
+/*	{sys_fsm_init,		    1},			 */   \
+	{power_fsm_init,	    1},			      \
+}
 
-#define REG_ASW_INIT_ITEM(name,p_user_data)  const AUTO_REG_OBJ _auto_reg_##name REG_ASW_SECTION = {#name,AUTO_REG_ASW_INIT,p_user_data};
-
-///-------device
-#define REG_ASW_INIT(asw_name,init)                                                                      \
-                static ASW_INIT_OBJ asw_init_##asw_name = {#asw_name,init,0};\
-                REG_ASW_INIT_ITEM(asw_name,(void*)&asw_init_##asw_name)
 
 extern void asw_init(void);
+extern void asw_1msTask(void);
 
-#endif
-
-
+#endif /* ASW_HAL_BASIC_H_ */
 

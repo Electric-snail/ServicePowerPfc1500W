@@ -4,56 +4,141 @@
  *  Created on: 2025.9.30
  *      Author:   Hongbo.Jiang
  */
-#include "PUBLIC_INC/DIGITAL_PLL.H"
 #include "PFC_CTR/PFC_CTR.H"
 #include "ISR_INC/BSW_ISR_ADC.H"
 #include "SOFTWARE_ENV_CFG.H"
 #include "ASW_BASIC.H"
-#include "DF_MATH.H"
+#include "POWER_FSM/POWER_FSM.H"
+#include "MEASURE/MEASURE.h"
+#include "PUBLIC_INC/DC_MATH.H"
 
-SOGI_OBJ_T   				g_stSogi;
-NOTCH_OBJ_T			g_stVpfcNotchFilt;
-
-ORTH_PLL_OBJ_T  	g_stOrthPll;
-
+STATIC PI_POS_T				    gs_stVpfcPiCtrl;
+STATIC PI_GAIN_POS_T		gs_stIacPiGainCtrl;
+STATIC float							    gs_f32FeedCoff;
+PFC_CTR_OUT						g_stPfcOut;
+float						g_f32VpfcPiKpFast;
+float						g_f32VpfcPiKiTsFast;
+float						g_f32VpfcPiKpSlow;
+float						g_f32VpfcPiKiTsSlow;
+float                       g_f32PowerOpenSet = 0;
 void 	pfc_controller_init(void){
-		g_stSogi.stCoff.f32Kp                			= 1.414f;
-		g_stSogi.stCoff.u8Ena2nd             		= 0;   //二阶禁止
-		g_stSogi.stCoff.f32Ts                			= CTR_PERIOD;
-		g_stSogi.stInter.f32IntegOut       			= 0.0f;
-		g_stSogi.stInter.f32IntegOutQ      		= 0.0f;
-		g_stSogi.stInter.f32IntegOut2nd   	 	= 0.0f;
-		g_stSogi.stInter.f32IntegOut2ndQ   		= 0.0f;
-		sogi_set_freq_1p(&g_stSogi, 		50.0f);
+		gs_stVpfcPiCtrl.stCoff.f32IntegrateMax			= 3500.0f;   //output is the input power，maximum the input power
+		gs_stVpfcPiCtrl.stCoff.f32IntegrateMin			= -1000.0f;
 
-	    g_stVpfcNotchFilt.stOut.f32Out 							= 0;
-	    g_stVpfcNotchFilt.stCoff.f32Sin1OmegT  			= 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
-	    g_stVpfcNotchFilt.stCoff.f32Cos1OmegT	 		= 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
-	    g_stVpfcNotchFilt.stCoff.f32Width1    				= 0.0083;
-	    g_stVpfcNotchFilt.stCoff.f32Width0    				= 0.001;
-	    g_stVpfcNotchFilt.stInner.f32Out0thX       		= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32Out0thY       		= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32Out1thX       		= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32Out1thY       		= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32OutPredict0thX 	= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32OutPredict0thY 	= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32OutPredict1thX 	= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32OutPredict1thY 	= 0.0f;
-	    g_stVpfcNotchFilt.stInner.f32Err               			= 0.0f;
+		gs_stVpfcPiCtrl.stCoff.f32OutMax				= 3500.0f;   //output is the input power,maximum the input power
+		gs_stVpfcPiCtrl.stCoff.f32OutMin				= -1000.0f;
+
+		g_f32VpfcPiKpFast									= 500;
+		g_f32VpfcPiKiTsFast									= 5 * 2*3.1415926f * 5 * CTR_PERIOD;
+
+		g_f32VpfcPiKpSlow									= 50.0f;
+		g_f32VpfcPiKiTsSlow									= 5 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+
+		gs_stVpfcPiCtrl.stCoff.f32Kp						= 70.0f;
+		gs_stVpfcPiCtrl.stCoff.f32KiTs						= 50.0f * CTR_PERIOD;
+		gs_stVpfcPiCtrl.stInner.f32Integrate				= 0;
+		gs_stVpfcPiCtrl.stInner.f32Err						= 0;
+
+		gs_stIacPiGainCtrl.stCoff.f32IntegrateMax			= 0.95f;
+		gs_stIacPiGainCtrl.stCoff.f32IntegrateMin			= -1.0f;
+
+		gs_stIacPiGainCtrl.stCoff.f32OutMax					= 0.95f;
+		gs_stIacPiGainCtrl.stCoff.f32OutMin					= -1.0f;
+
+	//	gs_stIacPiGainCtrl.stCoff.f32Kp						= 0.02 * 380f;
+	//	gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.2f * 666.6 * 380f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
+		gs_stIacPiGainCtrl.stCoff.f32Kp						= 20.0f;
+		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 20.0f * 4000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
+		gs_stIacPiGainCtrl.stInner.f32Integrate				= 0;
+		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
+
+		gs_f32FeedCoff													= 1.0f;
+		g_stPfcOut.f32Duty											= 0.0f;
 }
 
- REG_ASW_INIT(pfc_controller,			pfc_controller_init);
-
+#define POWER_SET           750
+#define VRMS_VALUE          220.0f
+#define Cx					2.22e-6
+float f32DutyForwared;
 void 	pfc_controller(void){
-	    float f32VinTrans;
-		#if(NOTICH_FILT_ENABLE == 1)
-			g_stVpfcNotchFilt.stIn.f32In = f32_get_vpfc_volt_raw();
-			notch_filter(&g_stVpfcNotchFilt);
-		#endif
-		f32VinTrans = f32_get_vin_volt_raw();
+	//	static unsigned short s_u16VpfcFeedFlag = 0;
+	//	static unsigned short s_u16VpfcPiCoffLevel = 0;
+		float f32Duty;
+	    float f32VacPll		= f32_get_vac_volt_pll();
+		float f32VpfcNpf    = f32_get_vpfc_npf();
+		float f32VpfcLpf	= f32_get_vpfc_isr_lpf();
+		float f32VinAbs		= ABSF(f32_get_vin_raw());
+		float f32VinRms		= f32_get_vin_rms_flt();
+		float f32XCapCompI;
+		float f32IlRefTemp,f32PinTransTemp;
+		float f32VpfcErrAbs;
 
-		g_stOrthPll.stIn.f32SigIn = f32VinTrans;
-		orth_pll_proc_1p(&g_stOrthPll);
+		gs_stVpfcPiCtrl.stIn.f32Ref = f32_get_vpfc_set();
+		gs_stVpfcPiCtrl.stIn.f32Fb = f32VpfcNpf;
+		
+		f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
+		
+	/*	if (f32VpfcErrAbs < 10) {
+			
+		}
+		else {
+			//gs_stVpfcPiCtrl.stCoff.f32Kp = (f32VpfcErrAbs - 10) * 10 + 50.0f;
+			//gs_stVpfcPiCtrl.stCoff.f32KiTs  = (f32VpfcErrAbs - 10) * 1 + 5 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+		}*/
+		gs_stVpfcPiCtrl.stCoff.f32Kp	= 50.0f;
+		gs_stVpfcPiCtrl.stCoff.f32KiTs	= 1 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+
+		ctrl_pi_position(&gs_stVpfcPiCtrl);
+
+		if (f32VinRms < 35.0f)  f32VinRms = 35.0f;
+
+		f32XCapCompI = Cx * 1.414f * 2 * pi * 50.0f * f32_get_vac_volt_q_pll() * (-1.0f);
+
+		f32IlRefTemp				= gs_stVpfcPiCtrl.stOut.f32Out * f32VacPll / (f32VinRms * f32VinRms) + f32XCapCompI;
+		f32PinTransTemp		= f32VacPll * f32IlRefTemp;
+
+		if (f32PinTransTemp <= 0)
+			gs_stIacPiGainCtrl.stIn.f32Ref = 0;
+		else
+			gs_stIacPiGainCtrl.stIn.f32Ref = ABSF(f32IlRefTemp);
+
+		//gs_stIacPiGainCtrl.stIn.f32Ref	= gs_stVpfcPiCtrl.stOut.f32Out*ABSF(f32VacPll)/(f32VinRms * f32VinRms) + f32XCapCompI;
+
+		if(g_u16LoopWorkMode 	== LOOP_VOLT_OPEN_IL_CLOSE){
+		       gs_stIacPiGainCtrl.stIn.f32Ref	= g_f32PowerOpenSet * ABSF(f32VacPll)/(f32VinRms * f32VinRms);
+		}
+
+		gs_stIacPiGainCtrl.stIn.f32Fb	= f32_get_curr_inductor_ave();
+
+		gs_stIacPiGainCtrl.stIn.f32Gain = 1/(f32VpfcLpf + 0.5);
+
+		if (gs_stIacPiGainCtrl.stIn.f32Gain > 0.01f)  gs_stIacPiGainCtrl.stIn.f32Gain = 0.01f;
+
+	
+
+		ctrl_pi_gain_position(&gs_stIacPiGainCtrl);
+
+		//占空比前馈 feedforwared for vin & vout
+	 
+		f32DutyForwared = gs_f32FeedCoff * (f32VpfcLpf - f32VinAbs) /(f32VpfcLpf + 1.0f);  //防止除以0
+
+		f32Duty = f32DutyForwared + gs_stIacPiGainCtrl.stOut.f32Out;
+
+		if (f32Duty > 0.98f) {  //限最大值输出，以及防止正向饱和
+			g_stPfcOut.f32Duty = 0.98f;
+		//	f32Temp = 1.0f - f32DutyForwared;
+		//	set_pi_position_integrate(&gs_stIacPiGainCtrl, f32Temp);
+		}
+		else if (f32Duty < 0.0f) {  // 限最小输出，以及防止反向饱和
+			g_stPfcOut.f32Duty = 0.0f;
+		//	f32Temp = 0.0f - f32DutyForwared;
+		//	set_pi_position_integrate(&gs_stIacPiGainCtrl, f32Temp);
+		}
+		else {
+			g_stPfcOut.f32Duty = f32Duty;
+		}
+
+
 
 }
 

@@ -4,15 +4,29 @@
  *  Created on: 2022-07-18
  *      Author: Hongbo.jiang
 **********************************************************************/
+#include "TASK/BSW_TASK_SERVICE.h"
+#ifndef DLLX64
+#include "MCAL_INC/BSW_MCAL_INT_CTRL.h"
+#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
+#include "DEBUG_PLATFORM/SFRA/SFRA.h"
+#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
+#include "COMM_STACK/DP_STACK/APL/APL_STACK.H"
+#endif
+
+#include "ISR_INC/BSW_ISR_CPUTIMER.h"
 #include "PUBLIC_INC/ASSERT.H"
-#include "MCAL_INC/BSW_MCAL_INT_CTRL.H"
-#include "HAL_INC/BSW_HAL_TIMER.H"
-#include "ISR_INC/BSW_ISR_CPUTIMER.H"
-#include "BSW_SVC_BASIC.H"
-#include "BSW_TASK_SERVICE.H"
+#include "ASW_BASIC.h"
+#include "MEASURE/MEASURE.h"
+#include "DIAGNOSTIC/DIAGNOSTIC.h"
+#include "DERATING/DERATING.h"
+#include "SYS_FSM/SYS_FSM.h"
+#include "POWER_FSM/POWER_FSM.h"
+#include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 
 extern UINT32 TaskRegLoadStart;
 extern UINT16 TaskRegLoadSize;
+
+const TASK_ITEM_OBJ gc_stTaskItemTab[] = TASK_REG_TAB;
 
 #if(TASK_CPU_LOAD_TEST == 1)
 UINT32 g_u32CpuLoadTotalTimer = 0;
@@ -31,29 +45,26 @@ TASK_SCHE_OBJ g_TaskScheVars ={0};
 *  Return:         void
 *  Others:         //
 *************************************************/
-void BSW_SVC_vScheInit(void)
+void bsw_svc_vScheInit(void)
 {
     UINT16 i;
-    AUTO_REG_OBJ *p_auto_reg = NULL;
-    TASK_ITEM_OBJ *p_task_reg = NULL;
-    unsigned int u16TaskNum = (UINT16)((UINT32)&TaskRegLoadSize/sizeof(AUTO_REG_OBJ));
-    p_auto_reg =(AUTO_REG_OBJ *)&TaskRegLoadStart;
+    const TASK_ITEM_OBJ *p_task_reg = gc_stTaskItemTab;
+    unsigned int u16TaskNum = (UINT16)(sizeof(gc_stTaskItemTab)/sizeof(TASK_ITEM_OBJ));
     if(u16TaskNum <= MAX_TASK_NUM){
         for(i = 0;i < u16TaskNum; i++){
-            p_task_reg = (TASK_ITEM_OBJ *)p_auto_reg[i].p_reg_data;
             g_TaskScheVars.ua32TaskExeTimer[i]   = p_task_reg->u16Offset;
             g_TaskScheVars.ua32TaskRunMaxCnt[i]  = 0xFFFFFFFF;
             g_TaskScheVars.ua32TaskRunMinCnt[i]  = 0x00000000;
+            p_task_reg++;
         }
-        g_TaskScheVars.u8NumOfTasks 	 = u16TaskNum;
-        g_TaskScheVars.u8TaskCoreInitFlg = 1;
+        g_TaskScheVars.u8NumOfTasks 	         = u16TaskNum;
+        g_TaskScheVars.u8TaskCoreInitFlg         = 1;
     }else{
-    	g_TaskScheVars.u8TaskCoreInitFlg = 0;
+    	g_TaskScheVars.u8TaskCoreInitFlg         = 0;
     }
 
 }
 
-REG_SVC_INIT(SVC_TASK,	BSW_SVC_vScheInit)
 /*************************************************
 *  Function:       ScheM_ExcuTask
 *  Description:    excute the ready task
@@ -66,49 +77,44 @@ REG_SVC_INIT(SVC_TASK,	BSW_SVC_vScheInit)
 *  Others:         //
 *************************************************/
 #ifndef DLLX64
-#pragma CODE_SECTION(bsw_svc_task_run, ".TI.ramfunc");
+#pragma CODE_SECTION(BSW_SVC_ScheExcuTask, ".TI.ramfunc");
 #endif
+
 extern UINT16 SvcRegLoadStart;
 //6us -> 1.3us
-void bsw_svc_task_run(void)
+void bsw_svc_sche_exe_task(void)
 {
      UINT16 i;
-     AUTO_REG_OBJ *p_auto_reg = NULL;
-     TASK_ITEM_OBJ *p_task_reg = NULL;
+     const TASK_ITEM_OBJ *p_task_reg = gc_stTaskItemTab;
      static UINT32 s_u32task_timer_pre = 0;
-     UINT32 u32task_timer   = 0;
-     p_auto_reg = (AUTO_REG_OBJ *)&TaskRegLoadStart;//&SvcRegLoadStart;//TaskRegLoadStart;
 
      if(g_TaskScheVars.u8TaskCoreInitFlg == 0) return;
-     u32task_timer = get_sys_timer();
-     if(u32task_timer > s_u32task_timer_pre){
+     UINT32 u32task_timer = get_sys_timer();
+     if(TIME_OVER_U32(s_u32task_timer_pre,u32task_timer)){
         #if(TASK_CPU_LOAD_TEST == 1)
-         UINT32  u32TaskTestTemp = 0xFFFFFFFF - GetTaskTestTimer();
+        UINT32 u32TaskTestTemp = 0xFFFFFFFF - GetTaskTestTimer();
         g_u32CpuLoadTotalTimer += u32TaskTestTemp;
         g_u16CpuLoadCnt ++;
         #endif
         s_u32task_timer_pre++;   //update the last time, in order to each task timer, the task scheduler only be called once.
         for(i = 0; i < g_TaskScheVars.u8NumOfTasks; i++)
         {
-            p_task_reg = (TASK_ITEM_OBJ *)p_auto_reg[i].p_reg_data;
-
-            if(p_task_reg != NULL){//Judge if the task register is normal.
-                if((TIME_OVER_U32(g_TaskScheVars.ua32TaskExeTimer[i],u32task_timer)) \
-                    &&(p_task_reg->enable == 1)){
-                    if(p_task_reg->taskProc != NULL){ //Judge if the task is NULL
-                       #if(TASK_CPU_LOAD_TEST == 1)
-                       ResetTaskTestTimer();
-                       #endif
-                       p_task_reg->taskProc();
-                       #if(TASK_CPU_LOAD_TEST == 1)
-                       u32TaskTestTemp = GetTaskTestTimer();
-                       g_TaskScheVars.ua32TaskRunMinCnt[i] = (u32TaskTestTemp > g_TaskScheVars.ua32TaskRunMinCnt[i])?u32TaskTestTemp:g_TaskScheVars.ua32TaskRunMinCnt[i];
-                       g_TaskScheVars.ua32TaskRunMaxCnt[i] = (u32TaskTestTemp < g_TaskScheVars.ua32TaskRunMaxCnt[i])?u32TaskTestTemp:g_TaskScheVars.ua32TaskRunMaxCnt[i];
-                       #endif
-                       g_TaskScheVars.ua32TaskExeTimer[i] += p_task_reg->u16Period;
-                    }
+            if((TIME_OVER_U32(g_TaskScheVars.ua32TaskExeTimer[i],u32task_timer)) \
+                &&(p_task_reg->enable == 1)){
+                if(p_task_reg->taskProc != NULL){ //Judge if the task is NULL
+                   #if(TASK_CPU_LOAD_TEST == 1)
+                   ResetTaskTestTimer();
+                   #endif
+                   p_task_reg->taskProc();
+                   #if(TASK_CPU_LOAD_TEST == 1)
+                   u32TaskTestTemp = GetTaskTestTimer();
+                   g_TaskScheVars.ua32TaskRunMinCnt[i] = (u32TaskTestTemp > g_TaskScheVars.ua32TaskRunMinCnt[i])?u32TaskTestTemp:g_TaskScheVars.ua32TaskRunMinCnt[i];
+                   g_TaskScheVars.ua32TaskRunMaxCnt[i] = (u32TaskTestTemp < g_TaskScheVars.ua32TaskRunMaxCnt[i])?u32TaskTestTemp:g_TaskScheVars.ua32TaskRunMaxCnt[i];
+                   #endif
+                   g_TaskScheVars.ua32TaskExeTimer[i] += p_task_reg->u16Period;
                 }
-             }
+            }
+            p_task_reg++;
          }
         #if (TASK_CPU_LOAD_TEST == 1)
           ResetTaskTestTimer();

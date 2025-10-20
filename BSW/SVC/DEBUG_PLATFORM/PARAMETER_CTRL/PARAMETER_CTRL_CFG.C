@@ -1,0 +1,48 @@
+/*
+ * PARAMETER_CTRL_CFG.C
+ *
+ *  Created on: 2025Äê10ÔÂ16ÈÕ
+ *      Author: Administrator
+ */
+#include "SOFTWARE_ENV_CFG.H"
+#include "DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER_CTRL.H"
+#include "ISR_INC/BSW_ISR_ADC.H"
+#include "DIAGNOSTIC/DIAGNOSTIC.H"
+#include "POWER_FSM/POWER_FSM.H"
+#include "PUBLIC_INC/DC_MATH.H"
+#include "PFC_CTR/PFC_CTR.H"
+#include "MEASURE/MEASURE.H"
+
+extern 	STATIC 		PI_POS_T				    gs_stVpfcPiCtrl;
+extern 	STATIC 		PI_GAIN_POS_T		gs_stIacPiGainCtrl;
+extern 	float			gs_f32FeedCoff;
+extern     float 			g_f32VpfcSetTarget;
+extern     float           g_f32PowerOpenSet;
+//-----------------------------------------var_name,					var,																		attr,					  def,				  											  min,															max
+REG_CFG_ITEM_U16(LOOP_MODE,				g_u16LoopWorkMode,													VAR_WR,			  0,						  										0,																3);
+REG_CFG_ITEM_F32(OPEN_DUTY,					g_f32OpenDuty,						    									VAR_WR,		      0,						  										0,																1.0f);
+REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    						    VAR_WR,		      0,						  										0,																2000.0f);
+REG_CFG_ITEM_F32(VPFC_TARGET,			   g_f32VpfcSetTarget,						    							VAR_WR,		      80,			      										       60.0f,						 								 150.0f);
+
+REG_CFG_ITEM_U16(RECV_FALUT,				g_stDiagStatus.unAutoRecvFault.u16All,					VAR_RD,			  0,						  										0,																0);
+REG_CFG_ITEM_U16(NO_RECV_FAULT,	   g_stDiagStatus.unNoRecvFault.u16All,						VAR_RD,			  0,						  										0,																0);
+
+REG_CFG_ITEM_U16(PWR_FSM,	   					fsm_obj_POWER_FSM.u8CurStateId,						VAR_RD,			  0,						  										0,																0);
+
+REG_CFG_ITEM_F32(VPFC_KP,					   gs_stVpfcPiCtrl.stCoff.f32Kp,						    			VAR_WR,		      500.0f,				 										1,																2000.0f);
+REG_CFG_ITEM_F32(VPFC_KI,					       gs_stVpfcPiCtrl.stCoff.f32KiTs,						    		VAR_WR,		      (10.0f / 65000.0f	),									(5000.0f / 65000.0f),							(0.1f / 65000.0f	));
+
+REG_CFG_ITEM_F32(IL_KP,					   		   gs_stIacPiGainCtrl.stCoff.f32Kp,						    		VAR_WR,		      10.0f,				 										0.01,														500.0f);
+REG_CFG_ITEM_F32(IL_KI,					       	   gs_stIacPiGainCtrl.stCoff.f32KiTs,						    	VAR_WR,		      (10.0f * 2000.0f/ 65000.0f),			      (10.0f * 10.0f/ 65000.0f),						 (10.0f * 10000.0f/ 65000.0f));
+REG_CFG_ITEM_F32(IL_FEED,					       gs_f32FeedCoff,						    									VAR_WR,		      0.8,			      										  0,						 										 1.0f);
+
+REG_CFG_ITEM_F32(VIN_FRQ,			             g_stMeasureOut. stVinPolFrqObj.stOut.f32Frq,			VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
+REG_CFG_ITEM_U16(VIN_TYPE,			         g_stMeasureOut. stVinPolFrqObj.stOut.u16Type,			VAR_RD,		      0,			      										        0,						 								   		0);
+
+REG_CFG_ITEM_F32(VIN_RMS,			        g_stMeasureOut.stVinRmsObj.stOut.f32Rms,			    VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
+
+REG_CFG_ITEM_F32(VIN_RMS_FLT,			g_stMeasureOut.f32VinRmsLpf,			        					VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
+
+REG_CFG_ITEM_F32(PIN_AVE,						g_stMeasureOut.stPinAveObj.stOut.f32Ave,			        VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
+
+REG_CFG_ITEM_F32(IIN_RMS,						g_stMeasureOut.f32IinRmsLpf,			        					VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);

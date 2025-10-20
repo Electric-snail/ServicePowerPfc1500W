@@ -5,33 +5,28 @@
  *  Created on: 2022-07-18
  *      Author: Hongbo.jiang
  */
+#ifndef DLLX64
+#include "BSW_MCAL_BASIC.H"
+#include "DP_STACK/APL/APL_STACK.H"
+#include "DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER_CTRL.H"
+#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
+#endif
 
-
-#include <PUBLIC_INC/AUTO_REGISTER.H>
 #include "BSW_SVC_BASIC.h"
+#include "ISR_INC/BSW_ISR_ADC.h"
+#include "TASK/BSW_TASK_SERVICE.h"
+#include "STORAGE/BSW_SVC_STORAGE.h"
 
-extern UINT16 SvcRegLoadStart;
-extern UINT16 SvcRegLoadSize;
+const SVC_INIT_ITEM_T gc_stSvcInitTab[] = SVC_INIT_TAB;
 
-void bsw_svc_init(void)
-{
-    UINT16 i;
-
-    AUTO_REG_OBJ *p_auto_reg = NULL;
-    pf_init_func p_init_func = NULL;
-
-
-    UINT16   auto_reg_item = (UINT16)((UINT32)&SvcRegLoadSize / sizeof(AUTO_REG_OBJ));
-    p_auto_reg = (AUTO_REG_OBJ *)&SvcRegLoadStart;
-    SVC_INIT_OBJ *p_SvcInitObj = NULL;
-    for(i = 0; i < auto_reg_item; i++)
-    {
-       p_SvcInitObj = (SVC_INIT_OBJ *)p_auto_reg->p_reg_data;
-       if(p_SvcInitObj == NULL)
-           continue;
-       p_init_func =(pf_svc_id_init)p_SvcInitObj->svc_id_init;
-       if(p_init_func != NULL)
-          p_init_func();
-       p_auto_reg ++;
-    }
+void bsw_svc_init(void) {
+	unsigned char i = 0;
+	const SVC_INIT_ITEM_T *p_svc_init_item = NULL;
+	unsigned char u8SvcInitNum = (unsigned char)(sizeof(gc_stSvcInitTab) / sizeof(SVC_INIT_ITEM_T));
+	for (i = 0; i < u8SvcInitNum; i++) {
+		p_svc_init_item = &gc_stSvcInitTab[i];
+		if ((p_svc_init_item->enable == 1) && (p_svc_init_item->pf_svc_init != 0x00000000)) {
+			p_svc_init_item->pf_svc_init();
+		}
+	}
 }

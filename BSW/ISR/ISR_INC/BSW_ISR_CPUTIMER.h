@@ -13,7 +13,7 @@ extern "C" {
 #endif
 #include  "SOFTWARE_ENV_CFG.h"
 
-extern __interrupt void IsrCpuTimer2(void);
+extern INTERRUPT void IsrCpuTimer2(void);
 extern UINT32 g_u32SysTimerMs;
 #define get_sys_timer()     g_u32SysTimerMs
 

@@ -4,12 +4,21 @@ Purpose :         Handle timer0/1/2...
 
 
 **********************************************************************/
+#ifndef DLLX64
 #include "common/include/f28x_Project.h"
+#endif
+#include "SOFTWARE_ENV_CFG.H"
 #include  "ISR_INC/BSW_ISR_CPUTIMER.h"
-#include "HAL_INC/BSW_HAL_GPIO.H"
-#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.h"
+#include  "HAL_INC/BSW_HAL_GPIO.H"
 
+#if(DB_TOOL_ENABLE == TRUE)
+#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.h"
+#endif
+
+#ifndef DLLX64
 #pragma CODE_SECTION(IsrCpuTimer2, ".TI.ramfunc");
+#endif
+
 
 /*************************************************
 *  Function:       IsrCpuTimer2
@@ -27,14 +36,16 @@ UINT32 g_u32SysTimerMs = 0;
 ISR_EXE_VAR_ENTITY(CPU_TIMER2_ISR)
 #endif
 
-__interrupt void IsrCpuTimer2(void)   //200US
+INTERRUPT void IsrCpuTimer2(void)   //200US
 {
     static unsigned char s_u8Status = 0;
+#ifndef DLLX64
     PieCtrlRegs.PIEACK.all = PIEACK_GROUP1 | PIEACK_GROUP12;
     IER = M_INT1 | M_INT12;
     __asm("  NOP");
-    EINT;                                         // Enable Global interrupt INTM
-
+    bsw_mcal_enable_global_int();                                         // Enable Global interrupt INTM
+    CpuTimer2Regs.TCR.bit.TIF = 1;
+#endif
     #if(TASK_CPU_LOAD_TEST == 1)
      UINT16 u16TaskTestTimerStatus = GetTaskTestTimerStatus();
      StopTaskTestTimer();
@@ -42,7 +53,6 @@ __interrupt void IsrCpuTimer2(void)   //200US
      ResetTaskTestTimer();
     #endif
 
-    CpuTimer2Regs.TCR.bit.TIF = 1;
     g_u32SysTimerMs++;
 
     if(s_u8Status == 0){

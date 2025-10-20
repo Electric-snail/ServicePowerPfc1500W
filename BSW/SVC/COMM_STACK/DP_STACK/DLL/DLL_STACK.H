@@ -9,7 +9,7 @@
 #define BSW_SVC_COMMSTACK_DLL_H_
 
 #include "SOFTWARE_ENV_CFG.h"
-#include "DP_STACK/DPStackCfg.h"
+#include "DP_STACK/DP_STACK_CFG.H"
 
 enum LINK_ID{
 	LINK_INVALID_ID = 0,

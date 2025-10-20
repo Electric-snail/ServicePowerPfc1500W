@@ -143,8 +143,6 @@ typedef union
 extern MSG_PFC_LLC_SLOW_U g_unPfcSlowRxMsg;
 extern MSG_PFC_LLC_FAST_U g_unPfcFastRxMsg;
 
-extern void pfc_llc_comm_rx_hander(void *p_stAplDmTemp);
-
 #define u8_get_rolling_counter()         (g_unPfcSlowRxMsg.bits.rolling_counter)
 #define em_get_workMode()                (g_unPfcSlowRxMsg.bits.b4WorkMode)
 #define em_get_psmState()                (g_unPfcSlowRxMsg.bits.b4PsmState)

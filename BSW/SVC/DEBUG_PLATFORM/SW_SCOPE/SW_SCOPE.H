@@ -11,8 +11,8 @@
 #include <PUBLIC_INC/RING_ARRAY.H>
 
 #define  SCOPE_VAR_MAX_ITEM_CNT        			6
-#define  SCOPE_STOP_CMD                         0
-#define  SCOPE_RUN_CMD                          1
+#define  SCOPE_STOP_CMD                         				0
+#define  SCOPE_RUN_CMD                          				1
 
 #if(SCOPE_VAR_MAX_ITEM_CNT > 6)
 #error"The SCOPE_VAR_MAX_ITEM_CNT must below 7"
@@ -107,6 +107,7 @@ typedef struct
 #define   SW_SCOPE_DATA_NOT_READY_ID      0x07
 #define   SW_SCOPE_IS_RUNNING_ID          0x08
 extern void SwScopeCmdSetLink(void *p_vAplDm);
+extern void sw_scope_init(void);
 extern void sw_scope_task(void);
 
 #define GEN_SW_SCOPE_VAR_DECLARE

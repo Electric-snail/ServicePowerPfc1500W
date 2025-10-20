@@ -12,7 +12,7 @@
  *      Author: Hongbo.jiang
  */
 #include "BSW_SVC_BASIC.h"
-#include "DP_STACK/DPStackBasic.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DEBUG_PLATFORM/DBG_BASIC.H"
@@ -131,7 +131,7 @@ void CpuLoadCalculate(void){
     g_u16CpuLoadCnt        = 0;
 }
 
-REG_TASK(CpuLoadCalculate,1,  CPU_LOAD_TASK_PERIOD,CPU_LOAD_TASK_PERIOD)
+//REG_TASK(CpuLoadCalculate,1,  CPU_LOAD_TASK_PERIOD,CPU_LOAD_TASK_PERIOD)
 
 extern unsigned int HWI_STKBOTTOM;
 extern unsigned int HWI_STKTOP;
@@ -148,7 +148,7 @@ void StackUsageCalculate(void){
     u16TempData = p_u16Temp - p_u16TempRef;
     gs_f32StackUsage  = (float)u16TempData/(float)u32StackSize;
 }
-REG_TASK(StackUsageCalculate,1,  300, 177)
+//REG_TASK(StackUsageCalculate,1,  300, 177)
 
 #elif((ISR_CPU_LOAD_TEST == 1)||(NESTING_ISR_CPU_LOAD_TEST == 1))
 extern UINT16 IsrTestRegLoadSize;
@@ -222,7 +222,7 @@ void MeasureTimeCalc(void){
     g_f32MeasureTime = (float)g_u32TimerCnt * GetCpuTimer1Inv()/1000000.0f;
 }
 
-REG_TASK(MeasureTimeCalc,	1,  200, 	111)
+//REG_TASK(MeasureTimeCalc,	1,  200, 	111)
 REG_CFG_ITEM_F32(MEASURE_TIME, g_f32MeasureTime, VAR_RD, 0, 0, 1000000);
 #endif
 

@@ -234,5 +234,6 @@ typedef struct
 #endif
 
 extern void ParamCfgCmdSetLink(void *p_stAplDmTemp);
+extern void param_core_init(void);
 
 #endif /* BSW_DEBUGPLATFORM_PARAMETER_CFG_H_ */

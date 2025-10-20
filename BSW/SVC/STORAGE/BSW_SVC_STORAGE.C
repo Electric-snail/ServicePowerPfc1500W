@@ -5,16 +5,18 @@
  *      Author: jhb72
  */
 #include "SOFTWARE_ENV_CFG.H"
+#include "PUBLIC_INC/MEM_HANDLE.H"
 #include "HAL_INC/BSW_HAL_STORAGE.H"
 #include "STORAGE/BSW_SVC_STORAGE.H"
 
 extern const UINT8 crc_table[];                   // CRC table.
 
 volatile UINT16 g_u16StoreFlag = 0;
-STORAGE_DATA_T g_stStoreData;
+
 
 #pragma DATA_SECTION(gc_stStoreData, ".STORAGE_REG_SECTION");
-const STORAGE_DATA_T gc_stStoreData;
+const STORAGE_DATA_T gc_stStoreData;     //存储在Flash 区
+STORAGE_DATA_T 			g_stStoreData;      //存储在RAM区
 
 void storage_init(void){
      UINT16 i = 0;
@@ -31,7 +33,7 @@ void storage_init(void){
          }
          if(u8CrcData != g_stStoreData.u16CrcCheck){
              ErashStorageData((UINT16 *)&gc_stStoreData, sizeof(gc_stStoreData));
-             memset((void *)&g_stStoreData, 0xFFFF,sizeof(STORAGE_DATA_T));
+             memset_user((void *)&g_stStoreData, 0xFFFF,sizeof(STORAGE_DATA_T));
          }
      }
 }

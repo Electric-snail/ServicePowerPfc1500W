@@ -6,7 +6,7 @@
  */
 #include "BSW_SVC_BASIC.h"
 #include "DEBUG_PLATFORM/DBG_BASIC.H"
-#include "DP_STACK/DPStackBasic.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DP_STACK/APL/APL_STACK.H"
@@ -22,7 +22,6 @@ void comm_test_init(void)
 	memclr_user((UINT16 *)&gs_stCommTestTxInfoObj,sizeof(COMM_TEST_TX_INFO)/sizeof(UINT16));
 	gs_stCommTestRxInfoObj.u8CommTestCmd = COMM_TEST_STOP_CMD;
 }
-REG_SVC_INIT(COMM_TEST,comm_test_init)
 
 void comm_test_task(void)
 {
@@ -73,8 +72,6 @@ void comm_test_task(void)
 	}
 
 }
-
-REG_TASK(comm_test_task,	1,	COMM_TEST_TASK_PERIOD,		23);
 
 void GetCommRxCmdInfo(APL_DOMAIN *p_stAplDm)
 {

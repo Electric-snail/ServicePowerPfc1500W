@@ -6,8 +6,8 @@
  */
 
 #include <PUBLIC_INC/MEM_HANDLE.H>
-#include "DP_STACK/DPStackBasic.h"
-#include "DP_STACK/DPStackCfg.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
+#include "DP_STACK/DP_STACK_CFG.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 

@@ -8,6 +8,7 @@
 #ifndef ASW_DERATING_DERATING_H_
 #define ASW_DERATING_DERATING_H_
 
+void  derating_init(void);
 void  derating_task_20ms(void);
 float GetPowerDeratingPower(void);
 

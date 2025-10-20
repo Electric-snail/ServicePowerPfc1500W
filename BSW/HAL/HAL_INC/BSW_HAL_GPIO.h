@@ -8,8 +8,8 @@
 #ifndef BSW_HAL_GPIO_H_
 #define BSW_HAL_GPIO_H_
 #ifndef DLLX64
-#include "../CHIP_PACK/common/include/F28x_Project.h"
-#include "MCAL/MCAL_INC/BSW_MCAL_GPIO_DEF.h"
+#include "common/include/F28x_Project.h"
+#include "MCAL_INC/BSW_MCAL_GPIO_DEF.h"
 #endif
 #include "ENV_CFG/HARDWARE_ENV_CFG.h"
 
@@ -18,52 +18,14 @@
 #define BSW_HAL_YELLOW_ON()                     GpioSet(A, 20)
 #define BSW_HAL_YELLOW_OFF()                    GpioClear(A, 20)
 
-//#define BSW_HAL_GREEN_ON()                   GpioSet(B, 49)
-//#define BSW_HAL_GREEN_OFF()                  GpioClear(B, 49)
+#define BSW_HAL_GREEN_ON()						GpioSet(B, 49)
+#define BSW_HAL_GREEN_OFF()						GpioClear(B, 49)
 
-//OUTPUT
-//feed watchdog signal
-#define BSW_HAL_DSP_FEED_WD_H()
-#define BSW_HAL_DSP_FEED_WD_L()
+#define BSW_HAL_RELAY_ON()						    GpioSet(A, 6)
+#define BSW_HAL_RELAY_OFF()						GpioClear(A, 6)
 
-//CAN transceiver Standby mode control
-#define BSW_HAL_CAN_STB_MODE_DIS()           GpioSet(B,49)
-#define BSW_HAL_CAN_STB_MODE_EN()            GpioClear(B,49)
-
-//Auxiliary source secondary 15V enable
-#define BSW_HAL_DSP_SecAux15V_EN()              GpioSet(A,17)    //
-#define BSW_HAL_DSP_SecAux15V_DIS()             GpioClear(A,17)
-
-//Auxiliary source secondary 5V enable
-#define BSW_HAL_DSP_SecAux5V_EN()              GpioSet(A,29)    //
-#define BSW_HAL_DSP_SecAux5V_DIS()             GpioClear(A,29)
-
-//Hardware protected reset
-#define BSW_HAL_HwProtect_Reset_EN()         GpioSet(A,25)    //
-#define BSW_HAL_HwProtect_Reset_DIS()        GpioClear(A,25)
-
-//Fault wake-up of external BMU
-#define BSW_HAL_Fault_WakeUp_BMU_EN()        GpioSet(A,26)    //
-#define BSW_HAL_Fault_WakeUp_BMU_DIS()       GpioClear(A,26)
-
-//Low voltage battery sampling enable
-#define BSW_HAL_LVDC_VBAT_SAMP_EN()          GpioSet(A,27)    //
-#define BSW_HAL_LVDC_VBAT_SAMP_DIS()         GpioClear(A,27)
-
-//Auxiliary power supply enable unlock
-#define BSW_HAL_DSP_AUX_CLOSE_EN()          GpioSet(B,42)    //
-#define BSW_HAL_DSP_AUX_CLOSE_DIS()         GpioClear(B,42)
-
-//Low voltage B2B MOS enable control
-#define BSW_HAL_LVDC_B2B_MOS_EN()            GpioSet(A,8)    //
-#define BSW_HAL_LVDC_B2B_MOS_DIS()           GpioClear(A,8)
-
-//High voltage input voltage sampling enable
-#define BSW_HVDC_VIN_SAMP_EN()               GpioSet(H,224)    //
-#define BSW_HVDC_VIN_SAMP_DIS()              GpioClear(H,224)
-
-#define CAN_STANDBY_MODE()                   BSW_HAL_CAN_STB_MODE_EN()
-#define CAN_NORMAL_MODE()                    BSW_HAL_CAN_STB_MODE_DIS()
+#define BSW_HAL_BUCK_OK()						GpioSet(A, 16)
+#define BSW_HAL_BUCK_FAULT()					GpioSet(A, 16)
 
 #define GPIO_ReadPin_HWP_LOCK_TZ()           GpioDataRegs.GPADAT.bit.GPIO6
 #define GPIO_ReadPin_HW_VOUT_OVP()           GpioDataRegs.GPADAT.bit.GPIO14
@@ -182,10 +144,17 @@ typedef struct {
 extern SIM_GPIOA_T g_stGpioA;
 extern SIM_GPIOB_T g_stGpioB;
 extern SIM_GPIOH_T g_stGpioH;
- //LAUNCHXL BOARD
-#define BSW_HAL_YELLOW_ON()                      g_stGpioB.Num20 = 1
-#define BSW_HAL_YELLOW_OFF()                     g_stGpioB.Num20 = 0
+extern SIM_GPIOA_T g_stGpioA;
+extern SIM_GPIOB_T g_stGpioB;
+extern SIM_GPIOH_T g_stGpioH;
+//LAUNCHXL BOARD
+#define BSW_HAL_YELLOW_ON()                      g_stGpioA.Num20 = 1
+#define BSW_HAL_YELLOW_OFF()                     g_stGpioA.Num20 = 0       
+#define BSW_HAL_RELAY_ON()						 g_stGpioA.Num06 = 1
+#define BSW_HAL_RELAY_OFF()						 g_stGpioA.Num06 = 0
 
+#define BSW_HAL_BUCK_OK()						 g_stGpioA.Num16 = 1
+#define BSW_HAL_BUCK_FAULT()					 g_stGpioA.Num16 = 0
 
 #endif
 

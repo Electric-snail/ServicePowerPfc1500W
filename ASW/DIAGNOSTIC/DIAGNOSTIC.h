@@ -8,270 +8,204 @@
 #ifndef DIAGNOSTIC_H_
 #define DIAGNOSTIC_H_
 
-#include "DIAGNOSTIC/DIAGNOSTIC_INF.H"
-
 #define SINGLE_P      0
 
 #define TTL_LOW       0
 #define TTL_HIGH      1
 
+typedef struct {
+    unsigned short  b1VinRmsOvp : 1;
+    unsigned short  b1VinRmsUvp : 1;
+    unsigned short  b1VinOfp    : 1;
+    unsigned short  b1VinUfp    : 1;
+    unsigned short  b12Rvs      :  12;
+}AUTO_RECV_FAULT_BITS;
 
-typedef struct
-{
-    UINT16 hwLV_VOUT_OVP_fault;
-    UINT16 hwLV_VOUT_UVP_fault;
-    UINT16 hwLV_IOUT_OCP_fault;
-    UINT16 hwHV_IIN_OCP_fault;
-    UINT16 hwProtectLock_fault;
-    UINT16 LV_Iout_OCP_fault;
-    UINT16 LV_Out_ShrtCirP_fault;
-    UINT16 LV_Vout_UVP_fault;
-    UINT16 LV_Vout_OVP_fault;
-    UINT16 SoftStartTimeOut_fault;
-}DIAG_PROTECT_FLAG_L0_T;
+typedef struct {
+    unsigned short  b1VfpcHwOvp   : 1;
+    unsigned short  b1VpfcFastOvp : 1;
+    unsigned short  b1VpfcSlowOvp : 1;
+    unsigned short  b1VpfcFastUvp : 1;
+    unsigned short  b1VpfcSlowUvp : 1;
+    unsigned short  b1InOpp       : 1;
+    unsigned short  b1InRmsOcp    : 1;
+    unsigned short  b1IlCbbp      : 1;
+    unsigned short  b6Rvs         : 8;
+}NO_RECV_FAULT_BITS;
 
-extern DIAG_PROTECT_FLAG_L0_T g_stDiagFaultFlagL0;    //CBC
+typedef union {
+    unsigned short 			u16All;
+    AUTO_RECV_FAULT_BITS    bits;
+}AUTO_RECV_FAULT_WORD_U;
 
-typedef struct
-{
-    UINT16 HvPri_OTP_fault;
-    UINT16 LvSec_OTP_fault;
-    UINT16 Case_OTP_fault;
-    UINT16 LV_Vbat_OVP_fault;
+typedef union {
+    unsigned short 			u16All;
+    NO_RECV_FAULT_BITS      bits;
+}NO_RECV_FAULT_WORD_U;
 
-}DIAG_PROTECT_FLAG_L1_T;
-extern DIAG_PROTECT_FLAG_L1_T g_stDiagFaultFlagL1;  //NOTREADY
 
-typedef struct
-{
-    UINT32 LvBat_InvCnn_fault;
-    UINT32 LVDC_1V24_fault;
-    UINT32 LV_Vbat_Rationality_fault;
-    UINT32 LV_Vout_Rationality_fault;
-    UINT32 HV_Vin_OVP_fault;
-    UINT32 HV_Vin_UVP_fault;
-    UINT32 LV_Vbat_UVP_fault;
-    UINT32 LV_Vout_UVP_fault;
-    UINT32 hwLV_IOUT_OCP_fault;
-    UINT32 hwLV_VOUT_UVP_fault;
-    UINT32 hwLV_VOUT_OVP_fault;
-    UINT32 hwProtectLock_fault;
-    UINT32 hwHV_IIN_OCP_fault;
-    UINT32 LV_Iout_OCP_fault;
-    UINT32 LV_Out_ShrtCirP_fault;
-    UINT32 CanSignalBit_fualt;
-    UINT32 LV_Vout_OVP_fault;
-    UINT32 SoftStartTimeOut_fault;
 
-}DIAG_PROTECT_FLAG_L2_T;
-
-extern DIAG_PROTECT_FLAG_L2_T g_stDiagFaultFlagL2;  //NOTREADY
-
-typedef struct
-{
-    UINT16 DSP_Integrity_fault;
-    UINT16 hwLvOutIsamp_fault;
-    UINT16 hwHvInVsamp_fault;
-    UINT16 hwLvOutVsamp_fault;
-    UINT16 hwLvOutVsamp_R_fault;
-    UINT16 hwLvBatVsamp_fault;
-    UINT16 hwHvPriTsamp_fault;
-    UINT16 hwLvSecTsamp_fault;
-    UINT16 hwCaseTsamp_fault;
-    UINT16 hwB2B_Mos_fault;
-}DIAG_PROTECT_FLAG_L3_T;
-extern DIAG_PROTECT_FLAG_L3_T g_stDiagFaultFlagL3;
-
-typedef enum HW_DIAG_ID
-{
-    HW_LVOUT_OVP = 0,
-    HW_LVOUT_UVP,
-    HW_LVOUT_OCP,
-    HW_HVIN_OCP,
-    HW_LOCK_P,
-    HW_DIAG_ID_MAX
-}HW_DIAG_ID_EM ;
+typedef struct {
+    AUTO_RECV_FAULT_WORD_U  unAutoRecvFault;
+    NO_RECV_FAULT_WORD_U    unNoRecvFault;
+}DIAG_STATUS_T;
 
 
 typedef enum SW_DIAG_ID
 {
-    HVPRI_OTP  = 0,
-    LVSEC_OTP,
-    CASE_OTP,
-    HV_VIN_OVP_F,
-    HV_VIN_OVP,
-    HV_VIN_UVP_F,
-    HV_VIN_UVP,
-    LV_IOUT_OCP_F,
-    LV_IOUT_OCP,
-    LV_POUT_OPP_F,
-    LV_POUT_OPP,
-    LV_VOUT_OVP_F,
-    LV_VOUT_OVP,
-    LV_VOUT_UVP_F,
-    LV_VOUT_UVP,
-    LV_VBAT_OVP,
-    LV_VBAT_UVP,
+    VIN_RMS_OVP_ID = 0,
+    VIN_RMS_UVP_ID,
+    VIN_OFP_ID,
+    VIN_UFP_ID,
+    VPFC_OVP_HW_ID,
+    IL_CBBP_ID,
+    VPFC_FAST_OVP_ID,
+    VPFC_SLOW_OVP_ID,
+    VPFC_FAST_UVP_ID,
+    VPFC_SLOW_UVP_ID,
+    IN_OPP_ID,
+    IN_RMS_OCP_ID,
     SW_DIAG_ID_MAX
-}SW_DIAG_ID_EM ;
-
-typedef struct
-{
-    HW_DIAG_ID_EM emHwDiagId;
-    UINT16        u16ErrCnt ;
-    UINT16        u16RcvrCnt ;
-    UINT16        u16errTTL ;
-}HWDIAG_PARAM_CFG_T;
+}SW_DIAG_ID_EM;
 
 typedef struct
 {
     SW_DIAG_ID_EM emSwDiagId;
-    UINT16        u16ErrCnt ;
-    UINT16        u16RcvrCnt ;
-    FLOAT32       f32PrtctThreshold ;
-    FLOAT32       f32RcvrThreshold ;
+    UINT16        u16ErrCnt;
+    UINT16        u16RcvrCnt;
+    FLOAT32       f32PrtctThreshold;
+    FLOAT32       f32RcvrThreshold;
 }SWDIAG_PARAM_CFG_T;
 
-extern FLOAT32 g_f32HvInOVP_Threshold;
-extern FLOAT32 g_f32HvInUVP_Threshold;
+/*---emSwDiagId-----------------u16ErrCnt-------u16RcvrCnt------f32PrtctThreshold------f32RcvrThreshold*/
+#define DIAG_PARAM_TAB          \
+{\
+    { VIN_RMS_OVP_ID,               5,           10,            45,                    265 },\
+    { VIN_RMS_UVP_ID,               5,           10,             25,                     85 },\
+    { VIN_OFP_ID,                   		 5,           10,             75,                     70 },\
+    { VIN_UFP_ID,              	         5,           10,             40,                     45 },\
+    { VPFC_OVP_HW_ID,             1,           0,              0.5,                    0 },\
+    { IL_CBBP_ID,                			30,          0,              0.5,                    0 },\
+    { VPFC_FAST_OVP_ID,          10,          0,              220,                    0 },\
+    { VPFC_SLOW_OVP_ID,          20,          0,             200,                    0},\
+    { VPFC_FAST_UVP_ID,            5,           0,              15,                     0},\
+    { VPFC_SLOW_UVP_ID,          20,          0,              10,                     0},\
+    { IN_OPP_ID,                    			5,           0,              800,                   0 },\
+    { IN_RMS_OCP_ID,               		5,           0,              10,                     0 },\
+};
 
-#define  ASW_DiagHWFault(Flag, IOState, ERR_TTL, u16Count, ERR_CNT, RCVR_CNT)   \
-         if(Flag == 0)                                                           \
-         {                                                                       \
-            if(IOState == ERR_TTL)                                              \
-            {                                                                    \
-                u16Count ++;                                                     \
-               if(u16Count >= ERR_CNT)                                           \
-               {                                                                 \
-                  Flag = 1;                                                      \
-                  u16Count = 0;                                                  \
-               }                                                                 \
-            }                                                                    \
-            else                                                                 \
-            {                                                                    \
-                u16Count = 0;                                                    \
-            }                                                                    \
-         }                                                                       \
-         else                                                                    \
-         {                                                                       \
-            if(IOState == (1 - ERR_TTL))                                        \
-            {                                                                    \
-                u16Count ++;                                                     \
-               if(u16Count >= RCVR_CNT)                                          \
-               {                                                                 \
-                  Flag = 0;                                                      \
-                  u16Count = 0;                                                  \
-               }                                                                 \
-            }                                                                    \
-            else                                                                 \
-            {                                                                    \
-                u16Count = 0;                                                       \
-            }                                                                    \
-         }
+#define  ASW_DiagSWFaultOverNoRecv(Flag, PhysVal, PrtctThreshold, u8Count, ERR_CNT)  \
+         if(Flag == 0)                                                           		\
+         {                                                                       		\
+            if(PhysVal > PrtctThreshold)                                         		\
+            {                                                                    		\
+               u8Count ++;                                                      		\
+               if(u8Count >= ERR_CNT)                                            		\
+               {                                                                 		\
+                  Flag = 1;                                                      		\
+                  u8Count = 0;                                                   		\
+               }                                                                 		\
+            }                                                                    		\
+            else                                                                 		\
+            {                                                                    		\
+                u8Count = 0;                                                    		\
+            }                                                                    		\
+         }                                                                      
 
+#define  ASW_DiagSWFaultUnderNoRecv(Flag, PhysVal, PrtctThreshold, u8Count, ERR_CNT)  \
+         if(Flag == 0)                                                           		\
+         {                                                                       		\
+            if(PhysVal < PrtctThreshold)                                         		\
+            {                                                                    		\
+               u8Count ++;                                                      		\
+               if(u8Count >= ERR_CNT)                                            		\
+               {                                                                 		\
+                  Flag = 1;                                                      		\
+                  u8Count = 0;                                                   		\
+               }                                                                 		\
+            }                                                                    		\
+            else                                                                 		\
+            {                                                                    		\
+                u8Count = 0;                                                    		\
+            }                                                                    		\
+         }  
 
-#define  ASW_DiagSWFaultOver(Flag, PhysVal, PrtctThreshold, RcvrThreshold, u16Count, ERR_CNT, RCVR_CNT)  \
+#define  ASW_DiagSWFaultOverRecv(Flag, PhysVal, PrtctThreshold, RcvrThreshold, u8Count, ERR_CNT, RECV_CNT)  \
          if(Flag == 0)                                                           \
          {                                                                       \
             if(PhysVal > PrtctThreshold)                                         \
             {                                                                    \
-                u16Count ++;                                                         \
-               if(u16Count >= ERR_CNT)                                            \
+                u8Count ++;                                                      \
+               if(u8Count >= ERR_CNT)                                            \
                {                                                                 \
                   Flag = 1;                                                      \
-                  u16Count = 0;                                                     \
+                  u8Count = 0;                                                   \
                }                                                                 \
             }                                                                    \
             else                                                                 \
             {                                                                    \
-                u16Count = 0;                                                       \
+                u8Count = 0;                                                    \
             }                                                                    \
          }                                                                       \
          else                                                                    \
          {                                                                       \
             if(PhysVal < RcvrThreshold)                                          \
             {                                                                    \
-                u16Count ++;                                                         \
-               if(u16Count >= RCVR_CNT)                                             \
+                u8Count ++;                                                     \
+               if(u8Count >= RECV_CNT)                                          \
                {                                                                 \
                   Flag = 0;                                                      \
-                  u16Count = 0;                                                     \
+                  u8Count = 0;                                                  \
                }                                                                 \
             }                                                                    \
             else                                                                 \
             {                                                                    \
-                u16Count = 0;                                                       \
+                u8Count = 0;                                                    \
             }                                                                    \
          }
 
-#define  ASW_DiagSWFaultUnder(Flag, PhysVal, PrtctThreshold, RcvrThreshold, u16Count, ERR_CNT, RCVR_CNT)  \
+#define  ASW_DiagSWFaultUnderRecv(Flag, PhysVal, PrtctThreshold, RcvrThreshold, u8Count, ERR_CNT, RECV_CNT)  \
          if(Flag == 0)                                                           \
          {                                                                       \
             if(PhysVal < PrtctThreshold)                                         \
             {                                                                    \
-                u16Count ++;                                                     \
-               if(u16Count >= ERR_CNT)                                              \
+                u8Count ++;                                                      \
+               if(u8Count >= ERR_CNT)                                            \
                {                                                                 \
                   Flag = 1;                                                      \
-                  u16Count = 0;                                                  \
+                  u8Count = 0;                                                   \
                }                                                                 \
             }                                                                    \
             else                                                                 \
             {                                                                    \
-                u16Count = 0;                                                    \
+                u8Count = 0;                                                    \
             }                                                                    \
          }                                                                       \
          else                                                                    \
          {                                                                       \
             if(PhysVal > RcvrThreshold)                                          \
             {                                                                    \
-                u16Count ++;                                                     \
-               if(u16Count >= RCVR_CNT)                                          \
+                u8Count ++;                                                     \
+               if(u8Count >= RECV_CNT)                                          \
                {                                                                 \
                   Flag = 0;                                                      \
-                  u16Count = 0;                                                  \
+                  u8Count = 0;                                                  \
                }                                                                 \
             }                                                                    \
             else                                                                 \
             {                                                                    \
-                u16Count = 0;                                                    \
+                u8Count = 0;                                                    \
             }                                                                    \
          }
 
-#define UnRcvrSWFaultOverP(Flag, PhysVal, PrtctThreshold,  u16Count, CNT_THRD)    \
-        if (Flag == 0)                                                      \
-        {                                                                   \
-            if((PhysVal > PrtctThreshold) )                                 \
-            {                                                               \
-                u16Count ++;                                                \
-                if(u16Count >= CNT_THRD)                                    \
-                {                                                           \
-                    Flag = 1;                                               \
-                }                                                           \
-            }                                                               \
-            else                                                            \
-            {                                                               \
-                u16Count = 0;                                               \
-            }                                                               \
-        }
+extern DIAG_STATUS_T g_stDiagStatus;
 
-#define UnRcvrSWFaultUnderP(Flag, PhysVal, PrtctThreshold,  u16Count, CNT_THRD)    \
-        if (Flag == 0)                                                      \
-        {                                                                   \
-            if((PhysVal < PrtctThreshold) )                                 \
-            {                                                               \
-                u16Count ++;                                                \
-                if(u16Count >= CNT_THRD)                                    \
-                {                                                           \
-                    Flag = 1;                                               \
-                }                                                           \
-            }                                                               \
-            else                                                            \
-            {                                                               \
-                u16Count = 0;                                               \
-            }                                                               \
-        }
+#define u16_get_auto_recv_diag()       g_stDiagStatus.unAutoRecvFault.u16All
+#define u16_get_no_recv_diag()          g_stDiagStatus.unNoRecvFault.u16All
 
-
-
+extern void diagnostic_init(void);
+extern void diagnostic_fast_task(void);
+extern void diag_1ms_task(void);
+extern void diag_10ms_task(void);
+extern void diag_100ms_task(void);
 #endif /* DIAGNOSTIC_H_ */

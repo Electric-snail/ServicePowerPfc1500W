@@ -1,14 +1,6 @@
-/*
- * FSM_CORE.c
- *
- *  Created on: 2022.9.17
- *      Author: hongbo.jiang
- */
-#ifdef DLLX64
-	#include "BSW_FSM_CORE.h"
-#else
-	#include "FSM/BSW_FSM_CORE.h"
-#endif
+#include "SVC/FSM/BSW_FSM_CORE.h"
+#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
+
 
 void fsm_init(fsm_obj_t* p_fsm) {
 	UINT8 i = 0;
@@ -62,7 +54,7 @@ void fsm_fun(fsm_obj_t* p_fsm)
 	}
 }
 
-void fsm_emit_event(fsm_obj_t* p_fsm, UINT16 u16TrigEvent)
+void fsm_emit_event(fsm_obj_t* p_fsm, uint16_t u16TrigEvent)
 {
 	const fsm_item_obj_t* p_fsm_item;
 	UINT8 u8NextStatusId = 0;
@@ -86,8 +78,8 @@ void fsm_emit_event(fsm_obj_t* p_fsm, UINT16 u16TrigEvent)
 	}
 }
 
-UINT8 get_fsm_status(fsm_obj_t* p_fsm){
-	if(p_fsm == NULL)
-		return	INVALID_FSM_ID;
-	return p_fsm->u8CurStateId;
+UINT8 get_fsm_status(fsm_obj_t* p_fsm) {
+	if (p_fsm == NULL)
+		return INVALID_FSM_ID
+		return p_fsm->u8CurStateId;
 }

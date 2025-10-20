@@ -8,10 +8,7 @@
 #define BSW_HAL_BASIC_H_
 #include "../ENV_CFG/SOFTWARE_ENV_CFG.h"
 
-
-void BswHalAdcInit(void);
-
-extern void BSW_HAL_Init(void);
+extern void bsw_hal_init(void);
 
 #endif /* BSW_HAL_BASIC_H_ */
 

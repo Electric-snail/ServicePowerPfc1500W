@@ -8,10 +8,16 @@
 #ifndef ASW_PFC_CTR_PFC_CTR_H_
 #define ASW_PFC_CTR_PFC_CTR_H_
 
+typedef struct {
+	float f32VinPll;
+	float f32Duty;
+}PFC_CTR_OUT;
 
-#define               NOTICH_FILT_ENABLE				1
-#define				f32_get_pwm_duty()                         0.5f
+extern PFC_CTR_OUT				g_stPfcOut;
 
+#define             NOTICH_FILT_ENABLE				TRUE
+#define				f32_get_pwm_duty()             g_stPfcOut.f32Duty
+#define              f32_get_vin_pll_out()          g_stPfcOut.f32VinPll
 
 extern		void 		pfc_controller(void);
 extern		void 		pfc_controller_init(void);

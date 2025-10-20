@@ -1,45 +1,44 @@
 /*
- * ASW_BASIC.C
+ * ASW_BASIC.c
  *
  *  Created on: 2022-07-18
  *      Author: Hongbo.jiang
  */
+#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
+#ifndef DLLX64
+#include "DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER_CTRL.H"
+#endif
 
-
-#include "PUBLIC_INC/AUTO_REGISTER.H"
-#include "SOFTWARE_ENV_CFG.H"
-#include "TASK/BSW_TASK_SERVICE.H"
 #include "ASW_BASIC.h"
-
-extern UINT16 AswRegLoadStart;
-extern UINT16 AswRegLoadSize;
-
-void asw_init(void)
-{
-    UINT16 i;
-
-    AUTO_REG_OBJ *p_auto_reg = NULL;
-    pf_init_func p_init_func = NULL;
+#include "HAL/HAL_INC/BSW_HAL_GPIO.h"
+#include "DIAGNOSTIC/DIAGNOSTIC.h"
+#include "MEASURE/MEASURE.h"
+#include "DERATING/DERATING.h"
+#include "SYS_FSM/SYS_FSM.h"
+#include "POWER_FSM/POWER_FSM.h"
+#include "PFC_CTR/PFC_CTR.H"
 
 
-    UINT16   auto_reg_item = (UINT16)((UINT32)&AswRegLoadSize / sizeof(AUTO_REG_OBJ));
-    p_auto_reg = (AUTO_REG_OBJ *)&AswRegLoadStart;
-    ASW_INIT_OBJ *p_AswInitObj = NULL;
-    for(i = 0; i < auto_reg_item; i++)
-    {
-        p_AswInitObj = (ASW_INIT_OBJ *)p_auto_reg->p_reg_data;
-       if(p_AswInitObj == NULL)
-           continue;
-       p_init_func =(pf_asw_id_init)p_AswInitObj->asw_id_init;
-       if(p_init_func != NULL)
-          p_init_func();
-       p_auto_reg ++;
-    }
+const ASW_INIT_ITEM_T gc_stAswInitTab[] = ASW_INIT_ITEM_TAB;
+
+void asw_init(void) {
+	unsigned char i = 0;
+	const ASW_INIT_ITEM_T *p_asw_init_item = NULL;
+	unsigned char u8AswInitNum = (unsigned char)(sizeof(gc_stAswInitTab) / sizeof(ASW_INIT_ITEM_T));
+	for (i = 0; i < u8AswInitNum; i++) {
+		p_asw_init_item = &gc_stAswInitTab[i];
+		if ((p_asw_init_item->enable == 1) && (p_asw_init_item->pf_asw_init != 0x00000000)) {
+			p_asw_init_item->pf_asw_init();
+		}
+	}
 }
 
 void asw_1msTask(void)
 {
+#if(SFRA_ENABLED == TRUE)
+//    SFRA_RUN_BACKGROUND(&sfra);
+//    SFRA_GUI_RUN_COMMS(&sfra);
+
+//   TiSfraCollectDataTx();
+#endif
 }
-
-REG_TASK(asw_1msTask,		1,			1,				0);
-

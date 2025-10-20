@@ -5,15 +5,12 @@
  *      Author: Hongbo.jiang
  */
 
-//#define DEF_DBG_I
-//#define DEF_DBG_W
-//#define DEF_DBG_E
+#include "DP_STACK/DP_STACK_BASIC.H"
 #include "BSW_SVC_BASIC.h"
-#include "DP_STACK/DPStackBasic.h"
+#include "DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER_CTRL.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DEBUG_PLATFORM/DBG_BASIC.H"
-#include "DEBUG_PLATFORM/PARAMETER_CTRL/PARAMETER.H"
 #include "string.h"
 
 
@@ -45,7 +42,6 @@ void param_core_init(void)
     reset_param_all();
 }
 
-REG_SVC_INIT(SVC_PARAM_CFG,		param_core_init)
 /*
 
     +-------+-------------------------+----------------------------------+-------+-------+-------+

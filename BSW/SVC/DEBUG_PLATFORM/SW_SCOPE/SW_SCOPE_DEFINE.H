@@ -162,8 +162,7 @@
 														if(g_stGuiCfgSwScope.u8TrigIndex < g_stScopeCtrlInfo.u8VarChannelNum)\
 															g_stScopeCtrlInfo.u8Enable = 1;\
                                                     }\
-												}\
-												REG_SVC_INIT(SW_SCOPE_INIT,sw_scope_init)
+												}
 #endif
 
 

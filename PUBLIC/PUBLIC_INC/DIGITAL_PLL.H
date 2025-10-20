@@ -1,6 +1,8 @@
 #ifndef _SOGI_H
 #define _SOGI_H
 
+#include "SOFTWARE_ENV_CFG.H"
+
 typedef struct {
 	float         f32SigIn;
 }SOGI_INPUT_T;
@@ -59,19 +61,15 @@ typedef struct {
 }ORTH_OUTPUT_T;
 
 typedef struct {
-
-}ORTH_INTER_T;
-
-typedef struct {
 	ORTH_INPUT_T  		stIn;
 	ORTH_COFF_T      	stCoff;
-	ORTH_OUTPUT_T 	stOut;
+	ORTH_OUTPUT_T 		stOut;
 }ORTH_PLL_OBJ_T;
 
-void sogi_set_freq_1p(SOGI_OBJ_T *pst_Sogi, float f32Freq);
-extern void sogi_proc_1p(SOGI_OBJ_T *pst_Sogi);
+void sogi_set_freq_1p(VOLATILE 		SOGI_OBJ_T *pst_Sogi, float f32Freq);
+extern void sogi_proc_1p(VOLATILE 	SOGI_OBJ_T *pst_Sogi);
 
-extern void orth_pll_proc_1p(ORTH_PLL_OBJ_T 	*pst_OrthPll);
+extern void orth_pll_proc_1p(VOLATILE	ORTH_PLL_OBJ_T 	*pst_OrthPll);
 
 #endif
 

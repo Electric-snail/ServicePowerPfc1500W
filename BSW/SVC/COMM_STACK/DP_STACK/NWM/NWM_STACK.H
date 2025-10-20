@@ -9,8 +9,8 @@
 #define BSW_SVC_COMMSTACK_DPSTACK_NWM_NWM_STACK_H_
 
 #include "DP_STACK/DLL/DLL_STACK.H"
-#include "DP_STACK/DPStackBasic.h"
-#include "DP_STACK/DPStackCfg.h"
+#include "DP_STACK/DP_STACK_BASIC.H"
+#include "DP_STACK/DP_STACK_CFG.H"
 
 #define  PFC_NODE_ADDR                 01
 #define  LLC_NODE_ADDR                 02

@@ -1,4 +1,4 @@
-#include "DF_MATH.H"
+#include "PUBLIC_INC/DF_MATH.H"
 
 #define PI2    6.283185307179586
 //filter  y(n)=a*x+(1-a)*y(n-1)  a=Fc*2*pi*TS/(Fc*2*pi*TS+1)
@@ -15,7 +15,7 @@
   Others:
 **************************************************************************************************/
 
-void notch_filter_2th(NOTCH_OBJ_2TH_T	 *p_stNotch){
+void notch_filter_2th(VOLATILE 	NOTCH_OBJ_2TH_T	 *p_stNotch){
 	p_stNotch->stInner.f32OutPredict0thX 	= p_stNotch->stInner.f32Out0thX;
 	p_stNotch->stInner.f32OutPredict0thY 	= p_stNotch->stInner.f32Out0thY;
 	p_stNotch->stInner.f32OutPredict2thX 	= p_stNotch->stCoff.f32Cos2OmegT *p_stNotch->stInner.f32Out2thX - p_stNotch->stCoff.f32Sin2OmegT * p_stNotch->stInner.f32Out2thY;
@@ -43,7 +43,7 @@ void notch_filter_2th(NOTCH_OBJ_2TH_T	 *p_stNotch){
   Others:
 **************************************************************************************************/
 
-void notch_filter(NOTCH_OBJ_T	 *p_stNotch){
+void notch_filter(VOLATILE		NOTCH_OBJ_T	 *p_stNotch){
 	p_stNotch->stInner.f32OutPredict0thX = 	p_stNotch->stInner.f32Out0thX;
 	p_stNotch->stInner.f32OutPredict0thY = 	p_stNotch->stInner.f32Out0thY;
 	p_stNotch->stInner.f32OutPredict1thX = 	p_stNotch->stCoff.f32Cos1OmegT * p_stNotch->stInner.f32Out1thX - p_stNotch->stCoff.f32Sin1OmegT * p_stNotch->stInner.f32Out1thY;

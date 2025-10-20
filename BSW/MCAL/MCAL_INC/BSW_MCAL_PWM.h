@@ -332,10 +332,10 @@ struct EPWMx_CFG_CC{
     UINT16           										u16CmpcVal;
     UINT16           										u16CmpdVal;
 };
-/*-----PWM_CHANNEL-----------------u16ABCDShadowEnable--------emLoadMode-------------------------------u32CmpaVal--------------------------------------u32CmpbVal---------------u16CmpCVal--------u16CmpDVal--------*/
+/*-----PWM_CHANNEL-----------------u16ABCDShadowEnable--------emLoadMode-----------------------------u32CmpaVal---------------------u32CmpbVal(HR-low 16bit)---------------u16CmpCVal--------u16CmpDVal--------*/
 #define EPWM_CFG_CC_TAB  \
 {\
-    {PFC_PWM_CHANNEL, 		                1, 				               	CC_LOAD_CTR_ZERO, 			 (UINT32)PFC_PWM_TBPRD * 65536/2,   					           3UL* 65536,					0,								0},\
+    {PFC_PWM_CHANNEL, 		                1, 				               	CC_LOAD_CTR_ZERO, 							 (UINT32)0,   					           3UL* 65536,												0,								0},\
 }
 
 struct EPWMx_CFG_AQ{

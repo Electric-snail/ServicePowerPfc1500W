@@ -16,8 +16,16 @@
 
 #define 	pfc_drv_turn_on()    														do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
 
-#define  set_pfc_pwm_duty(f32Duty,   u16CouterTemp)         do{u16CouterTemp = (unsigned short)(f32Duty  * PFC_PWM_TBPRD);\
+#define     set_pfc_pwm_duty(f32Duty,   u16CouterTemp)         do{u16CouterTemp = (unsigned short)(f32Duty  * PFC_PWM_TBPRD);\
 																											  gp_stPwmChannel[PFC_PWM_CHANNEL]->CMPA.bit.CMPA = u16CouterTemp; }while(0)
+
+#define     read_pfc_drv_dcaevt2_flag()												    gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFLG.bit.DCAEVT2
+#define     clr_pfc_drv_deaevt2_flag()                                                  do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.DCAEVT2 = 1;EDIS;}while(0)
+
+#define     read_pfc_drv_dcaevt1_flag()												    gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFLG.bit.DCAEVT2
+#define     clr_pfc_drv_deaevt1_flag()                                                  do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.DCAEVT1 = 0;\
+																							gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
+
 #else
 
 typedef struct {
@@ -27,17 +35,18 @@ typedef struct {
 	UINT16 u16PhaseCnt;
 }SIM_PWM_T;
 
-typedef struct {
-	UINT16 u16Enable;
-	UINT16 u16PeriodHrCnt;
-	UINT16 u16DutyHrCnt;
-	UINT16 u16PhaseHrCnt;
-}SIM_HRPWM_T;
+extern SIM_PWM_T g_stEpwm1;
 
-extern SIM_PWM_T g_stEpwm3;
+#define     read_pfc_drv_dcaevt2_flag()						0	
+#define     clr_pfc_drv_deaevt2_flag()                       
 
-#define LLC_PRI_EPWM_OFF()      g_stEpwm3.u16Enable = 0
-#define LLC_PRI_EPWM_ON()		g_stEpwm3.u16Enable = 1
+
+#define 	pfc_drv_turn_off()   							g_stEpwm1.u16Enable = 0
+ 
+#define 	pfc_drv_turn_on()    							g_stEpwm1.u16Enable = 1
+
+#define     set_pfc_pwm_duty(f32Duty,   u16CouterTemp)      g_stEpwm1.u16DutyCnt = (unsigned short)(f32Duty  * PFC_PWM_TBPRD);
+
 
 #endif
 

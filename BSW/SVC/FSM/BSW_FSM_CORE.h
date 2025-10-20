@@ -1,15 +1,15 @@
 /*
  * FSM_CORE.h
  *
- *  Created on: 2022.9.22
- *      Author: hongbo.jiang
+ *  Created on: 2022/11/14
+ *      Author: xj8r1j
  */
 
-#ifndef _BSW_FSM_CORE_H_
-#define _BSW_FSM_CORE_H_
+#ifndef _FSM_CORE_H_
+#define _FSM_CORE_H_
 
-
-#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
+#include "stdint.h"
+#include "SVC/BSW_SVC_BASIC.h"
 
 #define STATE_IS_UNCHANGE       0u
 #define STATE_IS_CHANGE         1u
@@ -42,37 +42,17 @@ typedef struct
 	UINT16				    u16TrigEven;      //The happen action in current status, whether the status need to be changed, it is based on it
 }fsm_obj_t;
 
-extern void  fsm_emit_event(fsm_obj_t* p_fsm, UINT16 u16Event);
+extern void  fsm_emit_event(fsm_obj_t* p_fsm, uint16_t u16Event);
 extern void  fsm_fun(fsm_obj_t* p_fsm);
 extern void  fsm_init(fsm_obj_t* p_fsm);
 extern UINT8 get_fsm_status(fsm_obj_t* p_fsm);
 
-#ifdef DLLX64
-	#define REG_FSM_OBJ(fsm_name,period,offset,init_state_id,...) 				\
-		const fsm_item_obj_t  fsm_item_tab_##fsm_name[]={__VA_ARGS__};		\
-		fsm_obj_t             fsm_obj_##fsm_name={0,1,fsm_item_tab_##fsm_name,sizeof(fsm_item_tab_##fsm_name)/sizeof(fsm_item_obj_t),init_state_id};\
-        void fsm_init_##fsm_name(void){                               		\
-			fsm_init(&fsm_obj_##fsm_name);									\
-		}																	\
-		void fsm_func_##fsm_name(void){										\
-			fsm_fun(&fsm_obj_##fsm_name);                             		\
-		}	 
-#else
-		#define REG_FSM_OBJ(fsm_name,period,offset,init_state_id,...) 				\
-		const fsm_item_obj_t  fsm_item_tab_##fsm_name[]={__VA_ARGS__};		\
-		fsm_obj_t             fsm_obj_##fsm_name={0,1,fsm_item_tab_##fsm_name,sizeof(fsm_item_tab_##fsm_name)/sizeof(fsm_item_obj_t),init_state_id};\
-        void fsm_init_##fsm_name(void){                               		\
-			fsm_init(&fsm_obj_##fsm_name);									\
-		}																	\
-        REG_SVC_INIT(SVC_FSM_##fsm_name,fsm_init_##fsm_name)				\
-		void fsm_func_##fsm_name(void){										\
-			fsm_fun(&fsm_obj_##fsm_name);                             		\
-		}	                                                    			\
-		REG_TASK(fsm_func_##fsm_name,1,period,offset)
-#endif
+#define REG_FSM_OBJ(fsm_name,init_state_id,...) 		\
+const fsm_item_obj_t  fsm_item_tab_##fsm_name[]={__VA_ARGS__};		\
+fsm_obj_t             fsm_obj_##fsm_name={0,1,fsm_item_tab_##fsm_name,sizeof(fsm_item_tab_##fsm_name)/sizeof(fsm_item_obj_t),init_state_id};
 
-
-
+#define FSM_OBJ_CALL(fsm_name)          fsm_fun(&fsm_obj_##fsm_name); 
+#define FSM_INIT_CALL(fsm_name)         fsm_init(&fsm_obj_##fsm_name);
 #define EMIT_FSM(fsm_name,event)		fsm_emit_event(&fsm_obj_##fsm_name,event)
 #define EXTERN_FSM_OBJ(fsm_name)        extern fsm_obj_t fsm_obj_##fsm_name;
 #define GET_FSM_STATUS(fsm_name)        get_fsm_status(&fsm_obj_##fsm_name)

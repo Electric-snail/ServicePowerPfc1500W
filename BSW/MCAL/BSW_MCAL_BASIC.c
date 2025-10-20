@@ -24,7 +24,6 @@
 #include "MCAL_INC/BSW_MCAL_SCI.h"
 #include "MCAL_INC/BSW_MCAL_I2C.h"
 #include "MCAL_INC/BSW_MCAL_WDG.h"
-#include "MCAL_INC/BSW_MCAL_CAN.h"
 //#include "MCAL_INC/BSW_MCAL_SPI.h"
 
 const MCAL_DRIVE_OBJ g_fst_McalDrvEntity[] = MCAL_DRV_REG_TAB;
