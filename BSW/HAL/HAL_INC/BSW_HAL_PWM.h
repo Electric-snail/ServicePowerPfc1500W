@@ -12,19 +12,19 @@
 
 #ifndef DLLX64
 #include "MCAL/MCAL_INC/BSW_MCAL_PWM.h"
-#define 	pfc_drv_turn_off()   														do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFRC.bit.OST = 1;EDIS;}while(0)
+#define 	pfc_drv_turn_off()   																do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFRC.bit.OST = 1;EDIS;}while(0)
 
-#define 	pfc_drv_turn_on()    														do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
+#define 	pfc_drv_turn_on()    																do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
 
-#define     set_pfc_pwm_duty(f32Duty,   u16CouterTemp)         do{u16CouterTemp = (unsigned short)(f32Duty  * PFC_PWM_TBPRD);\
-																											  gp_stPwmChannel[PFC_PWM_CHANNEL]->CMPA.bit.CMPA = u16CouterTemp; }while(0)
+#define     set_pfc_pwm_duty(f32Duty,   u16CouterTemp)         			do{u16CouterTemp = (unsigned short)(f32Duty  * PFC_PWM_TBPRD);\
+																											  	  	 gp_stPwmChannel[PFC_PWM_CHANNEL]->CMPA.bit.CMPA = u16CouterTemp; }while(0)
 
 #define     read_pfc_drv_dcaevt2_flag()												    gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFLG.bit.DCAEVT2
 #define     clr_pfc_drv_deaevt2_flag()                                                  do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.DCAEVT2 = 1;EDIS;}while(0)
 
 #define     read_pfc_drv_dcaevt1_flag()												    gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFLG.bit.DCAEVT2
 #define     clr_pfc_drv_deaevt1_flag()                                                  do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.DCAEVT1 = 0;\
-																							gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
+																													gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
 
 #else
 

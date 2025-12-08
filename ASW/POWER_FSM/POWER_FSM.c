@@ -73,8 +73,8 @@ void  power_standby_exe(void){
 	float f32VpfcPrechargeThrd;
 	float f32VpfcLpf;
 
-	if(u8_get_pfc_stop_cmd() == 1)
-		return;
+	/*if(u8_get_pfc_stop_cmd() == 1)
+		return;*/
 
 	if (u16_get_vin_type() == DC_TYPE) {
 		u16PolRvsFlag = 1;  //DC type 下默认输入极性出现跳变，控制继电器的吸合在过零点出.
@@ -89,7 +89,7 @@ void  power_standby_exe(void){
 	f32VpfcLpf						= f32_get_vpfc_lpf();
 	g_u16PwrFsmTimerCnt++;
 
-	if ((g_u16PwrFsmTimerCnt > 250)&&(1 == u16PolRvsFlag)&&(f32VpfcLpf > f32VpfcPrechargeThrd)&&(0x0000 == u16_get_auto_recv_diag()&&(LOOP_INVALID_MODE != u16_get_loop_mode()))) {
+	if ((g_u16PwrFsmTimerCnt > 800)&&(1 == u16PolRvsFlag)&&(f32VpfcLpf > f32VpfcPrechargeThrd)&&(0x0000 == u16_get_auto_recv_diag())){
 			BSW_HAL_RELAY_ON();
 			g_u16PwrFsmTimerCnt  = 0;
 			EMIT_FSM(POWER_FSM, PWR_PRE_CHG_CMP);

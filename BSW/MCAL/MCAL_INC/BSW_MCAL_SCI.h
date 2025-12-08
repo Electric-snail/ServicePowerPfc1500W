@@ -16,6 +16,11 @@
 #define 	SCIB_FIFO_WORD_SIZE            FIFO_16_WORD
 #define 	SCIA_FIFO_WORD_SIZE            FIFO_16_WORD
 
+#define    RXERR_BIT                                 7
+#define    FE_BIT                                          4
+#define    OE_BIT                                         3
+#define    PE_BIT                                         2
+
 #define scia_write_send_buff(u8Data)            SciaRegs.SCITXBUF.all = u8Data
 #define is_scia_fifo_enable                             SciaRegs.SCIFFTX.bit.SCIFFENA
 

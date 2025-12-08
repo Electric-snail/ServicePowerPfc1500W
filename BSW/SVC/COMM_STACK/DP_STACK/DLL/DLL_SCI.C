@@ -13,6 +13,7 @@
 /*---- The extern valible declaration zoon ****/
 extern const UINT8 crc_table[];                   // CRC table.
 
+unsigned short g_u16SciErrCnt = 0;
 /**   SCI physic layer protocal  as flow ------------------------------------------------
   *   HEAD BYTE0 + HEAD BYTE1 + HEAD BYTE2 + 1 LEN BYTE  + N Data byte + 1 CRC BYTE -----
   *    0xAA          0x55        0xAA         (N + 1)       ...            ...
@@ -309,6 +310,27 @@ void scib_send_from_ring(void){
 #endif
 }
 
+void scib_err_handler(void){
+	static unsigned short s_u16SciErrCnt = 0;
+	 if(ScibRegs.SCIRXST.all | (1 << RXERR_BIT ) | (1 << FE_BIT) | (1 << OE_BIT)  |  (1 << PE_BIT)){
+		 s_u16SciErrCnt ++;
+		 if(s_u16SciErrCnt > 5){
+			 bsw_mcal_sci_init();
+			 NOP;
+			 NOP;
+			 NOP;
+			 NOP;
+			 NOP;
+			 NOP;
+			 NOP;
+			 NOP;
+			 NOP;
+			 NOP;
+			 s_u16SciErrCnt = 0;
+			 g_u16SciErrCnt++;
+		 }
+	 }
+}
 INT16 dll_scib_frame_read(UINT16 *p_u16Data)
 {
     static enum DLL_RX_FMS enSciRxFsm = HEAD_BYTE0_FMS;

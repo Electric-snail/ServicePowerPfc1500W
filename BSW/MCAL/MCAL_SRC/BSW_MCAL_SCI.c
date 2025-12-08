@@ -28,7 +28,7 @@ void bsw_mcal_sci_init(void)
         p_stSciItemCfg = &gc_stSciItemCfg[i];
         if(p_stSciItemCfg->emSciId > SCI_MAX_ID)
             continue;
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICTL1.bit.SWRESET = 0;
+        p_stSciModue[p_stSciItemCfg->emSciId]->SCICTL1.all						   = 0;
         if(p_stSciItemCfg->emSciParity == NONE_PARITY){
            p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.PARITYENA = 0;
         }else{
@@ -36,12 +36,9 @@ void bsw_mcal_sci_init(void)
            p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.PARITYENA  = 1;
         }
 
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.LOOPBKENA     = 0;
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.STOPBITS      = p_stSciItemCfg->emSciStopBit;
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.SCICHAR       = 7;  //Default set 8 char bits
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICTL1.bit.RXERRINTENA  = 1;  //Enable the RX Err interrupt
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICTL1.bit.TXENA        = 1;  //Enable the Tx
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICTL1.bit.RXENA        = 1;  //Enable the Rx
+        p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.LOOPBKENA     	= 0;
+        p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.STOPBITS      		= p_stSciItemCfg->emSciStopBit;
+        p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.SCICHAR       		= 7;  //Default set 8 char bits
         switch(p_stSciItemCfg->emSciBaud){
             case BAUD_4800:
                 u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*4800.0f) - 1);
@@ -73,12 +70,12 @@ void bsw_mcal_sci_init(void)
             p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFTX.bit.TXFIFORESET = 0;
             p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFTX.bit.TXFIFORESET = 1;
 
-            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFFIL = p_stSciItemCfg->emFifoLevel;
-            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFFIENA = 1;
-            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFIFORESET = 0;     //Reset the RX FIFO
-            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFIFORESET = 1;     //Re-enable the RX FIFO
+            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFFIL 				= p_stSciItemCfg->emFifoLevel;
+            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFFIENA 		= 1;
+            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFIFORESET 	= 0;     //Reset the RX FIFO
+            p_stSciModue[p_stSciItemCfg->emSciId]->SCIFFRX.bit.RXFIFORESET 	= 1;     //Re-enable the RX FIFO
         }
-        p_stSciModue[p_stSciItemCfg->emSciId]->SCICTL1.all = 0x0063;                // enable SCI
+        p_stSciModue[p_stSciItemCfg->emSciId]->SCICTL1.all = 0x0023;                // enable SCI
     }
 }
 

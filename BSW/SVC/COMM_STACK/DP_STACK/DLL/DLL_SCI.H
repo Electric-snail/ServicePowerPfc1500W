@@ -74,6 +74,7 @@ extern void scia_send_from_ring(void);
 extern INT16 dll_scib_frame_write(void *);
 extern INT16 dll_scib_frame_read(UINT16 *);
 extern INT16 dll_scib_frame_read_fifo(UINT16 *);
+extern void scib_err_handler(void);
 extern void scib_send_from_ring(void);
 
 #endif /* BSW_SVC_COMMPROTOCOLSTACK_DLLSTACK_DLL_SCI_H_ */
