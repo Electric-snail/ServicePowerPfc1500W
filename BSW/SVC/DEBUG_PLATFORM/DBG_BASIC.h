@@ -20,8 +20,8 @@ enum VAR_TYPE
 
 #define  ENABLE_PARAM_CFG               					(1)
 #define  DATA_REC_MAX_CNT               					12
-#define  VAR_NAME_CHAR_MAX_LEN_BYTE     	32
-#define  SCOPE_VAR_MAX_ITEM_CNT         			6
+#define  VAR_NAME_CHAR_MAX_LEN_BYTE     					32
+#define  SCOPE_VAR_MAX_ITEM_CNT         					6
 
 #if(SCOPE_VAR_MAX_ITEM_CNT > 6)
 #error"The SCOPE_VAR_MAX_ITEM_CNT must below 7"

@@ -87,13 +87,13 @@ enum PWM_CHANNEL
 
 /* SHDWDBCTLMODE bits*/
 #define DB_CTR_RED_FED_SHADOW     			    0x1
-#define DB_CTR_RED_FED_IMMEDIATE  			0x0
+#define DB_CTR_RED_FED_IMMEDIATE  				0x0
 
 /* LOADDBCTLMODE bits*/
-#define DB_CNT_ZERO      0x0
-#define DB_CNT_PRD       0x1
-#define DB_CNT_ZERO_PRD  0x2
-#define DB_LD_DISABLE    0x3
+#define DB_LD_CNT_ZERO      									0x0
+#define DB_LD_CNT_PRD       									0x1
+#define DB_LD_CNT_ZERO_PRD  							0x2
+#define DB_LD_DISABLE    										0x3
 
 /*OUTSWAP bits */
 #define 		DB_AABB    			0X0
@@ -130,22 +130,6 @@ enum PWM_CHANNEL
 #define ECAP2SYNCOUT    0X19
 #define ECAP3SYNCOUT    0X1A
 
-/*EPWMSYNCINSEL  SEL bits */
-#define SYNCIN_DISABLE          0X0
-#define SYNCIN_EPWM1SYNCOUT     0X1
-#define SYNCIN_EPWM2SYNCOUT     0X2
-#define SYNCIN_EPWM3SYNCOUT     0X3
-#define SYNCIN_EPWM4SYNCOUT     0X4
-#define SYNCIN_EPWM5SYNCOUT     0X5
-#define SYNCIN_EPWM6SYNCOUT     0X6
-#define SYNCIN_EPWM7SYNCOUT     0X7
-#define SYNCIN_EPWM8SYNCOUT     0X8
-#define SYNCIN_ECAP1SYNCOUT     0X11
-#define SYNCIN_ECAP2SYNCOUT     0X12
-#define SYNCIN_ECAP3SYNCOUT     0X13
-#define SYNCIN_INPUT15XBAR      0X18
-#define SYNCIN_INPUT16XBAR      0X19
-
 /*EPWMSYNCOUTEN   bits */
 #define 		SYNCOUTEN_DISABLE       				0x00
 #define	 	SYNCOUTEN_SW            					0x01
@@ -162,14 +146,20 @@ extern volatile struct EPWM_REGS *p_stPwmChannel[];
 #define HR_COM_ENABLE    1
 
 enum EPWM_SYNC_IN_SRC{
-	   EPWM_SYNC_IN_NONE			 = 0x00,
-	   EPWM1_SYNCOUT      =  0x01,
-	   EPWM2_SYNCOUT      =  0x02,
-	   EPWM3_SYNCOUT      =  0x03,
-	   EPWM4_SYNCOUT      =  0x04,
-	   EPWM5_SYNCOUT      =  0x05,
-	   EPWM6_SYNCOUT      =  0x06,
-	   EPWM7_SYNCOUT      =  0x07,
+	   EPWM_SYNC_IN_NONE			 	= 0x00,
+	   EPWM1_SYNCOUT      					=  0x01,
+	   EPWM2_SYNCOUT      					=  0x02,
+	   EPWM3_SYNCOUT      					=  0x03,
+	   EPWM4_SYNCOUT      					=  0x04,
+	   EPWM5_SYNCOUT      					=  0x05,
+	   EPWM6_SYNCOUT      					=  0x06,
+	   EPWM7_SYNCOUT      					=  0x07,
+	   EPWM8_SYNCOUT      					=  0x08,
+	   ECAP1_SYNCOUT     						=  0x11,
+	   ECAP2_SYNCOUT     						=  0x12,
+	   ECAP3_SYNCOUT     						=  0x13,
+      INPUT15XBAR_SYNC      				=  0x18,
+	  INPUT16XBAR_SYNC      				=  0x19,
 };
 
 
@@ -319,7 +309,7 @@ struct EPWMx_CFG_TB{
 /*--emPwmChannel--------------------------emCounterMode--------------------emPhsDirEn------------emSyncInSrc---------------------------emSyncOut-------------------u16PrdShadowEnable-----------emLoadMode----------------------u16PrdVal------------------u16PhaseVal*/
 #define EPWM_CFG_TB_TAB  \
 {\
-    {PFC_PWM_CHANNEL, 			TB_COUNTER_UP_DOWN,           PHS_DISABLE, 				EPWM_SYNC_IN_NONE, 	       		 EPWM_SYNC_OUT_NONE, 				1,				PRD_LOAD_CTR_ZERO,			PFC_PWM_TBPRD,                      0},\
+    {PFC_PWM_CHANNEL, 			TB_COUNTER_UP_DOWN,           PHS_DISABLE, 		  EPWM_SYNC_IN_NONE, 	       		 EPWM_SYNC_OUT_NONE, 				1,				PRD_LOAD_CTR_ZERO,			PFC_PWM_TBPRD,                      0},\
 }
 
 
@@ -378,7 +368,7 @@ struct EPWMx_CFG_DB{
 /*--------PWM_CHANNEL-------------OUT_MODE------------IN_MODE--------------------OUTSWAP----------------POLSEL-------------DB_S8-- -------DB_SHDWDBCTLMODE---------LOAD_DB_RED_FED_MODE---------u16Redval---u16Fedval*/
 #define EPWM_CFG_DB_TAB  \
 {\
-    {PFC_PWM_CHANNEL,  		   DB_DISABLE,  			 DBA_RED_DBB_FED, 		 	DB_AABB, 					DB_ACTV_HI, 				 	0,		     DB_CTR_RED_FED_SHADOW, 						DB_CNT_ZERO,  						00, 					00},\
+    {PFC_PWM_CHANNEL,  		   DB_DISABLE,  			 DBA_RED_DBB_FED, 		 	DB_AABB, 					DB_ACTV_HI, 				 	0,		     DB_CTR_RED_FED_SHADOW, 						DB_LD_CNT_ZERO,  						00, 					00},\
 }
 
 

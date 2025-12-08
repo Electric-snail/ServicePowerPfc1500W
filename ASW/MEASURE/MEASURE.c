@@ -97,7 +97,7 @@ void measure_fast_task(void)
     //g_stIinRmsObj.stIn.i16Pol = g_stVinPolFrqObj.stOut.u16Pol;
     //RmsCal(&g_stIinRmsObj);
 
-    g_stMeasureOut.stPinAveObj.stIn.f32Var = ABSF(g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stVinRmsObj.stIn.f32Var);
+    g_stMeasureOut.stPinAveObj.stIn.f32Var = g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stVinRmsObj.stIn.f32Var;
     LPF(g_stMeasureOut.stPinAveObj.stOut.f32Ave, g_stMeasureOut.stPinAveObj.stIn.f32Var,  0.3f,   (CTR_PERIOD));
    // g_stPinAveObj.stIn.i16Pol = g_stVinPolFrqObj.stOut.u16Pol;
    // AveCal(&g_stPinAveObj);

@@ -10,8 +10,8 @@
 
 #ifndef 		DATA_REC_SETTING
 #define         DATA_REC_SETTING
-#define         DATA_REC_AUTO_TX_ENABLE   		   0
-#define    	  DATA_LOG_MIN_INTERVAL                   100
+#define         DATA_REC_AUTO_TX_ENABLE   		   		0
+#define    	  	DATA_LOG_MIN_INTERVAL                   100
 #define         DATA_REC_AUTO_PERIOD                    200
 #endif
 

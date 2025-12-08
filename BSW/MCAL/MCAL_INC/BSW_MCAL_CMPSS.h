@@ -86,7 +86,7 @@ enum BLANK_SRC{
 #define       CMP4L_N_DAC						   		         2
 #define       CMP4H_N_DAC						   		         2
 
-#define       DAC_LOAD_SYNC_SYCCLK              				0
+#define       DAC_LOAD_SYNC_SYSCLK              				0
 #define       DAC_LOAD_SYNC_EPWMSYNCPER           1
 //There is no latch function for 	CMPOUT_ASYNC,CMPOUT_SYNC,  CMPOUT_FILT,
 enum         CMPOUT_SEL{
@@ -115,8 +115,8 @@ typedef struct{
 /*---emCmpssModule--------u16DacOutEnable--------u16RampGenEnable-----------    emRampOrClearLatchSrc----------u16DacLoadSycnSrc-----------u16BlankEnable-----------emBlankSrc--------------emLatchClearSrc-----*/
 #define  CMPSS_CFG_TAB  \
 {\
-    {CMPSS1_ID,            					 0,             					0,												EPWM1SYNCPER,					DAC_LOAD_SYNC_SYCCLK,		         0,                        EPWM1BLANK,			LAT_CLR_SW},\
-    {CMPSS3_ID,            					 0,             					0,												EPWM1SYNCPER,					DAC_LOAD_SYNC_SYCCLK,		         0,                         EPWM1BLANK,			LAT_CLR_SW},\
+    {CMPSS1_ID,            					 0,             					0,												EPWM1SYNCPER,					DAC_LOAD_SYNC_SYSCLK,		         0,                        EPWM1BLANK,			LAT_CLR_SW},\
+    {CMPSS3_ID,            					 0,             					0,												EPWM1SYNCPER,					DAC_LOAD_SYNC_SYSCLK,		         0,                         EPWM1BLANK,			LAT_CLR_SW},\
 }
 
 enum CMP_MODULE{

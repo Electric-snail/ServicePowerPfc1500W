@@ -52,6 +52,9 @@ void bsw_mcal_sci_init(void)
             case BAUD_19200:
                 u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*19200.0f) - 1);
             break;
+            case BAUD_38400:
+                u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*38400.0f) - 1);
+            break;
             case BAUD_115200:
                 u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*115200.0f) - 1);
             break;

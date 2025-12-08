@@ -9,6 +9,7 @@
 #include "ISR_INC/BSW_ISR_ADC.H"
 #include "DIAGNOSTIC/DIAGNOSTIC.H"
 #include "POWER_FSM/POWER_FSM.H"
+#include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 #include "PUBLIC_INC/DC_MATH.H"
 #include "PFC_CTR/PFC_CTR.H"
 #include "MEASURE/MEASURE.H"
@@ -21,10 +22,10 @@ extern 	float			gs_f32FeedCoff;
 extern     float 			g_f32VpfcSetTarget;
 extern     float           g_f32PowerOpenSet;
 //-----------------------------------------var_name,					var,																		attr,					  def,				  											  min,															max
-REG_CFG_ITEM_U16(LOOP_MODE,				g_u16LoopWorkMode,													VAR_WR,			  0,						  										0,																3);
+REG_CFG_ITEM_U16(PFC_STOP_CMD,			g_u16PfcStopCmd,						    							VAR_WR,		            1,			      										0,						 								1);
 REG_CFG_ITEM_F32(OPEN_DUTY,					g_f32OpenDuty,						    									VAR_WR,		      0,						  										0,																1.0f);
 REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    						    VAR_WR,		      0,						  										0,																2000.0f);
-REG_CFG_ITEM_F32(VPFC_TARGET,			   g_f32VpfcSetTarget,						    							VAR_WR,		      380.0,			      										350.0f,						 								 400.0f);
+REG_CFG_ITEM_F32(VPFC_TARGET,			   g_f32VpfcSetTarget,						    							VAR_WR,		      380.0,			      										350.0f,						 								 430.0f);
 
 REG_CFG_ITEM_U16(RECV_FALUT,				g_stDiagStatus.unAutoRecvFault.u16All,					VAR_RD,			  0,						  										0,																0);
 REG_CFG_ITEM_U16(NO_RECV_FAULT,	   g_stDiagStatus.unNoRecvFault.u16All,						VAR_RD,			  0,						  										0,																0);

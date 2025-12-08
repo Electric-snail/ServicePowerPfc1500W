@@ -11,6 +11,7 @@
 #include "SVC/FSM/BSW_FSM_CORE.h"
 #include "SYS_FSM/SYS_FSM.h"
 #include "POWER_FSM/POWER_FSM.h"
+#include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
 #include "MEASURE/MEASURE.h"
 #include "SYS_FSM/SYS_FSM_INF.h"
@@ -62,6 +63,8 @@ void power_fsm_1ms_task(void){
 void  power_standby_in(void){
 	g_u16PwrFsmTimerCnt		= 0;
 	g_stPwrFsmOut.u16CtrCmd = 0;
+	BSW_HAL_BUCK_NOT_OK();
+	BSW_HAL_ALERT_CLR();
 }
 
 void  power_standby_exe(void){
@@ -70,8 +73,11 @@ void  power_standby_exe(void){
 	float f32VpfcPrechargeThrd;
 	float f32VpfcLpf;
 
+	if(u8_get_pfc_stop_cmd() == 1)
+		return;
+
 	if (u16_get_vin_type() == DC_TYPE) {
-		u16PolRvsFlag = 1;
+		u16PolRvsFlag = 1;  //DC type 下默认输入极性出现跳变，控制继电器的吸合在过零点出.
 	}
 	else {
 		if (s_u16PolLast != u16_get_vin_pol()) {

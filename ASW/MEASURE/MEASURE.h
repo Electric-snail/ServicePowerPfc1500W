@@ -42,7 +42,7 @@ extern void measure_init(void);
 
 extern		MEASURE_OUT_T					    g_stMeasureOut;
 
-#define		f32_get_vin_rms_flt()				g_stMeasureOut.f32VinRmsLpf
+#define		f32_get_vin_rms_flt()					g_stMeasureOut.f32VinRmsLpf
 #define		f32_get_vin_rms()					   g_stMeasureOut.stVinRmsObj.stOut.f32Rms
 
 #define		f32_get_iin_rms_flt()				g_stMeasureOut.f32IinRmsLpf

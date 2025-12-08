@@ -107,15 +107,15 @@ extern void sw_scope_init(void);
 extern void sw_scope_task(void);
 
 #define GEN_SW_SCOPE_VAR_DECLARE
-	#include "DEBUG_PLATFORM/SW_SCOPE/SW_Scope_Cfg.h"
+	#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_CFG.H"
 #undef GEN_SW_SCOPE_VAR_DECLARE
 
 #define GEN_SW_SCOPE_INIT_DECLARE
-	#include "DEBUG_PLATFORM/SW_SCOPE/SW_Scope_Cfg.h"
+	#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_CFG.H"
 #undef GEN_SW_SCOPE_INIT_DECLARE
 
 #define GEN_SW_SCOPE_DATA_DECLARE
-	#include "DEBUG_PLATFORM/SW_SCOPE/SW_Scope_Cfg.h"
+	#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_CFG.H"
 #undef GEN_SW_SCOPE_DATA_DECLARE
 
 

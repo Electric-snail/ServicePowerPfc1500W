@@ -26,9 +26,7 @@ unsigned short  g_u16DataRecRun = 0;
 	#include "DEBUG_PLATFORM/DATA_REC/DATA_REC_CFG.h"
 #undef GEN_DATA_REC_CFG_ENTITY
 
-#if(DATA_REC_AUTO_TX_ENABLE == 1)
-REG_TASK(data_rec_task,    1,   100,   79)
-#endif
+
 
 void DataLogCmdSetLink(void *p_stAplDmTemp){
     APL_DOMAIN *p_stAplDm =(APL_DOMAIN *)p_stAplDmTemp;

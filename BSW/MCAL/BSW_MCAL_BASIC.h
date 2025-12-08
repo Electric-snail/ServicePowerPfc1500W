@@ -37,6 +37,7 @@ enum MCAL_ID
     MCAL_CPU_TIMER,       //
     MCAL_CLA,             //
     MCAL_DMA,             //
+	MCAL_ANA,
 	MCAL_CMPSS,
     MCAL_ADC,             //
     MCAL_XBAR,            //
@@ -61,8 +62,9 @@ enum MCAL_ID
     {MCAL_INT_CTR,  	        		1,    bsw_mcal_pie_ctrl_init},  	\
     {MCAL_CPU_TIMER,  	    	1,    bsw_mcal_cpu_timer_init},	\
     {MCAL_CLA,  		            		0,    NULL},  		\
-    {MCAL_DMA,  		            	0,    NULL},  					\
-    {MCAL_CMPSS,  		            1,    bsw_mcal_cmpss_init},  		\
+    {MCAL_DMA,  		            		0,    NULL},  					\
+    {MCAL_ANA,  		            		0,    NULL},  		\
+    {MCAL_CMPSS,  		            	1,    bsw_mcal_cmpss_init},  		\
 	{MCAL_ADC,    		            	1,    bsw_mcal_adc_init},  		\
     {MCAL_XBAR,  		            	1,    bsw_mcal_xbar_init},  		\
 	{MCAL_ePWM,   		        		1,    bsw_mcal_epwm_init}, 		\

@@ -13,8 +13,6 @@ PAGE 0:
 #endif
    FLASH_APP    							: origin = 0x00086002,   length = 0x0000BFFE
 
-//   BEGIN_APP_CPY                    	: origin = 0x00092000,   length = 0x00000002
-//   FLASH_APP_CPY						: origin = 0x00092002,   length = 0x0000BFFE
    /***any reset vector entry, in this place, branch to the boot code ********/
    RESET                    					: origin = 0x003FFFC0,  length = 0x00000002
    /* Reserve and do not use for code as per the errata advisory "Memory: Prefetching Beyond Valid Memory" */

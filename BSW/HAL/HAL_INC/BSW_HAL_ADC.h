@@ -2,7 +2,7 @@
  * BSW_HAL_ADC.h
  *
  *  Created on: 2022/9/23/
- *      Author: rjgslg
+ *      Author:   hongbo.jiang
  */
 
 #ifndef BSW_HAL_ADC_H_

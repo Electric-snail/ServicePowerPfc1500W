@@ -17,7 +17,7 @@ const 	CMPSS_CMP_CFG_T		gc_stCmpssCmpCfgParm[] 	= CMPSS_CMP_CFG_TAB;
 static cmpss_cfg(const CMPSS_CFG_T *p_stCmpssCfg){
 		volatile struct CMPSS_REGS *p_stCmpssChannel = &Cmpss1Regs;
 	    EALLOW;
-		if(p_stCmpssCfg->u16DacLoadSycnSrc == DAC_LOAD_SYNC_SYCCLK){
+		if(p_stCmpssCfg->u16DacLoadSycnSrc == DAC_LOAD_SYNC_SYSCLK){
 				p_stCmpssChannel->COMPDACHCTL.bit.SWLOADSEL = 0;
 		}else{
 				p_stCmpssChannel->COMPDACHCTL.bit.SWLOADSEL = 1;
@@ -51,7 +51,7 @@ static cmpss_lite_cfg(const CMPSS_CFG_T *p_stCmpssCfg){
 			volatile struct CMPSS_LITE_REGS *p_stCmpssChannel = (volatile struct CMPSS_LITE_REGS *)u32RegAddr ;
 
 			EALLOW;
-			if(p_stCmpssCfg->u16DacLoadSycnSrc == DAC_LOAD_SYNC_SYCCLK){
+			if(p_stCmpssCfg->u16DacLoadSycnSrc == DAC_LOAD_SYNC_SYSCLK){
 					p_stCmpssChannel->COMPDACHCTL.bit.SWLOADSEL = 0;
 			}else{
 					p_stCmpssChannel->COMPDACHCTL.bit.SWLOADSEL = 1;

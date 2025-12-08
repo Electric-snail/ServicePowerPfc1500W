@@ -28,7 +28,7 @@ typedef void (*pf_action_func)(void *p_stAplDm);
 #define  MPPT_MASTER_DATA_CMD_SET     			0x10
 #define  LLC_MASTER_DATA_CMD_SET        		0x11
 #define  BMS_MASTER_DATA_CMD_SET       			0x12
-#define  PFC_LLC_DATA_CMD_SET                	0x13
+#define  PRI_SEC_DATA_CMD_SET                	0x13
 #define  MASTER_DCDC_DATA_CMD_SET               0x14
 
 typedef struct
@@ -43,14 +43,14 @@ typedef struct
 
 #define REG_CMD_LINK_ACTION_TAB  \
 {\
- /*   {PRI_SEC_DATA_CMD_SET,  pfc_llc_comm_rx_hander}, */   \
-    {PARAM_CFG_CMD_SET,  	ParamCfgCmdSetLink},    	\
-    {DATA_LOG_CMD_SET,  	DataLogCmdSetLink},    	    \
-	{SW_SCOPE_CMD_SET,   	SwScopeCmdSetLink}, 		\
-	{BOOTLOAD_CMD_SET,      bootload_cmd_set_link},     \
+    {PRI_SEC_DATA_CMD_SET,  pfc_llc_comm_rx_hander}, \
+    {PARAM_CFG_CMD_SET,  		ParamCfgCmdSetLink},    	\
+    {DATA_LOG_CMD_SET,  		DataLogCmdSetLink},    	    \
+	{SW_SCOPE_CMD_SET,   		SwScopeCmdSetLink}, 		\
+	{BOOTLOAD_CMD_SET,      	bootload_cmd_set_link},     \
     {PERFOR_TEST_CMD_SET,   PerformaceCmdSetLink},      \
     {COMM_TEST_CMD_SET,     CommTestCmdSetLink},        \
-    {SFRA_CMD_SET,          SfraCmdSetLink},            \
+    {SFRA_CMD_SET,          			SfraCmdSetLink},            \
 	{PARAM_CALIB_CMD_SET,   ParamCalibCmdSetLink},\
 }
 

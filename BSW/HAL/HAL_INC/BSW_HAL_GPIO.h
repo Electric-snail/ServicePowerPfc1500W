@@ -24,15 +24,11 @@
 #define BSW_HAL_RELAY_ON()						    GpioSet(A, 6)
 #define BSW_HAL_RELAY_OFF()						GpioClear(A, 6)
 
-#define BSW_HAL_BUCK_OK()						GpioSet(A, 16)
-#define BSW_HAL_BUCK_FAULT()					GpioSet(A, 16)
+#define BSW_HAL_BUCK_OK()						    GpioSet(A, 16)
+#define BSW_HAL_BUCK_NOT_OK()				GpioClear(A, 16)
 
-#define GPIO_ReadPin_HWP_LOCK_TZ()           GpioDataRegs.GPADAT.bit.GPIO6
-#define GPIO_ReadPin_HW_VOUT_OVP()           GpioDataRegs.GPADAT.bit.GPIO14
-#define GPIO_ReadPin_HW_VOUT_UVP()           GpioDataRegs.GPADAT.bit.GPIO15
-#define GPIO_ReadPin_HW_IOUT_OCP()           GpioDataRegs.GPBDAT.bit.GPIO34
-#define GPIO_ReadPin_HVIN_OCP_SGNL()         GpioDataRegs.GPADAT.bit.GPIO23
-#define GPIO_ReadPin_EX_HW_ONOFF_CMD()       GpioDataRegs.GPADAT.bit.GPIO22
+#define BSW_HAL_ALERT_SET()						GpioSet(B, 33)
+#define BSW_HAL_ALERT_CLR()						GpioClear(B, 33)
 
 #else
 

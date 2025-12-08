@@ -115,7 +115,7 @@ INTERRUPT void adcA1ISR(void)
 
             float       f32Duty;
 
-            UINT16 		u16PwmSwitch,    u16PwmCounter;
+            UINT16 		u16PwmSwitch = 0,    u16PwmCounter;
 
 			//测试CPU load 和任务执行时间时使用
 			#if(TASK_CPU_LOAD_TEST == 1)
@@ -213,27 +213,29 @@ INTERRUPT void adcA1ISR(void)
 
 			//判断是否有故障发生，统一在这里判断
 		 if ((u16_get_auto_recv_diag() != 0x0000)|| (u16_get_no_recv_diag() != 0x0000)){
+				BSW_HAL_BUCK_NOT_OK();
+				BSW_HAL_ALERT_SET();
 				g_u16FaultDetetFlag = 1;
 			}
 
 			//根据模式，运行控制器
-			if((g_u16LoopWorkMode  == LOOP_OPEN_MODE)&& (g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)){
+#if defined(OPEN_LOOP_CTR)
+			if((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)){
 					 f32Duty        			=  g_f32OpenDuty;
 					 u16PwmSwitch 	= 1;
-			}else if(g_u16LoopWorkMode 	>  LOOP_OPEN_MODE) {
-					 if ((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)) {
-					     pfc_controller();
-					     f32Duty 		= f32_get_pwm_duty();
-						 u16PwmSwitch 	= 1;
-					}else{
-						pfc_controller_init();
-						f32Duty 					= 0;
-						 u16PwmSwitch 	= 0;
-					}
-			}else{
-				 u16PwmSwitch 	= 0;
 			}
 
+#elif defined(CLOSE_LOOP_CTR)
+			 if ((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)) {
+				 pfc_controller();
+				 f32Duty 		= f32_get_pwm_duty();
+				 u16PwmSwitch 	= 1;
+			}else{
+				pfc_controller_init();
+				f32Duty 				= 0;
+				 u16PwmSwitch 	= 0;
+			}
+#endif
 			//根据环路运行结果,更新PWM模块
 			if(u16PwmSwitch == 1){
 				   set_pfc_pwm_duty(f32Duty,   u16PwmCounter);
@@ -242,28 +244,28 @@ INTERRUPT void adcA1ISR(void)
 				   pfc_drv_turn_off();
 			}
 
-			 #ifndef DLLX64
-				//调用软件示波器功能
-				#define GEN_SW_SCOPE_ISR_CALL
-				#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_CFG.H"
-				#undef GEN_SW_SCOPE_ISR_CALL
+		 #ifndef DLLX64
+			//调用软件示波器功能
+			#define GEN_SW_SCOPE_ISR_CALL
+			#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_CFG.H"
+			#undef GEN_SW_SCOPE_ISR_CALL
 
-				//调用CPUload 和任务执行时间测试函数.
-				#if(TASK_CPU_LOAD_TEST == 1)
-					ReloadTaskTestTimerStatus(u16TaskTestTimerStatus);
-				#elif(ISR_CPU_LOAD_TEST == 1)
-					ISR_EXE_VAR_CALL(ADCA1_ISR);
-				#endif
-					//Clear the interrupt flag
-					AdcaRegs.ADCINTFLGCLR.all |= ADC_INT1;
-					// Check if overflow has occurred
-					 if(1 == AdcaRegs.ADCINTOVF.bit.ADCINT1)       //ADCINT overflow occurred
-					 {
-						 AdcaRegs.ADCINTOVFCLR.all |= ADC_INT1 ;     //Clear overflow flag
-						 AdcaRegs.ADCINTFLGCLR.all |= ADC_INT1 ;     //Re-clear ADCINT flag
-					 }
-					 PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
-			 #endif
+			//调用CPUload 和任务执行时间测试函数.
+			#if(TASK_CPU_LOAD_TEST == 1)
+				ReloadTaskTestTimerStatus(u16TaskTestTimerStatus);
+			#elif(ISR_CPU_LOAD_TEST == 1)
+				ISR_EXE_VAR_CALL(ADCA1_ISR);
+			#endif
+				//Clear the interrupt flag
+				AdcaRegs.ADCINTFLGCLR.all |= ADC_INT1;
+				// Check if overflow has occurred
+				 if(1 == AdcaRegs.ADCINTOVF.bit.ADCINT1)       //ADCINT overflow occurred
+				 {
+					 AdcaRegs.ADCINTOVFCLR.all |= ADC_INT1 ;     //Clear overflow flag
+					 AdcaRegs.ADCINTFLGCLR.all |= ADC_INT1 ;     //Re-clear ADCINT flag
+				 }
+				 PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+		 #endif
 }
 
 

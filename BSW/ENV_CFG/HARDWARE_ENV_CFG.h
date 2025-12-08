@@ -8,7 +8,6 @@
 #ifndef BSW_BASIC_HARDWARE_BASIC_ENV_H_
 #define BSW_BASIC_HARDWARE_BASIC_ENV_H_
 
-#define   LAUNCHPAD
 #define   VREFHIX_EX_EN                1
 
 /*******GPIO hardware configuration *************/
@@ -28,8 +27,8 @@
 
 #define 		RELAY_IN_LATCH 									GPIO06_NUM
 
-#define 		P_BUCK_OK                             				GPIO16_NUM
-#define 		P_ALERT									   			GPIO33_NUM
+#define 		P_BUCK_OK                             				   GPIO16_NUM
+#define 		P_ALERT									   			   GPIO33_NUM
 
 #define       ADCC_PRI_TEMP              					   ADC_CH_ADCIN16
 #define       GPIO_ADC_PRI_TEMP                         GPIO28_NUM

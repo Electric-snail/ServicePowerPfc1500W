@@ -17,13 +17,14 @@ typedef struct
 
 #define ASW_INIT_ITEM_TAB   \
 {\
-    {pfc_controller_init,	1},       \
-/*	{derating_init,			1},        */     \
-	{measure_init,			1},               \
-	{diagnostic_init,			1},\
-/*	{sys_fsm_init,		    1},			 */   \
-	{power_fsm_init,	    1},			      \
-	{vpfc_mgt_init,	    	1},			      \
+    {pfc_controller_init,			1},       \
+/*	{derating_init,						1},        */     \
+	{measure_init,						1},               \
+	{diagnostic_init,					1},\
+/*	{sys_fsm_init,		    			1},			 */   \
+	{power_fsm_init,	    		1},			      \
+	{vpfc_mgt_init,	    			1},			      \
+	{pfc_llc_comm_init,		    1},			    \
 }
 
 
