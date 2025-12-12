@@ -9,6 +9,7 @@
 #define SCOPE_EXTERN_VAR_DECLAR
 #include "ISR_INC/BSW_ISR_ADC.H"
 #include "PUBLIC_INC/DC_MATH.H"
+#include "PUBLIC_INC/DF_MATH.H"
 extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
 extern 	PI_POS_T				    							gs_stVpfcPiCtrl;
 extern    PI_GAIN_POS_T									gs_stIacPiGainCtrl;
@@ -44,9 +45,9 @@ SW_SCOPE_START(PFC_SCOPE,		 STARTUP_GUI,  SW_SCOPE_CASH_SIZE)
 SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Ref)
 SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Fb)
 SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stOut.f32Out)
-SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Ref)
-SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Fb)
-SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stOut.f32Out)
+//SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Ref)
+SW_SCOPE_ITEM(gs_stVpfcNotchFilt.stOut.f32Out)
+SW_SCOPE_ITEM(g_stAnaPhyRaw.f32Vpfc)
 //SW_SCOPE_ITEM(g_stAnaPhyRaw.f32VinN)
 //SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IinL)
 //SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IlAveL)

@@ -25,7 +25,8 @@
 
 
 /************ Variable definition region *********************************/
-DIAG_STATUS_T g_stDiagStatus;
+DIAG_STATUS_T 	g_stDiagStatus;
+DIAG_STATUS_T 	g_stDiagHisStatus;
 
 UINT16 g_u16SwDiagCount[SW_DIAG_ID_MAX] = { 0 };
 
@@ -57,8 +58,13 @@ void diagnostic_fast_task(void) {
 	ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1IlCbbp, f32IlCbcFlg, gc_stSwdiagCfgParam[IL_CBBP_ID].f32PrtctThreshold, g_u16SwDiagCount[IL_CBBP_ID], gc_stSwdiagCfgParam[IL_CBBP_ID].u16ErrCnt);
 
 	if(read_vpfc_hw_ovp_flag() == 1){
-	//jiang 	g_stDiagStatus.unNoRecvFault.bits.b1VfpcHwOvp = 1;
+	 	g_stDiagStatus.unNoRecvFault.bits.b1VfpcHwOvp = 1;
 	}
+    if ((g_stDiagStatus.unNoRecvFault.u16All != 0x0000)||(g_stDiagStatus.unAutoRecvFault.u16All != 0x0000)) {
+		g_stDiagHisStatus.unAutoRecvFault.u16All = g_stDiagStatus.unAutoRecvFault.u16All;
+		g_stDiagHisStatus.unNoRecvFault.u16All   = g_stDiagStatus.unNoRecvFault.u16All;
+		g_u16FaultDetetFlag = 1;
+    }
 }
 
 /*************************************************

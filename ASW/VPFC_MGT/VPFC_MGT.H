@@ -8,7 +8,7 @@
 #ifndef ASW_VPFC_MGT_VPFC_MGT_H_
 #define ASW_VPFC_MGT_VPFC_MGT_H_
 
-#define    VPFC_TARGET_DEFAULT						385
+#define    VPFC_TARGET_DEFAULT						400
 
 extern 	float g_f32VpfcSetTarget;
 

@@ -95,7 +95,7 @@ typedef struct
 /*---SCI_MODULE------BAUD----------------PARITY-------------STOP_BIT--------------SCI_RX_MODE----FIFO_ENABLE------FIFO_LEVEL---*/
 #define      REG_SCI_ITEM_CFG_TAB        \
 {\
-    {SCIB_ID,   			BAUD_9600,   	NONE_PARITY,   	ONE_STOP_BIT,    		RX_POLLING,      SCIB_FIFO_ENABLE,          SCIB_FIFO_WORD_SIZE},\
+    {SCIB_ID,   			BAUD_19200,   	NONE_PARITY,   	ONE_STOP_BIT,    		RX_POLLING,      SCIB_FIFO_ENABLE,          SCIB_FIFO_WORD_SIZE},\
 }
 
 //#define get_sciHwRxError()         (ScibRegs.SCIRXST.bit.RXERROR)

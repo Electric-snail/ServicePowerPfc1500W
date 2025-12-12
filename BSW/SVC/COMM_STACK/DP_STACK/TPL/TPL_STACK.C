@@ -5,7 +5,7 @@
  *      Author: xj8r1j
  */
 
-#include <PUBLIC_INC/MEM_HANDLE.H>
+#include "PUBLIC_INC/MEM_HANDLE.H"
 #include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/DP_STACK_CFG.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
@@ -220,7 +220,7 @@ UINT8 TPL_Mux_Frame_Handle(void){
              for(i = 0; i < i16DataSizeTemp0; i++){
             	 p_stRingItem->p_u16Output --;
              	if(p_stRingItem->p_u16Output < p_stRingItem->p_u16HeadAddr)
-             		p_stRingItem->p_u16Output = (p_stRingItem->p_u16HeadAddr + p_stRingItem->i16TotalSize);
+             		p_stRingItem->p_u16Output = (p_stRingItem->p_u16HeadAddr + p_stRingItem->i16TotalSize - 1);
              }
              p_stRingItem->i16IdelSize = p_stRingItem->i16IdelSize - i16DataSizeTemp0;
          }

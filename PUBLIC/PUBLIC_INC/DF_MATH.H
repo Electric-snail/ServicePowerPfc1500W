@@ -97,7 +97,7 @@ typedef struct{
 typedef struct{
 	NOTCH_IN_T        					stIn;
 	NOTCH_COFF_T  					stCoff;
-	NOTCH_INNER_T 					stInner;
+	NOTCH_INNER_T 				stInner;
 	NOTCH_OUT_T    					stOut;
 }NOTCH_OBJ_T;
 

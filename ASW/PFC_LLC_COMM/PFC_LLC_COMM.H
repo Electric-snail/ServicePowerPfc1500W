@@ -25,8 +25,8 @@ typedef struct{
 }PFC_LLC_COMM_OUT;
 
 extern 	PFC_LLC_COMM_OUT    		g_stPfcLlcCommOut;
-extern		unsigned short g_u16VpfcRef;
-extern		unsigned short g_u16PfcStopCmd;
+extern		unsigned short 		g_u16VpfcRef;
+extern		unsigned short 		g_u16PfcStopCmd;
 //#define 	u16_get_vpfc_set()				 		  g_stPfcLlcCommOut.	u16VpfcRef
 //#define 	u8_get_pfc_stop_cmd()				  g_stPfcLlcCommOut.	u8PfcStopCmd
 

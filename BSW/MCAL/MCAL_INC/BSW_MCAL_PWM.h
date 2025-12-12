@@ -473,7 +473,7 @@ struct EPWMx_CFG_DC{
 /*--PWM_CHANNEL----------------DCAH_SEL--------------DCAL_SEL--------------DCBH_SEL----------DCBL_SEL--------DCAEVT1_CFG-------u16DcaEvt1Out--------------DCAEVT2_CFG--------u16DcaEvt2Out----------------DCBEVT1_CFG--------u16DcbEvt1Out-------------DCBEVT2_CFG------u16DcbEvt2Out--*/
 #define EPWM_CFG_DC_TAB  \
 {\
-	{PFC_PWM_CHANNEL, 		DC_SEL_TRIPIN4,       DC_SEL_TRIPIN5,	    DC_SEL_NONE,		DC_SEL_NONE,			DCxHH_LI,		  DCxEVT1_OUT_FORCE,			DCxHI_LH,		 DCxEVT1_OUT_FORCE,			EVT_DISABLE,	  DCxEVT1_OUT_NONE,			EVT_DISABLE,	  DCxEVT2_OUT_NONE},\
+	{PFC_PWM_CHANNEL, 		DC_SEL_TRIPIN4,       DC_SEL_TRIPIN5,	    DC_SEL_NONE,		DC_SEL_NONE,			DCxHH_LI,		  DCxEVT1_OUT_FORCE,			DCxHI_LH,		      DCxEVT2_OUT_FORCE,			EVT_DISABLE,	  DCxEVT1_OUT_NONE,			EVT_DISABLE,	  DCxEVT2_OUT_NONE},\
 }
 
 

@@ -53,10 +53,7 @@ void measure_init(void)
 	g_stMeasureOut.stVinPolFrqObj.stInner.u16NegN   = 0;
 	g_stMeasureOut.stVinPolFrqObj.stInner.u16PosN   = 0;
 
-	g_stMeasureOut.stPinAveObj.stInner.f32Sum   		   = 0.0f;
-	g_stMeasureOut.stPinAveObj.stOut.f32Ave       		   = 0.0f;
-	g_stMeasureOut.stPinAveObj.stInner.i16LastPol      = 0;
-	g_stMeasureOut.stPinAveObj.stInner.u16N               = 0;
+	g_stMeasureOut.f32PinLpf										  = 0.0f;
 
 	g_stMeasureOut.f32VpfcLpf                                      = 0.0f;
 	g_stMeasureOut.f32Temperature                        		  = 0.0f;
@@ -97,8 +94,8 @@ void measure_fast_task(void)
     //g_stIinRmsObj.stIn.i16Pol = g_stVinPolFrqObj.stOut.u16Pol;
     //RmsCal(&g_stIinRmsObj);
 
-    g_stMeasureOut.stPinAveObj.stIn.f32Var = g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stVinRmsObj.stIn.f32Var;
-    LPF(g_stMeasureOut.stPinAveObj.stOut.f32Ave, g_stMeasureOut.stPinAveObj.stIn.f32Var,  0.3f,   (CTR_PERIOD));
+//    g_stMeasureOut.stPinAveObj.stIn.f32Var = g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stVinRmsObj.stIn.f32Var;
+//    LPF(g_stMeasureOut.stPinAveObj.stOut.f32Ave, g_stMeasureOut.stPinAveObj.stIn.f32Var,  0.3f,   (CTR_PERIOD));
    // g_stPinAveObj.stIn.i16Pol = g_stVinPolFrqObj.stOut.u16Pol;
    // AveCal(&g_stPinAveObj);
 }
@@ -145,7 +142,7 @@ void measure_10ms_task(void)
 {
 	static float s_f32VinRmsSum = 0;
 	static float s_f32IinRmsSum = 0;
-
+    float f32PinTemp;
 	float f32Temp = s_f32VinRmsSum * 0.5f; 
 	s_f32VinRmsSum += g_stMeasureOut.stVinRmsObj.stOut.f32Rms - f32Temp;
 	g_stMeasureOut.f32VinRmsLpf = s_f32VinRmsSum * 0.5f;
@@ -154,5 +151,31 @@ void measure_10ms_task(void)
 	s_f32IinRmsSum += g_stMeasureOut.stIinRmsObj.stOut.f32Rms - f32Temp;
 
 	g_stMeasureOut.f32IinRmsLpf = s_f32IinRmsSum * 0.5f;
+
+	f32PinTemp = g_stMeasureOut.f32IinRmsLpf * g_stMeasureOut.f32VinRmsLpf;
+
+	if(g_stMeasureOut.f32VinRmsLpf < 150.0f){
+		if(f32PinTemp < 300.0f){
+			g_stMeasureOut.f32PinLpf = f32PinTemp * (0.985f - (300.0f - f32PinTemp) * 0.001f) ;
+		}else if(f32PinTemp < 500.0f){
+			g_stMeasureOut.f32PinLpf = f32PinTemp * (0.995f - (500.0f - f32PinTemp) * 0.0005f);
+		}else  if(f32PinTemp < 1000.0f){
+			g_stMeasureOut.f32PinLpf =  f32PinTemp * (1.0f - (1000.0f - f32PinTemp) * 0.00001f);
+		}else{
+			g_stMeasureOut.f32PinLpf =  f32PinTemp;
+		}
+	}else{
+		if(f32PinTemp < 300.0f){
+			g_stMeasureOut.f32PinLpf = f32PinTemp * (0.970f - (300.0f - f32PinTemp) * 0.001f) ;
+		}else if(f32PinTemp < 500.0f){
+			g_stMeasureOut.f32PinLpf = f32PinTemp * (0.980f - (500.0f - f32PinTemp) * 0.0005f);
+		}else  if(f32PinTemp < 1000.0f){
+			g_stMeasureOut.f32PinLpf =  f32PinTemp * (0.985f - (1000.0f - f32PinTemp) * 0.00001f);
+		}else  if(f32PinTemp < 1500.0f){
+			g_stMeasureOut.f32PinLpf =  f32PinTemp * (0.990f - (1000.0f - f32PinTemp) * 0.00001f);
+		}else {
+			g_stMeasureOut.f32PinLpf =  f32PinTemp * 0.992f;
+		}
+	}
 }
 

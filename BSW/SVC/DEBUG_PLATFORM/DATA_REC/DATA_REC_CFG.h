@@ -24,7 +24,7 @@ DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.f32IinRmsLpf)
 DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.f32VpfcLpf)
 DATA_REC_ITEM(eu_fp32,	g_stPfcOut.f32Duty)
 DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.stIinRmsObj.stOut.f32Rms)
-DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.stPinAveObj.stOut.f32Ave)
+DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.f32PinLpf)
 DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.stVinPolFrqObj.stOut.f32Frq)
 DATA_REC_END()
 

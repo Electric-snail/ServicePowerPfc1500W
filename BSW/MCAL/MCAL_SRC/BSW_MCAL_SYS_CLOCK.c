@@ -145,7 +145,7 @@ void bsw_mcal_sys_clock_init(void)
     //OSCCLK Connected, and MCD circuit enable, clear all the flag
     ClkCfgRegs.MCDCR.all = (1U << SYSREF_LOST_MCD_EN_BIT) | (1U << SYSREF_LOSTSCLR_BIT) | (1 << MCLKCLR_BIT);
     EDIS;
-    DELAY_US(50000);
+    DELAY_US(150000);
 }
 
 float SYS_CLK_GetSysClkFreq(void)

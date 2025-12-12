@@ -11,7 +11,8 @@
 #include "ENV_CFG/SOFTWARE_ENV_CFG.H"
 #include "DP_STACK/DP_STACK_CFG.H"
 
-
+#define   SCI_TO_PC_FIFO             FIFO_16_WORD
+#define   SCI_TO_CTR_FIFO            FIFO_8_WORD
 #if(DP_SCIA_ENABLE == 1)
     extern UINT16  g_au16DllSciaRxMsgBuff[];
 #endif

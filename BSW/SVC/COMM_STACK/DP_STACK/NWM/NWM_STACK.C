@@ -6,13 +6,10 @@
  */
 #include "DP_STACK/DLL/DLL_SCI.H"
 #include "PUBLIC_INC/LINE_BUFF.H"
-#include "DP_STACK/NWM/NWM_STACK.H"
-
-#include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/DP_STACK_CFG.H"
+#include "DP_STACK/NWM/NWM_STACK.h"
 
-UINT16  g_au16DllScicRxMsgBuff[100] = {0};
-//extern UINT16  g_au16DllScibRxMsgBuff[100];
+
 //The route address relative with the link id.
 static ADDR_LINK_ITEM const gc_stRegRoutItemTab[] = REG_ADDR_LINK_ITEM_TAB;
 

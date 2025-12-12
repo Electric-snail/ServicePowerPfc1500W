@@ -62,12 +62,10 @@ extern volatile float                  g_f32VpfcIsrLpf;
 #define f32_get_curr_inductor_ave()         g_stAnaPhyRaw.f32IlAve
 
 #define f32_get_vpfc_isr_lpf()             g_f32VpfcIsrLpf
-#define IsFastFaultDetect()                g_u16FaultDetetFlag
+#define IsFastFaultDetect()                  g_u16FaultDetetFlag
 #define ClrFastFaultDetectFlag()           g_u16FaultDetetFlag = 0
 
 extern INTERRUPT void adcA1ISR(void);
-
-#define   u16_get_loop_mode()            g_u16LoopWorkMode
 
 extern void adc_isr_init(void);
 

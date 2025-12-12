@@ -125,9 +125,8 @@ void sw_scope_task(void)
 	if((s_u8FsmStatus == 1)&&(g_stScopeRingCtrl.enRingCmd == RING_IDLE)){
 	        s_u8FsmStatus                   = 0;
             g_stScopeCtrlInfo.u8RunStopCmd  = SCOPE_STOP_CMD;
-			g_stScopeCtrlInfo.u8TrigFlg     = 0;
-		    g_stScopeRingCtrl.enRingCmd     = RING_REQUEST_WRITE; 
-
+			g_stScopeCtrlInfo.u8TrigFlg     		= 0;
+	//	    g_stScopeRingCtrl.enRingCmd     	= RING_REQUEST_WRITE;  //导致get data的功能无法正常使用
 	}
 }
 

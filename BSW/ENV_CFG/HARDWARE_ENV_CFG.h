@@ -62,6 +62,7 @@
 
 #define       GPIO_PWM_PFC_DRV           			    GPIO00_NUM
 #define       GPIO_MUX_EPWM1_A                         GpioMux(00,  EPWM1_A)
+
 #define 		PFC_PWM_CHANNEL              				ePWM1_CHANNEL
 
 

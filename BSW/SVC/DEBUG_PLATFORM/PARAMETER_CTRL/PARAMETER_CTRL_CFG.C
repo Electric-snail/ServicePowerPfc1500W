@@ -23,14 +23,16 @@ extern     float 			g_f32VpfcSetTarget;
 extern     float           g_f32PowerOpenSet;
 
 //-----------------------------------------var_name,					var,																		attr,					  def,				  											  min,															max
-REG_CFG_ITEM_U16(PFC_STOP_CMD,			g_u16PfcStopCmd,						    							VAR_WR,		            1,			      												0,						 										1);
+//REG_CFG_ITEM_U16(PFC_STOP_CMD,			g_u16PfcStopCmd,						    							VAR_WR,		            1,			      												0,						 										1);
 REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    						VAR_WR,		     		0,						  										0,																1);
 REG_CFG_ITEM_F32(OPEN_DUTY,					g_f32OpenDuty,						    								VAR_WR,		      		0,						  										0,																1.0f);
 REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    						VAR_WR,		      		0,						  										0,																2000.0f);
 REG_CFG_ITEM_F32(VPFC_TARGET,			   g_f32VpfcSetTarget,						    							VAR_WR,		      		380.0,			      										350.0f,						 								 430.0f);
 
-REG_CFG_ITEM_U16(RECV_FALUT,				g_stDiagStatus.unAutoRecvFault.u16All,					VAR_RD,			  0,						  										0,																65535);
-REG_CFG_ITEM_U16(NO_RECV_FAULT,	   g_stDiagStatus.unNoRecvFault.u16All,						VAR_RD,			  0,						  										0,																65535);
+REG_CFG_ITEM_U16(LLC_HISTORY_AUTO_FAULT, 		g_stDiagHisStatus.unAutoRecvFault.u16All,     VAR_WR,     0,    								 0,    				0xFFFF);
+REG_CFG_ITEM_U16(LLC_HISTORY_NO_FAULT,   			g_stDiagHisStatus.unNoRecvFault.u16All,      	VAR_WR,     0,     							 0,    				0xFFFF);
+REG_CFG_ITEM_U16(LLC_CURRENT_AUTO_FAULT, 		g_stDiagStatus.unAutoRecvFault.u16All,       		VAR_RD,     0,     							 0,    				0xFFFF);
+REG_CFG_ITEM_U16(LLC_CURRENT_NO_FAULT,   			g_stDiagStatus.unNoRecvFault.u16All,         		VAR_RD,     0,     							 0,    				0xFFFF);
 
 REG_CFG_ITEM_U16(PWR_FSM,	   					fsm_obj_POWER_FSM.u8CurStateId,						VAR_RD,			  0,						  										0,																4);
 
@@ -48,6 +50,6 @@ REG_CFG_ITEM_F32(VIN_RMS,			        g_stMeasureOut.stVinRmsObj.stOut.f32Rms,			 
 
 REG_CFG_ITEM_F32(VIN_RMS_FLT,			g_stMeasureOut.f32VinRmsLpf,			        					VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
 
-REG_CFG_ITEM_F32(PIN_AVE,						g_stMeasureOut.stPinAveObj.stOut.f32Ave,			        VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
+REG_CFG_ITEM_F32(PIN_AVE,						g_stMeasureOut.f32PinLpf,			        							VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
 
 REG_CFG_ITEM_F32(IIN_RMS,						g_stMeasureOut.f32IinRmsLpf,			        					VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);

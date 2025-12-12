@@ -36,7 +36,7 @@
 												  void sw_scope_##name##_item(void){                     						\
 	                                              float     f32Temp;                                                            \
                                                   UINT16    *p_u16Temp = NULL;                                                  \
-                                                  UINT16  	ua16RecBuf[120]	=	{0};        	\
+                                                  UINT16  	ua16RecBuf[150]	=	{0};        	\
                                                   FRAME_PROTOCOL_FORMAT st_ScopeItemFrame = {0};  								\
                                                   UINT16 *p_ua16RecBuffTemp = ua16RecBuf;										\
                                                   SCOPE_ITEM_INFO  *p_cfg_item  = NULL;   		    							\
@@ -66,7 +66,7 @@
                                                   rec_w_index += 4;		                     														  \
                                                   p_cfg_item 										   = (SCOPE_ITEM_INFO *)p_ua16RecBuffTemp;        \
                                                   u8CharNum											   = strlen(p_u8PackName);				          \
-                                                  if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= 120) return;   \
+                                                  if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= 150) return;   \
                                                   p_cfg_item->bits.uh8NameLen     = u8CharNum; 								\
                                                   rec_w_index++;															\
                                                   for(i = 0; i < u8CharNum;i+= 2){							       			\
@@ -75,7 +75,7 @@
                                                   }
      #define SW_SCOPE_ITEM(var)              p_u8PackName  = #var;														\
 		                                          u8CharNum									    = strlen(p_u8PackName);	    \
-		                                          if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= 120)    return;      \
+		                                          if((rec_w_index + ((u8CharNum + 1 + 4) >> 1)) >= 150)    return;      \
 											      p_VarName = (SCOPE_VAR_NAME  *)(ua16RecBuf + rec_w_index);				\
 												  p_VarName->bits.uh8NameLen   = u8CharNum;     							\
 												  p_VarName->bits.ul8Index     = max_var_item;          	                \
@@ -412,12 +412,12 @@
                                                                          if((*p_u16Data & 0x00FF) == SCOPE_RUN_CMD) {\
                                                                                if(g_stScopeCtrlInfo.u8RunStopCmd  == SCOPE_STOP_CMD){\
                                                                                      g_stScopeRingCtrl.enRingCmd         = RING_REQUEST_WRITE;\
-																		       g_stScopeCtrlInfo.u8RunStopCmd 	= SCOPE_RUN_CMD; \
-																		       if((g_stGuiCfgSwScope.emTrigMethod == FALLING_EDGE)||(g_stGuiCfgSwScope.emTrigMethod == ABOVE_LEVEL))\
-																				{\
+																		             g_stScopeCtrlInfo.u8RunStopCmd 	= SCOPE_RUN_CMD; \
+																		           if((g_stGuiCfgSwScope.emTrigMethod == FALLING_EDGE)||(g_stGuiCfgSwScope.emTrigMethod == ABOVE_LEVEL))\
+																				  {\
 																						 g_stScopeCtrlInfo.f32PreData = g_stGuiCfgSwScope.f32ThrdValue - 10.0f;			\
 																						 g_stScopeCtrlInfo.f32PreLastData = g_stScopeCtrlInfo.f32PreData; 				\
-																				}else{																				\
+																				  }else{																				\
 																					g_stScopeCtrlInfo.f32PreData = g_stGuiCfgSwScope.f32ThrdValue + 10.0f;	        \
 																					g_stScopeCtrlInfo.f32PreLastData = g_stScopeCtrlInfo.f32PreData; 			    \
 																				}\
@@ -425,7 +425,7 @@
 																		 }else{\
 																			 g_stScopeCtrlInfo.u8RunStopCmd     = SCOPE_STOP_CMD; \
 																		 }\
-																	  g_stScopeCtrlInfo.u8TrigFlg          = 0;\
+																	     g_stScopeCtrlInfo.u8TrigFlg          = 0;\
 																	}
     #define  SW_SCOPE_ITEM(var)
     #define  SW_SCOPE_END()				}

@@ -211,21 +211,14 @@ INTERRUPT void adcA1ISR(void)
 			//执行快速保护任务
 			diagnostic_fast_task();
 
-			//判断是否有故障发生，统一在这里判断
-		 if ((u16_get_auto_recv_diag() != 0x0000)|| (u16_get_no_recv_diag() != 0x0000)){
-				BSW_HAL_BUCK_NOT_OK();
-				BSW_HAL_ALERT_SET();
-				g_u16FaultDetetFlag = 1;
-			}
-
 			//根据模式，运行控制器
-#if defined(OPEN_LOOP_CTR)
+#if defined OPEN_LOOP_CTR
 			if((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)){
-					 f32Duty        			=  g_f32OpenDuty;
+					 f32Duty        			=  0.2;
 					 u16PwmSwitch 	= 1;
 			}
 
-#elif defined(CLOSE_LOOP_CTR)
+#elif (defined CLOSE_LOOP_CTR)||(defined IL_CLOSE_LOOP_MODE)
 			 if ((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)) {
 				 pfc_controller();
 				 f32Duty 		= f32_get_pwm_duty();
@@ -234,6 +227,8 @@ INTERRUPT void adcA1ISR(void)
 				pfc_controller_init();
 				f32Duty 				= 0;
 				 u16PwmSwitch 	= 0;
+				 BSW_HAL_BUCK_NOT_OK();
+				 BSW_HAL_ALERT_SET();
 			}
 #endif
 			//根据环路运行结果,更新PWM模块

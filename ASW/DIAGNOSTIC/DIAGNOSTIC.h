@@ -198,8 +198,8 @@ typedef struct
             }                                                                    \
          }
 
-extern DIAG_STATUS_T g_stDiagStatus;
-
+extern  DIAG_STATUS_T 					  g_stDiagStatus;
+extern  DIAG_STATUS_T 				 	  g_stDiagHisStatus;
 #define u16_get_auto_recv_diag()       g_stDiagStatus.unAutoRecvFault.u16All
 #define u16_get_no_recv_diag()          g_stDiagStatus.unNoRecvFault.u16All
 

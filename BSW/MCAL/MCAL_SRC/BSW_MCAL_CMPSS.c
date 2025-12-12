@@ -306,9 +306,7 @@ static cmpss_lite_cmp_cfg(const 	CMPSS_CMP_CFG_T 	*p_stCmpssCmpCfg){
 				   }
 	}
 	p_stCmpssChannel->COMPCTL.bit.COMPDACE = 1;   //Enable the comparator and DAC
-	__asm(" NOP");
-	__asm(" NOP");
-	__asm(" NOP");
+    DELAY_US(1000);
 	if((p_stCmpssCmpCfg->emCmpModule & 0xF0) == 0x00)    //high side the comparator
 			p_stCmpssChannel->COMPSTSCLR.bit.HLATCHCLR  = 1;   //Clear the output
 	else

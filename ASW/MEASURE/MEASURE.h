@@ -25,12 +25,12 @@
 typedef struct {
 	RMS_CALC_OBJ_T          		stVinRmsObj;
 	RMS_CALC_OBJ_T          		stIinRmsObj;
-	AVE_CALC_OBJ_T          		stPinAveObj;
 	POL_FRQ_CALC_OBJ_T      stVinPolFrqObj;
 	float f32Temperature;
 	float f32VpfcLpf;
 	float f32VinRmsLpf;
 	float f32IinRmsLpf;
+	float f32PinLpf;
 }MEASURE_OUT_T;
 
 

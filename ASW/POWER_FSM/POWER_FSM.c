@@ -73,9 +73,8 @@ void  power_standby_exe(void){
 	float f32VpfcPrechargeThrd;
 	float f32VpfcLpf;
 
-	/*if(u8_get_pfc_stop_cmd() == 1)
+/*	if(u8_get_pfc_stop_cmd() == 1)
 		return;*/
-
 	if (u16_get_vin_type() == DC_TYPE) {
 		u16PolRvsFlag = 1;  //DC type 下默认输入极性出现跳变，控制继电器的吸合在过零点出.
 	}
@@ -121,7 +120,7 @@ void  power_softstart_in(void) {
 
 void  power_softstart_exe(void) {
 	float f32VpfcSetTarget = f32_get_vpfc_set_target();
-	g_stPwrFsmOut.f32VpfcSet += 0.5f;
+	g_stPwrFsmOut.f32VpfcSet += 0.2f;
 	if (g_stPwrFsmOut.f32VpfcSet > f32VpfcSetTarget) {
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
 		if (f32_get_vpfc_raw() > (f32VpfcSetTarget - 10.0f)) {
@@ -152,7 +151,7 @@ void  power_run_exe(void) {
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
 	}
 	if (IsFastFaultDetect() == TRUE) {
-//		EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
+		EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
 	}
 }
 
@@ -177,11 +176,11 @@ void  power_fault_exe(void) {
 	else {
 		s_u16NoRecvRepeatStartFlag = 1;
 	}
-	if ((u16_get_auto_recv_diag() == 0)&&(s_u16NoRecvRepeatStartFlag == 1)) {
+/*	if ((u16_get_auto_recv_diag() == 0)&&(s_u16NoRecvRepeatStartFlag == 1)) {
 		ClrFastFaultDetectFlag();
 		s_u16NoRecvRepeatStartFlag = 0;
 		EMIT_FSM(POWER_FSM, PWR_FAULT_CLR_EVEN);
-	}
+	}*/
 }
 
 UINT8 power_fault_cond(UINT16 u16TrigEven) {

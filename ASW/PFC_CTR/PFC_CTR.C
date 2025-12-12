@@ -104,16 +104,15 @@ void 	pfc_controller(void){
 		f32IlRefTemp				= gs_stVpfcPiCtrl.stOut.f32Out * f32VacPll / (f32VinRms * f32VinRms) + f32XCapCompI;
 		f32PinTransTemp		= f32VacPll * f32IlRefTemp;
 
+		//if need to compensate the reative power, set as the zero, becasue this topology can't to compensate the reative power
 		if (f32PinTransTemp <= 0)
 			gs_stIacPiGainCtrl.stIn.f32Ref = 0;
 		else
 			gs_stIacPiGainCtrl.stIn.f32Ref = ABSF(f32IlRefTemp);
 
-		//gs_stIacPiGainCtrl.stIn.f32Ref	= gs_stVpfcPiCtrl.stOut.f32Out*ABSF(f32VacPll)/(f32VinRms * f32VinRms) + f32XCapCompI;
-
-		if(u16_get_loop_mode() 	== LOOP_VOLT_OPEN_IL_CLOSE){
-		       gs_stIacPiGainCtrl.stIn.f32Ref	= g_f32PowerOpenSet * ABSF(f32VacPll)/(f32VinRms * f32VinRms);
-		}
+#if defined IL_CLOSE_LOOP_MODE
+		gs_stIacPiGainCtrl.stIn.f32Ref	= g_f32PowerOpenSet * ABSF(f32VacPll)/(f32VinRms * f32VinRms);
+#endif
 
 		gs_stIacPiGainCtrl.stIn.f32Fb	= f32_get_curr_inductor_ave();
 

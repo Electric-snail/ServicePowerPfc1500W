@@ -14,7 +14,7 @@
 //x_LINK_RX_ROUTE    Whether the recive data need to be route from this communication port
 #if(PC_COMM_INF_MODULE == SCIA_MODULE)
 #define DP_SCIA_ENABLE             		1
-#define SCIA_LINK_RX_ROUTE         1
+#define SCIA_LINK_RX_ROUTE         	1
 #elif(PC_COMM_INF_MODULE == SCIB_MODULE)
 #define DP_SCIB_ENABLE             		1
 #define SCIB_LINK_RX_ROUTE         1
