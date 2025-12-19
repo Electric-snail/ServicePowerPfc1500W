@@ -18,16 +18,18 @@ extern 	STATIC 		PI_POS_T				    gs_stVpfcPiCtrl;
 extern 	STATIC 		PI_GAIN_POS_T		gs_stIacPiGainCtrl;
 extern    float				g_f32VpfcPiKpSlow;
 extern    float				g_f32VpfcPiKiTsSlow;
-extern 	float			gs_f32FeedCoff;
+extern 	float			    gs_f32FeedCoff;
 extern     float 			g_f32VpfcSetTarget;
 extern     float           g_f32PowerOpenSet;
 
-//-----------------------------------------var_name,					var,																		attr,					  def,				  											  min,															max
-//REG_CFG_ITEM_U16(PFC_STOP_CMD,			g_u16PfcStopCmd,						    							VAR_WR,		            1,			      												0,						 										1);
+//-----------------------------------------var_name,					var,																		attr,					  def,				  										 min,															max
+//REG_CFG_ITEM_U16(PFC_STOP_CMD,			g_u16PfcStopCmd,						    							VAR_WR,		            1,			      											0,						 										1);
 REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    						VAR_WR,		     		0,						  										0,																1);
 REG_CFG_ITEM_F32(OPEN_DUTY,					g_f32OpenDuty,						    								VAR_WR,		      		0,						  										0,																1.0f);
 REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    						VAR_WR,		      		0,						  										0,																2000.0f);
-REG_CFG_ITEM_F32(VPFC_TARGET,			   g_f32VpfcSetTarget,						    							VAR_WR,		      		380.0,			      										350.0f,						 								 430.0f);
+REG_CFG_ITEM_F32(VPFC_TARGET,			   g_f32VpfcSetTarget,						    							VAR_WR,		      		380.0,			      										350.0f,						 							    430.0f);
+REG_CFG_ITEM_F32(VPFC_FILT_DC,			   gs_stVpfcNotchFilt.stCoff.f32Width0,						    VAR_WR,		      		0.001,			      										0.00001,						 							0.1);
+REG_CFG_ITEM_F32(VPFC_FILT_AC,			   gs_stVpfcNotchFilt.stCoff.f32Width1,						    VAR_WR,		      		0.0083,			      								    0.000083f,						 						0.83);
 
 REG_CFG_ITEM_U16(LLC_HISTORY_AUTO_FAULT, 		g_stDiagHisStatus.unAutoRecvFault.u16All,     VAR_WR,     0,    								 0,    				0xFFFF);
 REG_CFG_ITEM_U16(LLC_HISTORY_NO_FAULT,   			g_stDiagHisStatus.unNoRecvFault.u16All,      	VAR_WR,     0,     							 0,    				0xFFFF);

@@ -6,6 +6,10 @@
  */
 #include "PUBLIC_INC/DC_MATH.H"
 
+#ifndef  DLLX64
+#pragma  CODE_SECTION(ctrl_pi_gain_position, 		".TI.ramfunc");
+#pragma  CODE_SECTION(ctrl_pi_position, 				".TI.ramfunc");
+#endif
 /*
 *Function name:    Ctrl2z3p **************************
  * Input variable:    CTRL_2z3_VARS_T *: 2z2p控制器的变量数据结构体指针;

@@ -28,7 +28,9 @@ Copyright Notice:
 #include "POWER_FSM/POWER_FSM.h"
 
 #ifndef  DLLX64
-#pragma  CODE_SECTION(adcA1ISR, ".TI.ramfunc");
+#pragma  CODE_SECTION(adcA1ISR, 				".TI.ramfunc");
+#pragma  CODE_SECTION(notch_filter_2th, 		".TI.ramfunc");
+#pragma  CODE_SECTION(orth_pll_proc_1p, 	".TI.ramfunc");
 #pragma  DATA_SECTION(g_stAnaPhyRaw, 		".CtrlVariableSector");
 #pragma  DATA_SECTION(gs_stSogi, 					".CtrlVariableSector");
 #pragma  DATA_SECTION(gs_stVpfcNotchFilt, ".CtrlVariableSector");
@@ -49,7 +51,9 @@ ISR_EXE_VAR_ENTITY(ADCA1_ISR)
 /************ Variable definition region *********************************/
 volatile ANA_PHY_VALUE_T 		g_stAnaPhyRaw;
 volatile SOGI_OBJ_T   					gs_stSogi;
-volatile NOTCH_OBJ_2TH_T	    gs_stVpfcNotchFilt;
+//volatile NOTCH_OBJ_2TH_T	    gs_stVpfcNotchFilt;
+volatile NOTCH_OBJ_T	    		gs_stVpfcNotchFilt;
+
 volatile ORTH_PLL_OBJ_T  		    gs_stOrthPll;
 
 volatile float                  		g_f32VpfcIsrLpf = 0.0f;
@@ -75,28 +79,21 @@ void adc_isr_init(void)
 
 
 	gs_stVpfcNotchFilt.stOut.f32Out = 0;
-	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT = 0.00483320056729547671334289638923f;   		//Sin(2*pi*50/fs)
-	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99998832001792715673006690787073f;   		//Cos(2*pi*50/fs)
-	gs_stVpfcNotchFilt.stCoff.f32Sin2OmegT = 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
-	gs_stVpfcNotchFilt.stCoff.f32Cos2OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
+	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT = 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
+	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
 	gs_stVpfcNotchFilt.stCoff.f32Width0 = 0.001;
 	gs_stVpfcNotchFilt.stCoff.f32Width1 = 0.0083;
 	//gs_stVpfcNotchFilt.stCoff.f32Width1 = 0.00f;
-	gs_stVpfcNotchFilt.stCoff.f32Width2 = 0.0167;
 
 	gs_stVpfcNotchFilt.stInner.f32Out0thX = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32Out0thY = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32Out1thX = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32Out1thY = 0.0f;
-	gs_stVpfcNotchFilt.stInner.f32Out2thX = 0.0f;
-	gs_stVpfcNotchFilt.stInner.f32Out2thY = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32OutPredict0thX = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32OutPredict0thY = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32OutPredict1thX = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32OutPredict1thY = 0.0f;
-	gs_stVpfcNotchFilt.stInner.f32OutPredict2thX = 0.0f;
-	gs_stVpfcNotchFilt.stInner.f32OutPredict2thY = 0.0f;
-	gs_stVpfcNotchFilt.stInner.f32Err = 0.0f;
+	gs_stVpfcNotchFilt.stInner.f32Err 					  = 0.0f;
 
 	g_stAnaPhyRaw.f32Iin					= 0.0f;
 	g_stAnaPhyRaw.f32IinH					= 0.0f;
@@ -190,11 +187,11 @@ INTERRUPT void adcA1ISR(void)
 			//对VPFC电压进行滤波处理
 			#if(NOTICH_FILT_ENABLE == TRUE)
 						gs_stVpfcNotchFilt.stIn.f32In = g_stAnaPhyRaw.f32Vpfc;
-						notch_filter_2th(&gs_stVpfcNotchFilt);
+						notch_filter(&gs_stVpfcNotchFilt);
 			#else
 
 			#endif
-			LPF(g_f32VpfcIsrLpf, g_stAnaPhyRaw.f32Vpfc, 1.0f, (float)CTR_PERIOD);
+			LPF(g_f32VpfcIsrLpf, g_stAnaPhyRaw.f32Vpfc, 5000.0f, (float)CTR_PERIOD);
 			//对输入电压进行锁相环
 			gs_stOrthPll.stIn.f32SigIn = g_stAnaPhyRaw.f32Vin;
 			if (g_u16PllFirstStart == 1)

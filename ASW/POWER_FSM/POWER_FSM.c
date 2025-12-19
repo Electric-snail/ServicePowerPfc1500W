@@ -151,6 +151,7 @@ void  power_run_exe(void) {
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
 	}
 	if (IsFastFaultDetect() == TRUE) {
+		BSW_HAL_BUCK_NOT_OK();
 		EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
 	}
 }

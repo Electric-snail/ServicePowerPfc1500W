@@ -41,7 +41,7 @@ typedef struct {
 
 extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
 extern 	volatile SOGI_OBJ_T   						gs_stSogi;
-extern 	volatile NOTCH_OBJ_2TH_T			gs_stVpfcNotchFilt;
+extern 	volatile NOTCH_OBJ_T					gs_stVpfcNotchFilt;
 extern 	volatile ORTH_PLL_OBJ_T  				gs_stOrthPll;
 extern      volatile unsigned short						g_u16FaultDetetFlag;
 extern 	unsigned short										g_u16LoopWorkMode;
@@ -61,9 +61,9 @@ extern volatile float                  g_f32VpfcIsrLpf;
 
 #define f32_get_curr_inductor_ave()         g_stAnaPhyRaw.f32IlAve
 
-#define f32_get_vpfc_isr_lpf()             g_f32VpfcIsrLpf
-#define IsFastFaultDetect()                  g_u16FaultDetetFlag
-#define ClrFastFaultDetectFlag()           g_u16FaultDetetFlag = 0
+#define f32_get_vpfc_isr_lpf()               g_f32VpfcIsrLpf
+#define IsFastFaultDetect()                     g_u16FaultDetetFlag
+#define ClrFastFaultDetectFlag()            g_u16FaultDetetFlag = 0
 
 extern INTERRUPT void adcA1ISR(void);
 

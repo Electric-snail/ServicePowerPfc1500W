@@ -13,7 +13,9 @@
 #include "PUBLIC_INC/DC_MATH.H"
 
 #ifndef  DLLX64
-#pragma  DATA_SECTION(gs_stVpfcPiCtrl, ".CtrlVariableSector");
+#pragma  CODE_SECTION(pfc_controller, 					".TI.ramfunc");
+#pragma  CODE_SECTION(ctrl_pi_gain_position, 		".TI.ramfunc");
+#pragma  CODE_SECTION(ctrl_pi_position, 				".TI.ramfunc");
 #pragma  DATA_SECTION(gs_stIacPiGainCtrl, ".CtrlVariableSector");
 #endif
 
@@ -86,11 +88,12 @@ void 	pfc_controller(void){
 		f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
 		
 	/*	if (f32VpfcErrAbs < 10) {
-			
+			gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
+			gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
 		}
 		else {
-			//gs_stVpfcPiCtrl.stCoff.f32Kp = (f32VpfcErrAbs - 10) * 10 + 50.0f;
-			//gs_stVpfcPiCtrl.stCoff.f32KiTs  = (f32VpfcErrAbs - 10) * 1 + 5 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+			gs_stVpfcPiCtrl.stCoff.f32Kp     = ((f32VpfcErrAbs - 10) * 0.1 + 1.0f)*g_f32VpfcPiKpSlow;
+			gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((f32VpfcErrAbs - 10) * 0.1 + 1.0f) * g_f32VpfcPiKiTsSlow;
 		}*/
 		gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
 		gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
@@ -99,6 +102,11 @@ void 	pfc_controller(void){
 
 		if (f32VinRms < 35.0f)  f32VinRms = 35.0f;
 
+
+		if(f32VpfcLpf	 > (gs_stVpfcPiCtrl.stIn.f32Ref  + 15.0f)){
+			gs_stVpfcPiCtrl.stInner.f32Integrate = 0.0f;
+			gs_stVpfcPiCtrl.stOut.f32Out           = 0.0f;
+		}
 		f32XCapCompI = Cx * 1.414f * 2 * pi * 50.0f * f32_get_vac_volt_q_pll() * (-1.0f);
 
 		f32IlRefTemp				= gs_stVpfcPiCtrl.stOut.f32Out * f32VacPll / (f32VinRms * f32VinRms) + f32XCapCompI;

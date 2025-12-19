@@ -1,5 +1,9 @@
 #include "PUBLIC_INC/DF_MATH.H"
 
+#ifndef  DLLX64
+#pragma  CODE_SECTION(notch_filter_2th, 		".TI.ramfunc");
+#endif
+
 #define PI2    6.283185307179586
 //filter  y(n)=a*x+(1-a)*y(n-1)  a=Fc*2*pi*TS/(Fc*2*pi*TS+1)
 #define LPF_COEFF(Fc, Ts)  ((PI2*(Fc)*(Ts))/(PI2*(Fc)*(Ts) + 1))
@@ -34,7 +38,7 @@ void notch_filter_2th(VOLATILE 	NOTCH_OBJ_2TH_T	 *p_stNotch){
 
 /**************************************************************************************************
   Function:      notch_filter
-  Description:    对基次谐波，和2次谐波进行滤波处理
+  Description:   p_stNotch->stInner.f32Out0thX 表示的是直流分量，  p_stNotch->stInner.f32Out1thX，表示基波，
 
   Called By:
   Input:

@@ -1,5 +1,8 @@
 #include  "PUBLIC_INC/DIGITAL_PLL.H"
 
+#ifndef  DLLX64
+#pragma  CODE_SECTION(orth_pll_proc_1p, 	".TI.ramfunc");
+#endif
 /**************************************************************************************************
   Function:       sogi_set_central_freq
   Description:    设定SOGI控制中心频率，通过检测输入极性，计算出频率
@@ -103,7 +106,7 @@ void sogi_proc_1p(VOLATILE	SOGI_OBJ_T *pst_sogi)
 }
 
 /**************************************************************************************************
-  Function:       sogi_pll_proc_1p
+  Function:       orth_pll_proc_1p
   Description:   Vin = Vm*Cos(ωt + θ)；  X = [α,  β];    α = Vm*Cos(ωt + θ)； β = Vm*Sin(ωt + θ)
   	  	  	  	  	  	  x[k+1] = Φ·x[k]，其中 Φ = e^(A·Ts)
   	  	  	  	  	  	  Φ = [cos(ωTs), -sin(ωTs);
@@ -112,14 +115,14 @@ void sogi_proc_1p(VOLATILE	SOGI_OBJ_T *pst_sogi)
   Input:
   Output:
   Return:
-  Others:
+  Others:    如果用直流分量怎么办;
 **************************************************************************************************/
 void orth_pll_proc_1p(VOLATILE	ORTH_PLL_OBJ_T  *pst_OrthPll)
 {
 	float f32OutXTemp, f32OutYTemp, f32ErrTemp;
     f32OutXTemp 								= (pst_OrthPll->stCoff.f32CosOmegT * pst_OrthPll->stOut.f32SigAlpha - pst_OrthPll->stCoff.f32SinOmegT * pst_OrthPll->stOut.f32SigBeta);
     f32OutYTemp 								= (pst_OrthPll->stCoff.f32SinOmegT * pst_OrthPll->stOut.f32SigAlpha + pst_OrthPll->stCoff.f32CosOmegT * pst_OrthPll->stOut.f32SigBeta);
-    f32ErrTemp 	 								= pst_OrthPll->stIn.f32SigIn - f32OutXTemp;
+    f32ErrTemp 	 							= pst_OrthPll->stIn.f32SigIn - f32OutXTemp;
     pst_OrthPll->stOut.f32SigAlpha = f32OutXTemp + (pst_OrthPll->stCoff.f32Kp * f32ErrTemp);
     pst_OrthPll->stOut.f32SigBeta  	= f32OutYTemp;
     if(pst_OrthPll->stOut.f32SigAlpha > pst_OrthPll->stCoff.f32OutMax)
