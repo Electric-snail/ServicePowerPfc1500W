@@ -119,6 +119,14 @@ void scia_send_from_ring(void){
     }
 }
 
+void scia_err_handler(void){
+	 if(SciaRegs.SCIRXST.all & ((1 << RXERR_BIT ) | (1 << FE_BIT) | (1 << OE_BIT) | (1 << PE_BIT))){
+		 	 SciaRegs.SCICTL1.bit.SWRESET = 0;
+		     asm(" RPT #30 || NOP");
+			 SciaRegs.SCICTL1.bit.SWRESET = 1;
+	 }
+}
+
 INT16 dll_scia_frame_read(UINT16 *p_u16Data)
 {
     static enum DLL_RX_FMS s_enDllRxFsm = HEAD_BYTE0_FMS;
@@ -313,26 +321,13 @@ void scib_send_from_ring(void){
 }
 
 void scib_err_handler(void){
-	static unsigned short s_u16SciErrCnt = 0;
-	 if(ScibRegs.SCIRXST.all | (1 << RXERR_BIT ) | (1 << FE_BIT) | (1 << OE_BIT)  |  (1 << PE_BIT)){
-		 s_u16SciErrCnt ++;
-		 if(s_u16SciErrCnt > 5){
-			 bsw_mcal_sci_init();
-			 NOP;
-			 NOP;
-			 NOP;
-			 NOP;
-			 NOP;
-			 NOP;
-			 NOP;
-			 NOP;
-			 NOP;
-			 NOP;
-			 s_u16SciErrCnt = 0;
-		//	 g_u16SciErrCnt++;
-		 }
+	 if(ScibRegs.SCIRXST.all & ((1 << RXERR_BIT ) | (1 << FE_BIT) | (1 << OE_BIT) | (1 << PE_BIT))){
+		 	 ScibRegs.SCICTL1.bit.SWRESET = 0;
+		     asm(" RPT #30 || NOP");
+			 ScibRegs.SCICTL1.bit.SWRESET = 1;
 	 }
 }
+
 INT16 dll_scib_frame_read(UINT16 *p_u16Data)
 {
 	   static enum DLL_RX_FMS 	s_enDllRxFsm = HEAD_BYTE0_FMS;

@@ -21,9 +21,10 @@ extern    float				g_f32VpfcPiKiTsSlow;
 extern 	float			    gs_f32FeedCoff;
 extern     float 			g_f32VpfcSetTarget;
 extern     float           g_f32PowerOpenSet;
+extern     unsigned short 	g_u16BuckOkTest;
 
 //-----------------------------------------var_name,					var,																		attr,					  def,				  										 min,															max
-//REG_CFG_ITEM_U16(PFC_STOP_CMD,			g_u16PfcStopCmd,						    							VAR_WR,		            1,			      											0,						 										1);
+REG_CFG_ITEM_U16(BUCK_OK_TEST,			g_u16BuckOkTest,						    							VAR_WR,		            1,			      											    0,						 										1);
 REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    						VAR_WR,		     		0,						  										0,																1);
 REG_CFG_ITEM_F32(OPEN_DUTY,					g_f32OpenDuty,						    								VAR_WR,		      		0,						  										0,																1.0f);
 REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    						VAR_WR,		      		0,						  										0,																2000.0f);

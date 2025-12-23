@@ -1,7 +1,8 @@
 #include "PUBLIC_INC/DF_MATH.H"
 
 #ifndef  DLLX64
-#pragma  CODE_SECTION(notch_filter_2th, 		".TI.ramfunc");
+//#pragma  CODE_SECTION(notch_filter_2th, 		".TI.ramfunc");
+#pragma  CODE_SECTION(notch_filter, 		".TI.ramfunc");
 #endif
 
 #define PI2    6.283185307179586

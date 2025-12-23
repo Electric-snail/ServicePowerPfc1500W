@@ -44,10 +44,9 @@ extern 	volatile float 										g_f32VpfcIsrLpf;
 //-------------name------------------------------startup_mode------------cache_size
 SW_SCOPE_START(PFC_SCOPE,		 STARTUP_GUI,  SW_SCOPE_CASH_SIZE)
 SW_SCOPE_ITEM(g_stAnaPhyRaw.f32Vpfc)
-SW_SCOPE_ITEM(gs_stVpfcNotchFilt.stOut.f32Out)
-//SW_SCOPE_ITEM(g_stAnaPhyRaw.f32VinN)
-//SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IinL)
-//SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IlAveL)
-//SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Fb)
+SW_SCOPE_ITEM(g_stAnaPhyRaw.f32Vin)
+SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IinL)
+SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IinH)
+SW_SCOPE_ITEM(g_stAnaPhyRaw.f32IlAveL)
 SW_SCOPE_END()
 

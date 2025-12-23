@@ -49,7 +49,8 @@ REG_FSM_OBJ(POWER_FSM, PWR_STATUS_STANDBY, \
 
 
 
-unsigned short g_u16PwrFsmTimerCnt = 0;
+unsigned short 	g_u16PwrFsmTimerCnt = 0;
+unsigned short	g_u16BuckOkTest		   = 0;
 
 void power_fsm_init(void) {
 	FSM_INIT_CALL(POWER_FSM)
@@ -61,8 +62,9 @@ void power_fsm_1ms_task(void){
 
 
 void  power_standby_in(void){
-	g_u16PwrFsmTimerCnt		= 0;
+	g_u16PwrFsmTimerCnt		 = 0;
 	g_stPwrFsmOut.u16CtrCmd = 0;
+	g_u16BuckOkTest                 = 1;
 	BSW_HAL_BUCK_NOT_OK();
 	BSW_HAL_ALERT_CLR();
 }
@@ -153,6 +155,11 @@ void  power_run_exe(void) {
 	if (IsFastFaultDetect() == TRUE) {
 		BSW_HAL_BUCK_NOT_OK();
 		EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
+	}
+	if(g_u16BuckOkTest == 0){
+		BSW_HAL_BUCK_NOT_OK();
+	}else{
+		BSW_HAL_BUCK_OK();
 	}
 }
 

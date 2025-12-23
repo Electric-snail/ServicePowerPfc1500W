@@ -29,8 +29,6 @@ Copyright Notice:
 
 #ifndef  DLLX64
 #pragma  CODE_SECTION(adcA1ISR, 				".TI.ramfunc");
-#pragma  CODE_SECTION(notch_filter_2th, 		".TI.ramfunc");
-#pragma  CODE_SECTION(orth_pll_proc_1p, 	".TI.ramfunc");
 #pragma  DATA_SECTION(g_stAnaPhyRaw, 		".CtrlVariableSector");
 #pragma  DATA_SECTION(gs_stSogi, 					".CtrlVariableSector");
 #pragma  DATA_SECTION(gs_stVpfcNotchFilt, ".CtrlVariableSector");

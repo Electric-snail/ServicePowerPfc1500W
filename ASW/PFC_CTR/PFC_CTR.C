@@ -110,6 +110,7 @@ void 	pfc_controller(void){
 		f32XCapCompI = Cx * 1.414f * 2 * pi * 50.0f * f32_get_vac_volt_q_pll() * (-1.0f);
 
 		f32IlRefTemp				= gs_stVpfcPiCtrl.stOut.f32Out * f32VacPll / (f32VinRms * f32VinRms) + f32XCapCompI;
+
 		f32PinTransTemp		= f32VacPll * f32IlRefTemp;
 
 		//if need to compensate the reative power, set as the zero, becasue this topology can't to compensate the reative power
