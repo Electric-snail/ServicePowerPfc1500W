@@ -25,16 +25,23 @@
 
 
 /************ Variable definition region *********************************/
-DIAG_STATUS_T 	g_stDiagStatus;
-DIAG_STATUS_T 	g_stDiagHisStatus;
+DIAG_STATUS_T 					g_stDiagStatus;
+DIAG_STATUS_T 					g_stDiagHisStatus;
+
 
 UINT16 g_u16SwDiagCount[SW_DIAG_ID_MAX] = { 0 };
 
 const SWDIAG_PARAM_CFG_T  gc_stSwdiagCfgParam[SW_DIAG_ID_MAX] = DIAG_PARAM_TAB; 
+VIN_DROP_DIG_OBJ_T       		g_stVinDropDiag;
 
 void diagnostic_init(void){
-	g_stDiagStatus.unAutoRecvFault.u16All = 0x0000;
-	g_stDiagStatus.unNoRecvFault.u16All    = 0x0000;
+	g_stDiagStatus.unAutoRecvFault.u16All 		= 0x0000;
+	g_stDiagStatus.unNoRecvFault.u16All    		= 0x0000;
+	g_stVinDropDiag.stCoff.f32DropTransThrd 	= 36.0f;
+	g_stVinDropDiag.stCoff.f32RecvRmsThrd     = 40.0f;
+	// arcsin(36.0f/(1.414*70)) = 2*3.1415926 * 40 * (N/2)/65000;     65000 is the diagnostic caller frequency --->  N = arcsin(36.0f/(1.414*70)) *65000/(40 * 3.1415926)
+	//The diagnostic time is = 192/65000 = 2.95ms
+	g_stVinDropDiag.stCoff.u16DropCntThrd      =  192;
 }
 /*************************************************
 *  Function:       fast_diagnostic_task
@@ -54,12 +61,23 @@ void diagnostic_init(void){
 
 void diagnostic_fast_task(void) {
 	float f32IlCbcFlg = (float)read_pfc_drv_dcaevt2_flag();
+	float f32Temp;
+
 	clr_pfc_drv_deaevt2_flag();
 	ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1IlCbbp, f32IlCbcFlg, gc_stSwdiagCfgParam[IL_CBBP_ID].f32PrtctThreshold, g_u16SwDiagCount[IL_CBBP_ID], gc_stSwdiagCfgParam[IL_CBBP_ID].u16ErrCnt);
 
 	if(read_vpfc_hw_ovp_flag() == 1){
 	 	g_stDiagStatus.unNoRecvFault.bits.b1VfpcHwOvp = 1;
 	}
+
+	f32Temp 												  = f32_get_vin_raw();
+
+	g_stVinDropDiag.stIn.f32VinAbsTrans = ABSF(f32Temp);
+
+	vin_drop_diag(&g_stVinDropDiag);
+
+	g_stDiagStatus.unAutoRecvFault.bits.b1VinDrop = g_stVinDropDiag.stOut.u16VinDropFlag;
+
     if ((g_stDiagStatus.unNoRecvFault.u16All != 0x0000)||(g_stDiagStatus.unAutoRecvFault.u16All != 0x0000)) {
 		g_stDiagHisStatus.unAutoRecvFault.u16All = g_stDiagStatus.unAutoRecvFault.u16All;
 		g_stDiagHisStatus.unNoRecvFault.u16All   = g_stDiagStatus.unNoRecvFault.u16All;
@@ -112,6 +130,10 @@ void diag_10ms_task(void)
 	ASW_DiagSWFaultUnderRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsUvp, f32TempValue, gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].f32PrtctThreshold, \
 		gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_RMS_UVP_ID], gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].u16RcvrCnt);
 
+	g_stVinDropDiag.stIn.f32VinRms = f32TempValue;
+
+	vin_drop_recv_diag(&g_stVinDropDiag);
+
 	f32TempValue = f32_get_vin_freq();
 
 	if (u16_get_vin_type() == AC_TYPE) {
@@ -123,7 +145,7 @@ void diag_10ms_task(void)
 
 	}
 
-	f32TempValue = f32_get_vpfc_lpf();
+	f32TempValue = f32_get_vpfc_lpf_measure();
 	ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1VpfcSlowOvp, f32TempValue, gc_stSwdiagCfgParam[VPFC_SLOW_OVP_ID].f32PrtctThreshold, \
 		g_u16SwDiagCount[VPFC_SLOW_OVP_ID], gc_stSwdiagCfgParam[VPFC_SLOW_OVP_ID].u16ErrCnt);
 

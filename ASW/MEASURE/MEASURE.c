@@ -21,11 +21,6 @@ MEASURE_OUT_T           		g_stMeasureOut;
 
 /********  function definition region **************************************/
 
-#ifndef  DLLX64
-#pragma  CODE_SECTION(RmsCal, ".TI.ramfunc");
-#pragma  CODE_SECTION(PolFrqCalc, ".TI.ramfunc");
-#endif
-
 /*************************************************
 *  Function:       measure_init
 *  Description:    
@@ -52,6 +47,7 @@ void measure_init(void)
 
 	g_stMeasureOut.stVinPolFrqObj.stInner.u16NegN   = 0;
 	g_stMeasureOut.stVinPolFrqObj.stInner.u16PosN   = 0;
+	g_stMeasureOut.stVinPolFrqObj.stOut.u16Type      = INVALID_TYPE;
 
 	g_stMeasureOut.f32PinLpf										  = 0.0f;
 
@@ -82,11 +78,11 @@ void measure_init(void)
 void measure_fast_task(void)
 {
 	g_stMeasureOut.stVinPolFrqObj.stIn.f32VarTrans = f32_get_vin_raw();
-    PolFrqCalc(&g_stMeasureOut.stVinPolFrqObj);
+    pol_freq_calc(&g_stMeasureOut.stVinPolFrqObj);
 
     g_stMeasureOut.stVinRmsObj.stIn.f32Var = f32_get_vin_raw();
     g_stMeasureOut.stVinRmsObj.stIn.i16Pol = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
-    RmsCal(&g_stMeasureOut.stVinRmsObj);
+    rms_calc(&g_stMeasureOut.stVinRmsObj);
 
     g_stMeasureOut.stIinRmsObj.stIn.f32Var           = f32_get_iin_low_raw();
     LPF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum, (g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stIinRmsObj.stIn.f32Var), 0.3f, (CTR_PERIOD));

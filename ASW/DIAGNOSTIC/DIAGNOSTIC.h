@@ -18,19 +18,20 @@ typedef struct {
     unsigned short  b1VinRmsUvp : 1;
     unsigned short  b1VinOfp    : 1;
     unsigned short  b1VinUfp    : 1;
-    unsigned short  b12Rvs      :  12;
+    unsigned short  b1VinDrop  : 1;
+    unsigned short  b11Rvs      :  11;
 }AUTO_RECV_FAULT_BITS;
 
 typedef struct {
-    unsigned short  b1VfpcHwOvp   : 1;
-    unsigned short  b1VpfcFastOvp : 1;
-    unsigned short  b1VpfcSlowOvp : 1;
-    unsigned short  b1VpfcFastUvp : 1;
-    unsigned short  b1VpfcSlowUvp : 1;
-    unsigned short  b1InOpp       : 1;
-    unsigned short  b1InRmsOcp    : 1;
-    unsigned short  b1IlCbbp      : 1;
-    unsigned short  b6Rvs         : 8;
+    unsigned short  b1VfpcHwOvp   	: 1;
+    unsigned short  b1VpfcFastOvp 	: 1;
+    unsigned short  b1VpfcSlowOvp 	: 1;
+    unsigned short  b1VpfcFastUvp 	: 1;
+    unsigned short  b1VpfcSlowUvp 	: 1;
+    unsigned short  b1InOpp       			: 1;
+    unsigned short  b1InRmsOcp    		: 1;
+    unsigned short  b1IlCbbp      			: 1;
+    unsigned short  b6Rvs         			: 8;
 }NO_RECV_FAULT_BITS;
 
 typedef union {
@@ -82,8 +83,8 @@ typedef struct
 {\
     { VIN_RMS_OVP_ID,               5,           10,            270,                    265 },\
     { VIN_RMS_UVP_ID,               5,           10,             80,                     85 },\
-    { VIN_OFP_ID,                   		 5,           10,             75,                     70 },\
-    { VIN_UFP_ID,              	         5,           10,             40,                     45 },\
+    { VIN_OFP_ID,                   	   5,           10,             75,                     73 },\
+    { VIN_UFP_ID,              	           5,           10,             40,                     42 },\
     { VPFC_OVP_HW_ID,             1,           0,              0.5,                    0 },\
     { IL_CBBP_ID,                			100,          0,              0.5,                    0 },\
     { VPFC_FAST_OVP_ID,          10,          0,              440,                    0 },\
@@ -198,10 +199,13 @@ typedef struct
             }                                                                    \
          }
 
-extern  DIAG_STATUS_T 					  g_stDiagStatus;
-extern  DIAG_STATUS_T 				 	  g_stDiagHisStatus;
-#define u16_get_auto_recv_diag()       g_stDiagStatus.unAutoRecvFault.u16All
-#define u16_get_no_recv_diag()          g_stDiagStatus.unNoRecvFault.u16All
+extern  DIAG_STATUS_T 					  	g_stDiagStatus;
+extern  DIAG_STATUS_T 				 	  	g_stDiagHisStatus;
+#define	u16_get_auto_recv_diag()       g_stDiagStatus.unAutoRecvFault.u16All
+#define 	u16_get_no_recv_diag()          g_stDiagStatus.unNoRecvFault.u16All
+#define	clr_no_recv_diag_fault()			  g_stDiagStatus.unNoRecvFault.u16All = 0
+#define  	u16_clr_fault_flag()                 g_u16FaultDetetFlag = 0
+#define 	u16_get_fault_flag()                 g_u16FaultDetetFlag
 
 extern void diagnostic_init(void);
 extern void diagnostic_fast_task(void);

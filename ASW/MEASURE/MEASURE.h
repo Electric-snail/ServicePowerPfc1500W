@@ -40,19 +40,24 @@ extern void measure_1ms_task(void);
 extern void measure_10ms_task(void);
 extern void measure_init(void);
 
-extern		MEASURE_OUT_T					    g_stMeasureOut;
+extern		MEASURE_OUT_T					    		g_stMeasureOut;
 
-#define		f32_get_vin_rms_flt()					g_stMeasureOut.f32VinRmsLpf
-#define		f32_get_vin_rms()					   g_stMeasureOut.stVinRmsObj.stOut.f32Rms
+#define		f32_get_vin_rms_flt()							g_stMeasureOut.f32VinRmsLpf
+#define		f32_get_vin_rms()					   			g_stMeasureOut.stVinRmsObj.stOut.f32Rms
 
-#define		f32_get_iin_rms_flt()				g_stMeasureOut.f32IinRmsLpf
-#define     f32_get_iin_rms()					    g_stMeasureOut.stIinRmsObj.stOut.f32Rms
+#define		f32_get_iin_rms_flt()							g_stMeasureOut.f32IinRmsLpf
+#define     f32_get_iin_rms()					    			g_stMeasureOut.stIinRmsObj.stOut.f32Rms
 
-#define     u16_get_vin_type()              	g_stMeasureOut.stVinPolFrqObj.stOut.u16Type
-#define     u16_get_vin_pol()              		g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol
-#define     f32_get_vin_freq()              	g_stMeasureOut.stVinPolFrqObj.stOut.f32Frq
-#define     f32_get_pin_ave()					g_stMeasureOut.stIinRmsObj.stOut.f32Rms
+#define     u16_get_vin_type()              					g_stMeasureOut.stVinPolFrqObj.stOut.u16Type
+#define     u16_get_vin_pol()              					g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol
+#define     f32_get_vin_freq()              					g_stMeasureOut.stVinPolFrqObj.stOut.f32Frq
+#define     f32_get_vin_sin_omgt()                         g_stMeasureOut.stVinPolFrqObj.stOut.f32SinOmegT
+#define     f32_get_vin_sin_2omgt()                       g_stMeasureOut.stVinPolFrqObj.stOut.f32Sin2OmegT
+#define     f32_get_vin_cos_omgt()                        g_stMeasureOut.stVinPolFrqObj.stOut.f32CosOmegT
+#define     f32_get_vin_cos_2omgt()                      g_stMeasureOut.stVinPolFrqObj.stOut.f32Cos2OmegT
 
-#define     f32_get_vpfc_lpf()					g_stMeasureOut.f32VpfcLpf
+#define     f32_get_pin_ave()									g_stMeasureOut.stIinRmsObj.stOut.f32Rms
+
+#define     f32_get_vpfc_lpf_measure()					g_stMeasureOut.f32VpfcLpf
 
 #endif /* MEASURE_H_ */

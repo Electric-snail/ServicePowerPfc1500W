@@ -34,6 +34,6 @@ extern		unsigned short 		g_u16PfcStopCmd;
 #define 	u8_get_pfc_stop_cmd()			g_u16PfcStopCmd
 
 extern void pfc_llc_comm_rx_hander(void *p_stAplDmTemp);
-extern void pfc_send_msg_task_50ms(void);
+extern void pfc_send_msg_50ms_task(void);
 extern void pfc_llc_comm_init(void);
 #endif /* _PFC_LLC_COMM_H_ */

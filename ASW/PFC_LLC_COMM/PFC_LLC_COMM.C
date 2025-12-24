@@ -27,7 +27,7 @@ void pfc_llc_comm_init(void)
 }
 
 
-void pfc_send_msg_task_50ms(void)
+void pfc_send_msg_50ms_task(void)
 {
 	unsigned short ua16AppTxBuff[7] = {0};
 	unsigned short u16Temp;
@@ -44,7 +44,7 @@ void pfc_send_msg_task_50ms(void)
     u16Temp																					= (unsigned short)(f32_get_pin_ave() * 10.0f);
     ua16AppTxBuff[2]																	=    u16Temp;
 
-    u16Temp																					= (unsigned short)(f32_get_vpfc_lpf() * 10.0f);
+    u16Temp																					= (unsigned short)(f32_get_vpfc_lpf_measure() * 10.0f);
     ua16AppTxBuff[3]																	=   u16Temp;
     u16Temp																					= (unsigned short)(f32_get_vin_freq()  * 100.0f);
     ua16AppTxBuff[4]																	=  u16Temp;

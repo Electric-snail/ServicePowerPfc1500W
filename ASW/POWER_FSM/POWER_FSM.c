@@ -41,18 +41,18 @@ POWER_FSM_OUT_T		g_stPwrFsmOut;
 REG_FSM_OBJ(POWER_FSM, PWR_STATUS_STANDBY, \
 	//---fsm status id------------------------------fsm_in_func-----------------fsm_exe_func-----------fsm_out_func---------fsm_cond_func;
 {PWR_STATUS_STANDBY, 						power_standby_in, 			power_standby_exe, 				NULL, 				power_standby_cond}, \
-{PWR_STATUS_RELAY_DITHER, 			NULL,									power_relay_dither_exe, 		NULL, 				power_relay_dither_cond}, \
-{PWR_STATUS_SOFTSTART, 					power_softstart_in, 			power_softstart_exe, 			NULL, 				power_softstart_cond}, \
+{PWR_STATUS_RELAY_DITHER, 			NULL,									power_relay_dither_exe, 	NULL, 				power_relay_dither_cond}, \
+{PWR_STATUS_SOFTSTART, 					power_softstart_in, 			power_softstart_exe, 				NULL, 				power_softstart_cond}, \
 {PWR_STATUS_RUN, 								power_run_in, 					power_run_exe, 					NULL, 				power_run_cond}, \
-{PWR_STATUS_FAULT, 								power_fault_in, 					power_fault_exe, 					NULL, 				power_fault_cond}, \
+{PWR_STATUS_FAULT, 							power_fault_in, 					power_fault_exe, 				NULL, 				power_fault_cond}, \
 )
 
 
 
 unsigned short 	g_u16PwrFsmTimerCnt = 0;
-unsigned short	g_u16BuckOkTest		   = 0;
-
+unsigned short    g_u16RestartCnt            = 0;
 void power_fsm_init(void) {
+	g_u16RestartCnt = 0;
 	FSM_INIT_CALL(POWER_FSM)
 }
 void power_fsm_1ms_task(void){
@@ -64,9 +64,7 @@ void power_fsm_1ms_task(void){
 void  power_standby_in(void){
 	g_u16PwrFsmTimerCnt		 = 0;
 	g_stPwrFsmOut.u16CtrCmd = 0;
-	g_u16BuckOkTest                 = 1;
 	BSW_HAL_BUCK_NOT_OK();
-	BSW_HAL_ALERT_CLR();
 }
 
 void  power_standby_exe(void){
@@ -87,7 +85,7 @@ void  power_standby_exe(void){
 		}
 	}
 	f32VpfcPrechargeThrd	= 0.9f * 1.414f * f32_get_vin_rms_flt();
-	f32VpfcLpf						= f32_get_vpfc_lpf();
+	f32VpfcLpf						=  f32_get_vpfc_lpf_measure();
 	g_u16PwrFsmTimerCnt++;
 
 	if ((g_u16PwrFsmTimerCnt > 800)&&(1 == u16PolRvsFlag)&&(f32VpfcLpf > f32VpfcPrechargeThrd)&&(0x0000 == u16_get_auto_recv_diag())){
@@ -129,6 +127,7 @@ void  power_softstart_exe(void) {
 			g_u16PwrFsmTimerCnt++;
 			if (g_u16PwrFsmTimerCnt > 3) {
 				BSW_HAL_BUCK_OK();
+				BSW_HAL_ALERT_CLR();
 				EMIT_FSM(POWER_FSM, PWR_SOFTSTART_CMP);
 			}
 		}
@@ -153,19 +152,13 @@ void  power_run_exe(void) {
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
 	}
 	if (IsFastFaultDetect() == TRUE) {
-		BSW_HAL_BUCK_NOT_OK();
-		EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
-	}
-	if(g_u16BuckOkTest == 0){
-		BSW_HAL_BUCK_NOT_OK();
-	}else{
-		BSW_HAL_BUCK_OK();
+		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
 	}
 }
 
 UINT8 power_run_cond(UINT16 u16TrigEven) {
 	if (u16TrigEven == PWR_SOFTSTART_REQ_EVEN)		return PWR_STATUS_SOFTSTART;
-	if (u16TrigEven == PWR_FAULT_EVEN)			    return PWR_STATUS_FAULT;
+	if (u16TrigEven == PWR_FAULT_EVEN)			    			return PWR_STATUS_FAULT;
 	return PWR_STATUS_RUN;
 }
 
@@ -174,25 +167,28 @@ void  power_fault_in(void) {
 }
 
 void  power_fault_exe(void) {
-	static unsigned short s_u16NoRecvRepeatStartFlag = 0;
-	if (u16_get_no_recv_diag() != 0) {
-		g_u16PwrFsmTimerCnt++;
-		if (g_u16PwrFsmTimerCnt > 3000) {
-			s_u16NoRecvRepeatStartFlag = 1;
+	float f32VpfcLpf						= f32_get_vpfc_isr_lpf();
+	g_u16PwrFsmTimerCnt ++;
+
+	if((u16_get_no_recv_diag() != 0x0000)&&(g_u16RestartCnt < 3)){
+			if(g_u16PwrFsmTimerCnt > 3000){ //1mS * 3000 = 3s{
+				clr_no_recv_diag_fault();
+				g_u16PwrFsmTimerCnt = 3000;
+				g_u16RestartCnt++;
+		    }
+	}
+
+	if((g_u16PwrFsmTimerCnt > 50) ||	(f32VpfcLpf < 270.0f)){
+		 BSW_HAL_BUCK_NOT_OK();
+		 if((u16_get_auto_recv_diag() == 0x0000)&&(u16_get_no_recv_diag() == 0x0000)){
+				u16_clr_fault_flag();
+				EMIT_FSM(POWER_FSM, 	PWR_FAULT_CLR_EVEN);
 		}
 	}
-	else {
-		s_u16NoRecvRepeatStartFlag = 1;
-	}
-/*	if ((u16_get_auto_recv_diag() == 0)&&(s_u16NoRecvRepeatStartFlag == 1)) {
-		ClrFastFaultDetectFlag();
-		s_u16NoRecvRepeatStartFlag = 0;
-		EMIT_FSM(POWER_FSM, PWR_FAULT_CLR_EVEN);
-	}*/
 }
 
 UINT8 power_fault_cond(UINT16 u16TrigEven) {
-
+    if(u16TrigEven == PWR_FAULT_CLR_EVEN)      return PWR_STATUS_STANDBY;
 	return PWR_STATUS_FAULT;
 }
 

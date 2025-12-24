@@ -27,8 +27,8 @@
 #define BSW_HAL_BUCK_OK()						    GpioSet(A, 16)
 #define BSW_HAL_BUCK_NOT_OK()				GpioClear(A, 16)
 
-#define BSW_HAL_ALERT_SET()						GpioSet(B, 33)
-#define BSW_HAL_ALERT_CLR()						GpioClear(B, 33)
+#define BSW_HAL_ALERT_CLR()						GpioSet(B, 33)
+#define BSW_HAL_ALERT_SET()						GpioClear(B, 33)
 
 #else
 

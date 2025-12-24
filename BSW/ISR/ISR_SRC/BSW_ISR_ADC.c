@@ -30,7 +30,7 @@ Copyright Notice:
 #ifndef  DLLX64
 #pragma  CODE_SECTION(adcA1ISR, 				".TI.ramfunc");
 #pragma  DATA_SECTION(g_stAnaPhyRaw, 		".CtrlVariableSector");
-#pragma  DATA_SECTION(gs_stSogi, 					".CtrlVariableSector");
+//#pragma  DATA_SECTION(gs_stSogi, 					".CtrlVariableSector");
 #pragma  DATA_SECTION(gs_stVpfcNotchFilt, ".CtrlVariableSector");
 #pragma  DATA_SECTION(gs_stOrthPll, 			".CtrlVariableSector");
 #endif
@@ -48,7 +48,7 @@ ISR_EXE_VAR_ENTITY(ADCA1_ISR)
 
 /************ Variable definition region *********************************/
 volatile ANA_PHY_VALUE_T 		g_stAnaPhyRaw;
-volatile SOGI_OBJ_T   					gs_stSogi;
+//volatile SOGI_OBJ_T   					gs_stSogi;
 //volatile NOTCH_OBJ_2TH_T	    gs_stVpfcNotchFilt;
 volatile NOTCH_OBJ_T	    		gs_stVpfcNotchFilt;
 
@@ -61,19 +61,19 @@ unsigned short						g_u16LoopWorkMode =  LOOP_INVALID_MODE;
 float										g_f32OpenDuty = 0.0f;
 void adc_isr_init(void)
 {
-	gs_stSogi.stCoff.f32Kp = 1.414f;
+/*	gs_stSogi.stCoff.f32Kp = 1.414f;
 	gs_stSogi.stCoff.u8Ena2nd = 0;   //二阶禁止
 	gs_stSogi.stCoff.f32Ts = CTR_PERIOD;
 	gs_stSogi.stInter.f32IntegOut = 0.0f;
 	gs_stSogi.stInter.f32IntegOutQ = 0.0f;
 	gs_stSogi.stInter.f32IntegOut2nd = 0.0f;
 	gs_stSogi.stInter.f32IntegOut2ndQ = 0.0f;
-	sogi_set_freq_1p(&gs_stSogi, 50.0f);
+	sogi_set_freq_1p(&gs_stSogi, 50.0f);*/
 
 	gs_stOrthPll.stCoff.f32CosOmegT = 0.99998832001792715673006690787073f;
 	gs_stOrthPll.stCoff.f32SinOmegT = 0.00483320056729547671334289638923f;
-	gs_stOrthPll.stCoff.f32OutMax = 425.0f;
-	gs_stOrthPll.stCoff.f32Kp = 0.001f;
+	gs_stOrthPll.stCoff.f32OutMax 	  = 425.0f;
+	gs_stOrthPll.stCoff.f32Kp             = 0.001f;
 
 
 	gs_stVpfcNotchFilt.stOut.f32Out = 0;
@@ -81,7 +81,6 @@ void adc_isr_init(void)
 	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
 	gs_stVpfcNotchFilt.stCoff.f32Width0 = 0.001;
 	gs_stVpfcNotchFilt.stCoff.f32Width1 = 0.0083;
-	//gs_stVpfcNotchFilt.stCoff.f32Width1 = 0.00f;
 
 	gs_stVpfcNotchFilt.stInner.f32Out0thX = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32Out0thY = 0.0f;
@@ -93,15 +92,15 @@ void adc_isr_init(void)
 	gs_stVpfcNotchFilt.stInner.f32OutPredict1thY = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32Err 					  = 0.0f;
 
-	g_stAnaPhyRaw.f32Iin					= 0.0f;
-	g_stAnaPhyRaw.f32IinH					= 0.0f;
-	g_stAnaPhyRaw.f32IinL					= 0.0f;
-	g_stAnaPhyRaw.f32IlAve					= 0.0f;
-	g_stAnaPhyRaw.f32IlAveH					= 0.0f;
-	g_stAnaPhyRaw.f32IlAveL					= 0.0f;
-	g_stAnaPhyRaw.f32Vin					= 0.0f;
-	g_stAnaPhyRaw.f32VinL					= 0.0f;
-	g_stAnaPhyRaw.f32VinN					= 0.0f;
+	g_stAnaPhyRaw.f32Iin									 = 0.0f;
+	g_stAnaPhyRaw.f32IinH									 = 0.0f;
+	g_stAnaPhyRaw.f32IinL									 = 0.0f;
+	g_stAnaPhyRaw.f32IlAve								 = 0.0f;
+	g_stAnaPhyRaw.f32IlAveH								 = 0.0f;
+	g_stAnaPhyRaw.f32IlAveL								= 0.0f;
+	g_stAnaPhyRaw.f32Vin									= 0.0f;
+	g_stAnaPhyRaw.f32VinL									= 0.0f;
+	g_stAnaPhyRaw.f32VinN								= 0.0f;
 }
 
 INTERRUPT void adcA1ISR(void)
@@ -110,7 +109,7 @@ INTERRUPT void adcA1ISR(void)
 
             float       f32Duty;
 
-            UINT16 		u16PwmSwitch = 0,    u16PwmCounter;
+            UINT16 	u16PwmCounter;
 
 			//测试CPU load 和任务执行时间时使用
 			#if(TASK_CPU_LOAD_TEST == 1)
@@ -121,13 +120,13 @@ INTERRUPT void adcA1ISR(void)
 			#endif
 
 			 //计算各个采样值.
-			f32VinL 						= bsw_hal_calc_vin_l();
-			f32VinN 						= bsw_hal_calc_vin_n();
-			f32Vpfc 						=	 bsw_hal_calc_vpfc();
-			f32CurInductorAveH				= bsw_hal_calc_cur_inductor_ave_h();
-			f32CurInductorAveL				= bsw_hal_calc_cur_inductor_ave_l();
-			f32IinL 						= bsw_hal_calc_iin_l();
-			f32IinH 						= bsw_hal_calc_iin_h();
+			f32VinL 							= bsw_hal_calc_vin_l();
+			f32VinN 							= bsw_hal_calc_vin_n();
+			f32Vpfc 							=	 bsw_hal_calc_vpfc();
+			f32CurInductorAveH		= bsw_hal_calc_cur_inductor_ave_h();
+			f32CurInductorAveL		= bsw_hal_calc_cur_inductor_ave_l();
+			f32IinL 							= bsw_hal_calc_iin_l();
+			f32IinH 							= bsw_hal_calc_iin_h();
 
 			//校准各个采样值
 			#if(PARAM_CALIB_ENABLE == TRUE)
@@ -182,30 +181,33 @@ INTERRUPT void adcA1ISR(void)
 			else
 				g_stAnaPhyRaw.f32Iin  = g_stAnaPhyRaw.f32IinL;
 
-			//对VPFC电压进行滤波处理
-			#if(NOTICH_FILT_ENABLE == TRUE)
-						gs_stVpfcNotchFilt.stIn.f32In = g_stAnaPhyRaw.f32Vpfc;
-						notch_filter(&gs_stVpfcNotchFilt);
-			#else
-
-			#endif
 			LPF(g_f32VpfcIsrLpf, g_stAnaPhyRaw.f32Vpfc, 5000.0f, (float)CTR_PERIOD);
-			//对输入电压进行锁相环
-			gs_stOrthPll.stIn.f32SigIn = g_stAnaPhyRaw.f32Vin;
-			if (g_u16PllFirstStart == 1)
-			{
-				gs_stOrthPll.stOut.f32SigAlpha = g_stAnaPhyRaw.f32Vin;
-				gs_stOrthPll.stOut.f32SigBeta = 0.0f;
-				g_u16PllFirstStart = 0;
-			}
-			orth_pll_proc_1p(&gs_stOrthPll);
-
 			//执行需要在中断执行的MEASURE的任务
 			measure_fast_task();
 
+			//对VPFC电压进行滤波处理
+			if( u16_get_vin_type() == AC_TYPE){
+					#if(NOTICH_FILT_ENABLE == TRUE)
+								gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT =  f32_get_vin_cos_2omgt();
+								gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT =   f32_get_vin_sin_2omgt();
+								gs_stVpfcNotchFilt.stIn.f32In 					   = g_stAnaPhyRaw.f32Vpfc;
+								notch_filter(&gs_stVpfcNotchFilt);
+					#endif
+					//对输入电压进行锁相环
+					gs_stOrthPll.stIn.f32SigIn = g_stAnaPhyRaw.f32Vin;
+					if (g_u16PllFirstStart == 1)
+					{
+						gs_stOrthPll.stOut.f32SigAlpha = g_stAnaPhyRaw.f32Vin;
+						gs_stOrthPll.stOut.f32SigBeta = 0.0f;
+						g_u16PllFirstStart = 0;
+					}
+
+					gs_stOrthPll.stCoff.f32CosOmegT =  f32_get_vin_cos_omgt();
+					gs_stOrthPll.stCoff.f32SinOmegT =   f32_get_vin_sin_omgt();
+					orth_pll_proc_1p(&gs_stOrthPll);
+			}
 			//执行快速保护任务
 			diagnostic_fast_task();
-
 			//根据模式，运行控制器
 #if defined OPEN_LOOP_CTR
 			if((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)){
@@ -216,24 +218,16 @@ INTERRUPT void adcA1ISR(void)
 #elif (defined CLOSE_LOOP_CTR)||(defined IL_CLOSE_LOOP_MODE)
 			 if ((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)) {
 				 pfc_controller();
-				 f32Duty 		= f32_get_pwm_duty();
-				 u16PwmSwitch 	= 1;
+				 f32Duty 		        = f32_get_pwm_duty();
+				 set_pfc_pwm_duty(f32Duty,   u16PwmCounter);
+				 pfc_drv_turn_on();
 			}else{
+				BSW_HAL_ALERT_SET();
 				pfc_controller_init();
 				f32Duty 				= 0;
-				 u16PwmSwitch 	= 0;
-				 BSW_HAL_BUCK_NOT_OK();
-				 BSW_HAL_ALERT_SET();
+				 pfc_drv_turn_off();
 			}
 #endif
-			//根据环路运行结果,更新PWM模块
-			if(u16PwmSwitch == 1){
-				   set_pfc_pwm_duty(f32Duty,   u16PwmCounter);
-				   pfc_drv_turn_on();
-			}else{
-				   pfc_drv_turn_off();
-			}
-
 		 #ifndef DLLX64
 			//调用软件示波器功能
 			#define GEN_SW_SCOPE_ISR_CALL

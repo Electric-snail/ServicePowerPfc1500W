@@ -35,7 +35,11 @@ typedef struct{
 typedef struct{
     unsigned short   u16Pol;
     unsigned short   u16Type;
-    float            f32Frq;
+    float            			f32Frq;
+    float                    f32SinOmegT;
+    float                    f32CosOmegT;
+    float                    f32Sin2OmegT;
+    float                    f32Cos2OmegT;
 }POL_FRQ_OUT_T;
 
 typedef struct{
@@ -72,11 +76,41 @@ typedef struct {
    AVE_CALC_OUT_T         stOut;
 }AVE_CALC_OBJ_T;
 
+typedef struct {
+    float            f32VinAbsTrans;
+    float            f32VinRms;
+}VIN_DROP_DIG_IN_T;
+
+typedef struct {
+    float           		  f32DropTransThrd;
+    unsigned short u16DropCntThrd;
+    float           		 f32RecvRmsThrd;
+}VIN_DROP_DIG_COFF_T;
+
+typedef struct {
+    unsigned short     u16DropN;
+    unsigned short     u16RecvN;
+}VIN_DROP_DIG_INNER_T;
+
+typedef struct {
+   unsigned short u16VinDropFlag;
+}VIN_DROP_DIG_OUT_T;
+
+typedef struct {
+	VIN_DROP_DIG_IN_T             stIn;
+	VIN_DROP_DIG_COFF_T       stCoff;
+	VIN_DROP_DIG_INNER_T     stInner;
+	VIN_DROP_DIG_OUT_T         stOut;
+}VIN_DROP_DIG_OBJ_T;
+
+#define              INVALID_TYPE                                                0xFF
 #define               AC_TYPE                                                         0
 #define               DC_TYPE                                                         1
 
-extern void 	RmsCal(RMS_CALC_OBJ_T *p_stRmsObj);
-extern void 	AveCal(AVE_CALC_OBJ_T* p_stAveObj);
-extern void 	PolFrqCalc(POL_FRQ_CALC_OBJ_T *p_stPolFrqObj);
+extern void 	rms_calc(RMS_CALC_OBJ_T 							*p_stRmsObj);
+extern void 	average_calc(AVE_CALC_OBJ_T					*p_stAveObj);
+extern void 	pol_freq_calc(POL_FRQ_CALC_OBJ_T 			*p_stPolFrqObj);
+extern void 	vin_drop_diag(VIN_DROP_DIG_OBJ_T 			*p_stVinDropObj);
+extern	void 	vin_drop_recv_diag(VIN_DROP_DIG_OBJ_T *p_stVinDropObj);
 
 #endif /* PUBLIC_PUBLIC_INC_POWER_CALC_H_ */

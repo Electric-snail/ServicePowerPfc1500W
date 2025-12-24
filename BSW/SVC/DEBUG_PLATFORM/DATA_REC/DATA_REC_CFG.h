@@ -7,6 +7,7 @@
 #include "DEBUG_PLATFORM/DATA_REC/DATA_REC_DEFINE.h"
 
 #include "MEASURE/MEASURE.H"
+#include "ISR_INC/BSW_ISR_ADC.H"
 #include "PFC_CTR/PFC_CTR.H"
 
 #ifndef 		DATA_REC_SETTING
@@ -19,12 +20,10 @@
 
 //the data record group must be less than 3, the maximum variable counter is defined by DATA_REC_MAX_CNT
 DATA_REC_START(PFC_DATA,  0x00)
-DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.f32VinRmsLpf)
-DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.f32IinRmsLpf)
-DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.f32VpfcLpf)
-DATA_REC_ITEM(eu_fp32,	g_stPfcOut.f32Duty)
-DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.stIinRmsObj.stOut.f32Rms)
-DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.f32PinLpf)
+DATA_REC_ITEM(eu_fp32,	gs_stOrthPll.stCoff.f32SinOmegT)
+DATA_REC_ITEM(eu_fp32,	gs_stOrthPll.stCoff.f32CosOmegT)
+DATA_REC_ITEM(eu_fp32,	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT)
+DATA_REC_ITEM(eu_fp32,	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT)
 DATA_REC_ITEM(eu_fp32,	g_stMeasureOut.stVinPolFrqObj.stOut.f32Frq)
 DATA_REC_END()
 

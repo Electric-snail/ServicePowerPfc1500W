@@ -9,7 +9,7 @@
 #define ASW_DERATING_DERATING_H_
 
 void  derating_init(void);
-void  derating_task_20ms(void);
+void  derating_20ms_task(void);
 float GetPowerDeratingPower(void);
 
 #endif /* ASW_DERATING_DERATING_H_ */

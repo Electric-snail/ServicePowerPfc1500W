@@ -21,7 +21,7 @@ void derating_init(void)
     g_f32PowerDeratingActive = 2000.0f;
 }
 
-void derating_task_20ms(void)
+void derating_20ms_task(void)
 {
 }
 

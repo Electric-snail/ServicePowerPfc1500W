@@ -109,9 +109,9 @@ typedef struct {
     else                               CurVal = RefVal;       \
 }
 
-#define Limit(In, min, max)         ((In > max) ? max : ((In > min) ? In : min))
-#define Min(A, B)                   ((A > B) ? B : A)
-#define Max(A, B)                   ((A < B) ? B : A)
+#define LIMIT(In, min, max)         ((In > max) ? max : ((In > min) ? In : min))
+#define Min(A, B)                  		 ((A > B) ? B : A)
+#define Max(A, B)                   		 ((A < B) ? B : A)
 
 //#define Limit(In, min, max)       __fsat(In, min, max)
 

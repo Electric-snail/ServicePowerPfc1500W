@@ -122,6 +122,7 @@ struct GPIO_CFG_PARAM{
 	 {GPIO_ADC_PFC_I_SENSE_L,    			GPIO_CORE_CPU1, 		 	GPIO_IN,					    0,  			GPIO_PULLUP,                 					  	GPIO_IO,         								 0,       		 1,     		GPIO_INT_INVALID,   		GPIO_LOW},\
 	 {GPIO_ADC_PFC_I_SENSE_H,     		    GPIO_CORE_CPU1, 		 	GPIO_IN,					    0,  			GPIO_PULLUP,                 					  	GPIO_IO,         								 0,       			1,     	GPIO_INT_INVALID,   		GPIO_LOW},\
 	 {P_BUCK_OK,         									GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      	 GPIO_LOW},\
+	 {P_ALERT,         									    GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      	 GPIO_LOW},\
 }
 
 #define PIN_AIO_224           224

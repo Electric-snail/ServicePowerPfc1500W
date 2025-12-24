@@ -47,19 +47,19 @@ extern void BSW_SVC_vScheInit(void);
 extern void BSW_SVC_ScheExcuTask(void);
 /* CAN_CYCLIC_TASK_PERIOD = 1 */
 /* CPU_LOAD_TASK_PERIOD = 3 */
-/***TaskFuncType taskProc       const char *name;           enable   u16Period              u16Offset  *****/
+/***TaskFuncType taskProc       const char *name;           						enable   u16Period              u16Offset  *****/
 #ifndef DLLX64
 #define TASK_REG_TAB                      \
 {\
-    {measure_1ms_task,         			"measure_10ms_task",             				1,          1,                 0},\
+    {measure_1ms_task,         			"measure_1ms_task",             			1,          1,                 0},\
     {power_fsm_1ms_task,        		"power_fsm_1ms_task",           			1,          1,                  1},\
     {diag_1ms_task,             				"diagnostic_1ms_task",          				1,          1,                  1},\
     {measure_10ms_task,         			"measure_10ms_task",            				1,          10,                 4},\
-    {diag_10ms_task,           			 	"diagnostic_10ms_task",         				1,          10,                 5},\
+    {diag_10ms_task,           			 	"diagnostic_10ms_task",         			1,          10,                 5},\
     {diag_100ms_task,           			"diag_100ms_task",              				1,          100,                11},\
-	{derating_task_20ms,       			"derating_task",              						1,          20,                 13},\
-	{pfc_send_msg_task_50ms,       	"pfc_send_msg_task_50ms",               0,          300,                 33},\
-    {sw_scope_task,             			"sw_scope_task",              						1,          1,                  0},\
+	{derating_20ms_task,       			"derating_task",              						1,          20,                 13},\
+	{pfc_send_msg_50ms_task,       	"pfc_send_msg_task_50ms",               1,          200,                 33},\
+    {sw_scope_task,             			"sw_scope_task",              					1,          1,                  0},\
     /* {sfra_fsm_task,             "sfra_fsm_task",           1,          2,                  0},*/\
 /*{cpu_load_calc_task,        "cpu_load_calc_task",         1,          3,                  1},*/\
     {apl_main,                  				"apl_main",                   1,          3,                  2},\

@@ -38,37 +38,27 @@ ISR_EXE_VAR_ENTITY(CPU_TIMER2_ISR)
 
 INTERRUPT void IsrCpuTimer2(void)   //200US
 {
-    static unsigned char s_u8Status = 0;
 #ifndef DLLX64
-    PieCtrlRegs.PIEACK.all = PIEACK_GROUP1 | PIEACK_GROUP12;
-    IER = M_INT1 | M_INT12;
+ /*   PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
+    IER = M_INT1;
     __asm("  NOP");
-    bsw_mcal_enable_global_int();                                         // Enable Global interrupt INTM
+    bsw_mcal_enable_global_int();        */                                 // Enable Global interrupt INTM
     CpuTimer2Regs.TCR.bit.TIF = 1;
 #endif
-    #if(TASK_CPU_LOAD_TEST == 1)
+    /*    #if(TASK_CPU_LOAD_TEST == 1)
      UINT16 u16TaskTestTimerStatus = GetTaskTestTimerStatus();
      StopTaskTestTimer();
     #elif(ISR_CPU_LOAD_TEST == 1)
      ResetTaskTestTimer();
-    #endif
+    #endif		*/
 
     g_u32SysTimerMs++;
 
-    if(s_u8Status == 0){
-    	BSW_HAL_YELLOW_ON();
-    	s_u8Status = 1;
-    }
-    else{
-    	BSW_HAL_YELLOW_OFF();
-    	s_u8Status = 0;
-    }
-    #if(TASK_CPU_LOAD_TEST == 1)
+  /*   #if(TASK_CPU_LOAD_TEST == 1)
       ReloadTaskTestTimerStatus(u16TaskTestTimerStatus);
     #elif(ISR_CPU_LOAD_TEST == 1)
       ISR_EXE_VAR_CALL(CPU_TIMER2_ISR)
-    #endif
-
+    #endif    */
 }
 
 
