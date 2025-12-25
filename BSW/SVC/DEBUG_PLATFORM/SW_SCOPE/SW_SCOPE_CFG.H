@@ -31,24 +31,23 @@ extern    VIN_DROP_DIG_OBJ_T       				g_stVinDropDiag;
 #ifndef SCOPE_CFG_DEFINE
 #define SCOPE_CFG_DEFINE
 
-#define STARTUP_ITSELF              0
-#define STARTUP_GUI                 1
+#define STARTUP_ITSELF              				0
+#define STARTUP_GUI                 					1
 //Unit --> ms
-#define SW_SCOPE_TASK_PERIOD        1
+#define SW_SCOPE_TASK_PERIOD        	1
 
-#define STARTUP_MODE     			STARTUP_GUI
-#define F32_THRD_VALUE              100.0f
-#define TRIGG_INDEX                 0
-#define ACQ_MODE                    CTR_FRE
-#define ACQ_INTERVAL                10
-#define TRIGG_POINT                 TRIGG_POINT_MID
-#define TRIGG_METHOD                FALLING_EDGE
+#define STARTUP_MODE     			STARTUP_ITSELF
+#define F32_THRD_VALUE              60.0f
+#define TRIGG_INDEX                     2
+#define ACQ_MODE                          CTR_FRE
+#define ACQ_INTERVAL                   30
+#define TRIGG_METHOD                RISING_EDGE
 #endif
 
 //-------------name------------------------------startup_mode------------cache_size
-SW_SCOPE_START(PFC_SCOPE,		 STARTUP_GUI,  SW_SCOPE_CASH_SIZE)
+SW_SCOPE_START(PFC_SCOPE,		 STARTUP_MODE,  SW_SCOPE_CASH_SIZE)
 SW_SCOPE_ITEM(g_stAnaPhyRaw.f32Vin)
-SW_SCOPE_ITEM(g_stMeasureOut.stVinPolFrqObj.stInner.u16PosN)
-SW_SCOPE_ITEM(g_stMeasureOut.stVinPolFrqObj.stInner.u16NegN)
+SW_SCOPE_ITEM(gs_stOrthPll.stOut.f32SigAlpha)
+SW_SCOPE_ITEM(gs_stOrthPll.stOut.f32SigBeta)
 SW_SCOPE_END()
 

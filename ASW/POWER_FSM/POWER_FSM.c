@@ -46,11 +46,10 @@ REG_FSM_OBJ(POWER_FSM, PWR_STATUS_STANDBY, \
 {PWR_STATUS_RUN, 								power_run_in, 					power_run_exe, 					NULL, 				power_run_cond}, \
 {PWR_STATUS_FAULT, 							power_fault_in, 					power_fault_exe, 				NULL, 				power_fault_cond}, \
 )
-
-
-
 unsigned short 	g_u16PwrFsmTimerCnt = 0;
 unsigned short    g_u16RestartCnt            = 0;
+
+
 void power_fsm_init(void) {
 	g_u16RestartCnt = 0;
 	FSM_INIT_CALL(POWER_FSM)
@@ -84,12 +83,13 @@ void  power_standby_exe(void){
 			u16PolRvsFlag = 1;
 		}
 	}
-	f32VpfcPrechargeThrd	= 0.9f * 1.414f * f32_get_vin_rms_flt();
+	f32VpfcPrechargeThrd	= 0.85f * 1.414f * f32_get_vin_rms_flt();
 	f32VpfcLpf						=  f32_get_vpfc_lpf_measure();
 	g_u16PwrFsmTimerCnt++;
 
 	if ((g_u16PwrFsmTimerCnt > 800)&&(1 == u16PolRvsFlag)&&(f32VpfcLpf > f32VpfcPrechargeThrd)&&(0x0000 == u16_get_auto_recv_diag())){
 			BSW_HAL_RELAY_ON();
+			u16_clr_fault_flag();
 			g_u16PwrFsmTimerCnt  = 0;
 			EMIT_FSM(POWER_FSM, PWR_PRE_CHG_CMP);
 	}
@@ -102,7 +102,7 @@ UINT8 power_standby_cond(UINT16 u16TrigEven){
 
 void  power_relay_dither_exe(void){
 	    g_u16PwrFsmTimerCnt ++;
-        if(g_u16PwrFsmTimerCnt > 20 ){
+        if(g_u16PwrFsmTimerCnt > 100){
 			EMIT_FSM(POWER_FSM, 	PWR_RELAY_DITHER_CMP);
         }
 }

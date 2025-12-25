@@ -21,7 +21,6 @@ extern    float				g_f32VpfcPiKiTsSlow;
 extern 	float			    gs_f32FeedCoff;
 extern     float 			g_f32VpfcSetTarget;
 extern     float           g_f32PowerOpenSet;
-
 //-----------------------------------------var_name,					var,																		attr,					  def,				  										 min,															max
 REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    						VAR_WR,		     		0,						  										0,																1);
 REG_CFG_ITEM_F32(OPEN_DUTY,					g_f32OpenDuty,						    								VAR_WR,		      		0,						  										0,																1.0f);
@@ -39,6 +38,9 @@ REG_CFG_ITEM_U16(PWR_FSM,	   					fsm_obj_POWER_FSM.u8CurStateId,						VAR_RD,		
 
 REG_CFG_ITEM_F32(VPFC_KP,					   g_f32VpfcPiKpSlow,						    							VAR_WR,		      50.0f,				 														1,												2000.0f);
 REG_CFG_ITEM_F32(VPFC_KI,					       g_f32VpfcPiKiTsSlow,						    						VAR_WR,		      (1 * 2 * 3.1415926f * 5 * CTR_PERIOD	),			(0.1f / 65000.0f	),					(5000.0f / 65000.0f)	);
+
+
+REG_CFG_ITEM_F32(PLL_KP,					   		  gs_stOrthPll.stCoff.f32Kp,						    		VAR_WR,		      0.01f,				 										0.001,														0.1f);
 
 REG_CFG_ITEM_F32(IL_KP,					   		   gs_stIacPiGainCtrl.stCoff.f32Kp,						    		VAR_WR,		      10.0f,				 										0.01,														500.0f);
 REG_CFG_ITEM_F32(IL_KI,					       	   gs_stIacPiGainCtrl.stCoff.f32KiTs,						    	VAR_WR,		      (10.0f * 2000.0f/ 65000.0f),			      (10.0f * 10.0f/ 65000.0f),						 (10.0f * 10000.0f/ 65000.0f));

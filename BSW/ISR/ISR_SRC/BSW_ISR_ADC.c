@@ -55,7 +55,7 @@ volatile NOTCH_OBJ_T	    		gs_stVpfcNotchFilt;
 volatile ORTH_PLL_OBJ_T  		    gs_stOrthPll;
 
 volatile float                  		g_f32VpfcIsrLpf = 0.0f;
-unsigned short				         g_u16PllFirstStart  = 1;
+unsigned short				         g_u16PllFirstStart;
 volatile unsigned short         g_u16FaultDetetFlag = 0;
 unsigned short						g_u16LoopWorkMode =  LOOP_INVALID_MODE;
 float										g_f32OpenDuty = 0.0f;
@@ -73,14 +73,14 @@ void adc_isr_init(void)
 	gs_stOrthPll.stCoff.f32CosOmegT = 0.99998832001792715673006690787073f;
 	gs_stOrthPll.stCoff.f32SinOmegT = 0.00483320056729547671334289638923f;
 	gs_stOrthPll.stCoff.f32OutMax 	  = 425.0f;
-	gs_stOrthPll.stCoff.f32Kp             = 0.001f;
+	gs_stOrthPll.stCoff.f32Kp             = 0.01f;
 
 
 	gs_stVpfcNotchFilt.stOut.f32Out = 0;
 	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT = 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
 	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
 	gs_stVpfcNotchFilt.stCoff.f32Width0 = 0.001;
-	gs_stVpfcNotchFilt.stCoff.f32Width1 = 0.0083;
+	gs_stVpfcNotchFilt.stCoff.f32Width1 = 0.0083f;
 
 	gs_stVpfcNotchFilt.stInner.f32Out0thX = 0.0f;
 	gs_stVpfcNotchFilt.stInner.f32Out0thY = 0.0f;
@@ -101,6 +101,7 @@ void adc_isr_init(void)
 	g_stAnaPhyRaw.f32Vin									= 0.0f;
 	g_stAnaPhyRaw.f32VinL									= 0.0f;
 	g_stAnaPhyRaw.f32VinN								= 0.0f;
+	g_u16PllFirstStart                                           = 1;
 }
 
 INTERRUPT void adcA1ISR(void)
@@ -188,22 +189,29 @@ INTERRUPT void adcA1ISR(void)
 			//对VPFC电压进行滤波处理
 			if( u16_get_vin_type() == AC_TYPE){
 					#if(NOTICH_FILT_ENABLE == TRUE)
-								gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT =  f32_get_vin_cos_2omgt();
-								gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT =   f32_get_vin_sin_2omgt();
-								gs_stVpfcNotchFilt.stIn.f32In 					   = g_stAnaPhyRaw.f32Vpfc;
-								notch_filter(&gs_stVpfcNotchFilt);
+					//	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
+					//	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT = 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
+						gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT =   f32_get_vin_cos_2omgt();
+						gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT  =   f32_get_vin_sin_2omgt();
+						gs_stVpfcNotchFilt.stIn.f32In 					    =    g_stAnaPhyRaw.f32Vpfc;
+						notch_filter(&gs_stVpfcNotchFilt);
 					#endif
 					//对输入电压进行锁相环
 					gs_stOrthPll.stIn.f32SigIn = g_stAnaPhyRaw.f32Vin;
 					if (g_u16PllFirstStart == 1)
 					{
 						gs_stOrthPll.stOut.f32SigAlpha = g_stAnaPhyRaw.f32Vin;
-						gs_stOrthPll.stOut.f32SigBeta = 0.0f;
+						if(g_stAnaPhyRaw.f32Vin > 0){
+							gs_stOrthPll.stOut.f32SigBeta   = -1.414f * f32_get_vin_rms();
+						}else{
+							gs_stOrthPll.stOut.f32SigBeta   = 1.414f * f32_get_vin_rms();
+						}
 						g_u16PllFirstStart = 0;
 					}
-
 					gs_stOrthPll.stCoff.f32CosOmegT =  f32_get_vin_cos_omgt();
 					gs_stOrthPll.stCoff.f32SinOmegT =   f32_get_vin_sin_omgt();
+				//	gs_stOrthPll.stCoff.f32CosOmegT =  0.999990539f;
+				//	gs_stOrthPll.stCoff.f32SinOmegT =   0.004488344f;
 					orth_pll_proc_1p(&gs_stOrthPll);
 			}
 			//执行快速保护任务

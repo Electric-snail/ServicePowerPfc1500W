@@ -12,6 +12,8 @@
 #include "MEASURE/MEASURE.h"
 #include "PUBLIC_INC/DC_MATH.H"
 
+#define     XCAP_COMP_EN											1
+#define 	 Cx																		2.22e-6
 #ifndef  DLLX64
 #pragma  CODE_SECTION(pfc_controller, 					".TI.ramfunc");
 #pragma  CODE_SECTION(ctrl_pi_gain_position, 		".TI.ramfunc");
@@ -60,7 +62,7 @@ void 	pfc_controller_init(void){
 	//	gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.2f * 666.6 * 380f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		gs_stIacPiGainCtrl.stCoff.f32Kp						= 20.0f;
 		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 20.0f * 4000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
-		gs_stIacPiGainCtrl.stInner.f32Integrate				= 0;
+		gs_stIacPiGainCtrl.stInner.f32Integrate			= 0;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
 
 		gs_f32FeedCoff											    = 1.0f;
@@ -73,14 +75,14 @@ void 	pfc_controller(void){
 		float f32Duty;
 	    float f32VacPll		= f32_get_vac_volt_pll();
 		float f32VpfcNpf    = f32_get_vpfc_npf();
-		float f32VpfcLpf;
+		float f32VpfcLpf    = f32_get_vpfc_isr_lpf();
 		float f32VinAbs		= ABSF(f32_get_vin_raw());
 		float f32VinRms		= f32_get_vin_rms_flt();
 		float f32Temp;
 		float f32IlRefTemp;
 
 		gs_stVpfcPiCtrl.stIn.f32Ref = f32_get_vpfc_set();
-		gs_stVpfcPiCtrl.stIn.f32Fb = f32VpfcNpf;
+		gs_stVpfcPiCtrl.stIn.f32Fb = f32VpfcNpf;  //f32VpfcLpf;
 		
 		/*		f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
    	   if (f32VpfcErrAbs < 10) {
@@ -96,7 +98,6 @@ void 	pfc_controller(void){
 
 		ctrl_pi_position(&gs_stVpfcPiCtrl);
 		//in case of the vpfc overshoot too high
-		f32VpfcLpf =   f32_get_vpfc_isr_lpf();
 		f32Temp	   = f32VpfcLpf -  15.0f;
 		if(f32Temp	 > gs_stVpfcPiCtrl.stIn.f32Ref){
 			gs_stVpfcPiCtrl.stInner.f32Integrate = 0.0f;

@@ -73,8 +73,9 @@ typedef struct
         SW_SCOPE_TRIGG_POINT_M  					emTrigPoint;      //if the trigger mode is the rising or falling, it defines the trigger point.
         SW_SCOPE_ACQ_MODE_M     					emAcqMode;        //the acquisition mode of sw scope, 0: the acq period basic on the control frequency
                                                     													//1 is the acq period basic on the data record function task's period
-        UINT8                  										u8TrigIndex;       //Trigger variable index.
-        UINT16  				    									u16AcqInterval;      //it means times of the acq period basic on the em_acq_mode.
+        UINT8                  										    u8TrigIndex;       //Trigger variable index.
+        UINT8                                                             u8StartMode;
+        UINT16  				    									    u16AcqInterval;      //it means times of the acq period basic on the em_acq_mode.
         FLOAT32 														f32ThrdValue;      //if the trigger mode is the rising or falling, it is the threshold value.
 }SW_SCOPE_GUI_CFG_ITEM;
 
@@ -82,10 +83,11 @@ typedef struct
 {
 	    UINT8   u8Enable;
 	    UINT8   u8RunStopCmd;        //
-		UINT8 	u8TrigFlg;           //When using trig capture mode, it indicate whether the trig condition is satisfy.
+		UINT8   u8TrigFlg;           //When using trig capture mode, it indicate whether the trig condition is satisfy.
 		UINT8   u8DataMsgTxFlg;
 		UINT8   u8VarType[SCOPE_VAR_MAX_ITEM_CNT];  //It indicate the channel variable the type, unsigned int or int, or float and so on
 		UINT8 	u8VarChannelNum;    //Variable number.
+		UINT8   u8GetDataFlag;
 //    	UINT16  u16MulDelayCnt;      //When using multi capture method, during two data capture, we should at least keep 500ms,  it indicate the delay time.
 
         INT16   i16RecRefCnt;

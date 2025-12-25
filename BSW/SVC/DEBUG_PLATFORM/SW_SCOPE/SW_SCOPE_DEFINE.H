@@ -138,10 +138,10 @@
 													g_stScopeCtrlInfo.f32PreLastData    = 0;								\
 													g_stGuiCfgSwScope.emAcqMode         = INVALID_ACQ_MODE;					\
 													g_stGuiCfgSwScope.u8TrigIndex       = 0;								\
+													g_stGuiCfgSwScope.u8StartMode      = startup_mode;			\
 													if(startup_mode == STARTUP_ITSELF){										\
 														g_stGuiCfgSwScope.u8TrigIndex 	 = TRIGG_INDEX;						\
-														g_stGuiCfgSwScope.emTrigMethod   = TRIGG_METHOD;					\
-														g_stGuiCfgSwScope.emTrigPoint    = TRIGG_POINT;						\
+														g_stGuiCfgSwScope.emTrigMethod   = TRIGG_METHOD;				\
 														g_stGuiCfgSwScope.emAcqMode      = ACQ_MODE;						\
 														g_stGuiCfgSwScope.u16AcqInterval = ACQ_INTERVAL;						\
 														g_stGuiCfgSwScope.f32ThrdValue   = F32_THRD_VALUE;					\

@@ -70,6 +70,7 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         	if(p_stPolFrqObj->stInner.u16NegN  <= AC_MAX_FRQ_CNT){   //it is the noise signal
         		p_stPolFrqObj->stInner.u16NegN = 0;
         	}else if(p_stPolFrqObj->stInner.u16PosN > 5){
+        		p_stPolFrqObj->stInner.u16NegN 			-= 6;
         		f32Temp0												= __divf32(1.0f,		p_stPolFrqObj->stInner.u16NegN);
         		p_stPolFrqObj->stOut.f32Sin2OmegT 	= __sinpuf32(f32Temp0);
         		p_stPolFrqObj->stOut.f32Cos2OmegT 	= __cospuf32(f32Temp0);
@@ -86,6 +87,7 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         	if(p_stPolFrqObj->stInner.u16PosN <= AC_MAX_FRQ_CNT){//it is the noise signal
         		p_stPolFrqObj->stInner.u16PosN = 0;
         	}else if(p_stPolFrqObj->stInner.u16NegN > 5){
+        		p_stPolFrqObj->stInner.u16PosN 			-= 6;
         		f32Temp0												= __divf32(1.0f,		p_stPolFrqObj->stInner.u16PosN);
         		p_stPolFrqObj->stOut.f32Sin2OmegT 	= __sinpuf32(f32Temp0);
         		p_stPolFrqObj->stOut.f32Cos2OmegT 	= __cospuf32(f32Temp0);
@@ -93,6 +95,7 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         		p_stPolFrqObj->stOut.f32Frq         		= CTR_FRQ * f32Temp0;
         		p_stPolFrqObj->stOut.f32SinOmegT  	=   __sinpuf32(f32Temp0);
         		p_stPolFrqObj->stOut.f32CosOmegT	 	=  __cospuf32(f32Temp0);
+        		p_stPolFrqObj->stOut.u16Type  			=  AC_TYPE;
         		p_stPolFrqObj->stInner.u16PosN = 0;
         	}
         }

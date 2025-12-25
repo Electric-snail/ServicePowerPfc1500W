@@ -114,12 +114,30 @@ void sw_scope_task(void)
 		memcpy((void *)&g_stScopeCopyRingCtrl,(void *)&g_stScopeRingCtrl,sizeof(RING_ITEM));
         g_stScopeRingCtrl.enRingStaus                        = RING_FULL;
         g_stScopeRingCtrl.enRingCmd                          = RING_REQUEST_READ;
-		u8TplTxStatus = Tpl_Msg_Send(&st_ScopeDataBuffCtrl,&st_ScopeDataFrame);
-		
-		if((u8TplTxStatus == TPL_TX_MSG_SUCCESS) || (u8TplTxStatus == TPL_TX_MUX_FRAME_DOING)){
-			g_stScopeCtrlInfo.u8DataMsgTxFlg                    = 0;
-			s_u8FsmStatus = 1;
-		}
+
+        if(g_stGuiCfgSwScope.u8StartMode == STARTUP_ITSELF){
+        	  	if(g_stScopeCtrlInfo.u8GetDataFlag == 1){
+        	  			u8TplTxStatus = Tpl_Msg_Send(&st_ScopeDataBuffCtrl,&st_ScopeDataFrame);
+        	  			if((u8TplTxStatus == TPL_TX_MSG_SUCCESS) || (u8TplTxStatus == TPL_TX_MUX_FRAME_DOING)){
+        	  				g_stScopeCtrlInfo.u8DataMsgTxFlg                    = 0;
+        	  				g_stScopeCtrlInfo.u8GetDataFlag                        = 0;
+        	  				s_u8FsmStatus = 1;
+						}
+        	  }else{
+        		  g_stScopeCtrlInfo.u8DataMsgTxFlg   = 0;
+        		  g_stScopeRingCtrl.enRingCmd 		  = RING_IDLE;
+        		  g_stScopeRingCtrl.enRingStaus         = RING_EMPTY;
+        		  s_u8FsmStatus = 1;
+        	  }
+        }else{
+    		u8TplTxStatus = Tpl_Msg_Send(&st_ScopeDataBuffCtrl,&st_ScopeDataFrame);
+    		if((u8TplTxStatus == TPL_TX_MSG_SUCCESS) || (u8TplTxStatus == TPL_TX_MUX_FRAME_DOING)){
+    			g_stScopeCtrlInfo.u8DataMsgTxFlg                    = 0;
+    			g_stScopeCtrlInfo.u8GetDataFlag                        = 0;
+    			s_u8FsmStatus = 1;
+    		}
+        }
+
 	}
 	//s_u8FsmStatus = 1 表示示波器已经装了数据，并成功，g_stScopeRingCtrl.enRingCmd = RING_IDLE 表示示波器的数据已经发送完毕。
 	if((s_u8FsmStatus == 1)&&(g_stScopeRingCtrl.enRingCmd == RING_IDLE)){
@@ -147,9 +165,10 @@ void scope_get_data_cmd_action(void){
         st_ScopeDataFrame.stAplDm.u16AplDLC                  = 0;
         st_ScopeDataFrame.p_u16AppData                       = (void *)0x00000000;
         Tpl_Single_Frame_Send(&st_ScopeDataFrame);
-    }else if(g_stScopeRingCtrl.enRingStaus == RING_EMPTY){     //the data is not sent out whole.
+    }else if(g_stScopeRingCtrl.enRingStaus == RING_EMPTY){
         memcpy((void *)&g_stScopeRingCtrl,(void *)&g_stScopeCopyRingCtrl,sizeof(RING_ITEM));
         g_stScopeCtrlInfo.u8DataMsgTxFlg = 1;
+        g_stScopeCtrlInfo.u8GetDataFlag     = 1;
     }
 }
 
