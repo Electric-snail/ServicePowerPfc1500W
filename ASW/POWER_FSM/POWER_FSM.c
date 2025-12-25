@@ -163,7 +163,8 @@ UINT8 power_run_cond(UINT16 u16TrigEven) {
 }
 
 void  power_fault_in(void) {
-	g_u16PwrFsmTimerCnt = 0;
+	g_u16PwrFsmTimerCnt 		 = 0;
+	g_stPwrFsmOut.u16CtrCmd = 0;
 }
 
 void  power_fault_exe(void) {

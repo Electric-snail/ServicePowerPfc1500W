@@ -91,10 +91,10 @@ typedef struct{
 #define   APL_DOMAIN_BYTES_LEN              (sizeof(APL_DOMAIN)*TYPE_8_BYTE_SIZE)
 
 typedef struct{
-    NWM_DOMAIN            stNwmDm;
+    NWM_DOMAIN              stNwmDm;
     TPL_DOMAIN              stTplDm;
     APL_DOMAIN              stAplDm;
-    UINT16                        *p_u16AppData;
+    UINT16                  *p_u16AppData;
 }FRAME_PROTOCOL_FORMAT;
 
 //unify the action status definition of in the DPSecStack

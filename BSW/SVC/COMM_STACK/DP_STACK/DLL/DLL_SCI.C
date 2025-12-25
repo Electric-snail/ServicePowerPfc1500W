@@ -208,7 +208,6 @@ UINT16  g_au16DllScibRxMsgBuff[(DP_NWM_SIG_FRAME_RX_MAX_BYTE_LEN >> 1)] = {0};
 
 REG_RING_ENTITY(SCIB_RING_TX, DLL_TX_RING_LEN)
 
-UINT16 g_u16Test = 0;
 //Forbid to be called in the interrupt functions
 INT16 dll_scib_frame_write(void *p_vHalFrameInfo)
 {
@@ -233,9 +232,6 @@ INT16 dll_scib_frame_write(void *p_vHalFrameInfo)
     if(u16ByteSize < u16FrameTotalSizeBytes){
         //Check whether the SCIB hardware is working, if not, enable the scib send.
         return -1;
-    }
-    if(u16FrameTotalSizeBytes == 504){
-    	g_u16Test++;
     }
     p_u16Data   = (UINT16 *)&stDllSciHead;
 
@@ -327,7 +323,6 @@ void scib_err_handler(void){
 			 ScibRegs.SCICTL1.bit.SWRESET = 1;
 	 }
 }
-
 INT16 dll_scib_frame_read(UINT16 *p_u16Data)
 {
 	   static enum DLL_RX_FMS 	s_enDllRxFsm = HEAD_BYTE0_FMS;

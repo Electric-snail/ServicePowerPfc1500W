@@ -33,7 +33,7 @@ typedef void (*pf_action_func)(void *p_stAplDm);
 
 typedef struct
 {
-    UINT8           u8CmdSet;
+    unsigned char           u8CmdSet;
     pf_action_func  action_func;
 }CMD_LINK_ACTION_ITEM;
 

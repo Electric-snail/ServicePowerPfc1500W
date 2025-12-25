@@ -1,5 +1,5 @@
 /*********************************************************************
-File name:       BSW_SERVICE_RTOS_Main.h
+File name:       BSW_TASK_SERVICE.h
 Purpose :
  *  Created on: 2022-07-18
  *      Author: Hongbo.jiang
@@ -11,7 +11,7 @@ Purpose :
 extern "C" {
 #endif
 
-#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
+#include "SOFTWARE_ENV_CFG.h"
 
 #define MAX_TASK_NUM       24
 

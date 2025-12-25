@@ -24,7 +24,9 @@ enum AUTO_REG_TYPE
 
     AUTO_REG_ASW_INIT           = 0X05,
 
-    AUTO_REG_ISR_TEST           = 0x06
+    AUTO_REG_ISR_TEST           = 0x06,
+
+    AUTO_REG_ISR_INIT           = 0x07,
 };
 
 typedef struct __auto_reg_

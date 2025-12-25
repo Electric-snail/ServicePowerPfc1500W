@@ -12,12 +12,7 @@
 #include "PUBLIC_INC/MEM_HANDLE.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 
-#if( (DP_SCIB_ENABLE == 1) || (DP_SCIA_ENABLE))
-#define TPL_MUX_INTERVAL_TIME       100
-#elif(( DP_CANA_ENABLE == 1)||( DP_CANB_ENABLE == 1)||(DP_MCAN_ENABLE == 1))
-#else
-#define TPL_MUX_INTERVAL_TIME       100
-#endif
+#define TPL_MUX_INTERVAL_TIME     100
 typedef void (*RX_MSG_APL_CALL_BACK_FUNC)(FRAME_PROTOCOL_FORMAT *p_stProtlFormat);
 
 enum TPL_MUX_STATUS

@@ -8,7 +8,7 @@
 #ifndef BSW_SVC_BASIC_H_
 #define BSW_SVC_BASIC_H_
 
-#include "../ENV_CFG/SOFTWARE_ENV_CFG.h"
+#include "SOFTWARE_ENV_CFG.h"
 
 typedef void(*SvcInitType)(void);
 

@@ -70,6 +70,7 @@ typedef struct{
 
 extern INT16 dll_scia_frame_write(void *);
 extern INT16 dll_scia_frame_read(UINT16 *);
+extern void scia_err_handler(void);
 extern void scia_send_from_ring(void);
 
 extern INT16 dll_scib_frame_write(void *);

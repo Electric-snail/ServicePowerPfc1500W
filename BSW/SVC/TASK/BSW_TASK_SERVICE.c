@@ -80,7 +80,6 @@ void bsw_svc_vScheInit(void)
 #pragma CODE_SECTION(BSW_SVC_ScheExcuTask, ".TI.ramfunc");
 #endif
 
-extern UINT16 SvcRegLoadStart;
 //6us -> 1.3us
 void bsw_svc_sche_exe_task(void)
 {

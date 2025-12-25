@@ -1,15 +1,15 @@
 /*
  * FSM_CORE.h
  *
- *  Created on: 2022/11/14
- *      Author: xj8r1j
+ *  Created on: 2022.9.22
+ *      Author: hongbo.jiang
  */
 
-#ifndef _FSM_CORE_H_
-#define _FSM_CORE_H_
+#ifndef _BSW_FSM_CORE_H_
+#define _BSW_FSM_CORE_H_
 
-#include "stdint.h"
-#include "SVC/BSW_SVC_BASIC.h"
+
+#include "SOFTWARE_ENV_CFG.h"
 
 #define STATE_IS_UNCHANGE       0u
 #define STATE_IS_CHANGE         1u
@@ -18,22 +18,22 @@
 typedef void  (*pf_fsm_in)  		(void);
 typedef void  (*pf_fsm_exe) 		(void);
 typedef void  (*pf_fsm_out) 		(void);
-typedef UINT8 (*pf_fsm_cond)	    (UINT16 event);
+typedef UINT8 (*pf_fsm_cond)		(UINT16 event);
 
 typedef struct
 {
-    UINT8               u8FsmStateId;
-	pf_fsm_in      		fsm_in_func;
-	pf_fsm_exe      	fsm_exe_func;
-	pf_fsm_out     		fsm_out_func;
-	pf_fsm_cond    		fsm_cond_func;
+	UINT8            	u8FsmStateId;
+    pf_fsm_in      		fsm_in_func;
+    pf_fsm_exe      	fsm_exe_func;
+    pf_fsm_out     		fsm_out_func;
+    pf_fsm_cond    		fsm_cond_func;
 }fsm_item_obj_t;
 
 typedef struct
 {
-    UINT8         			u8IsFsmInit;        //It indicate the whether the FSM has been initialized.
-    UINT8					u8IsStateChange;    //It indicate the status is need to be change;
-	const 				    fsm_item_obj_t *p_fsm_item_tab;     //The FSM item tabe.
+	UINT8         			u8IsFsmInit;        //It indicate the whether the FSM has been initialized.
+	UINT8					u8IsStateChange;    //It indicate the status is need to be change;
+	const fsm_item_obj_t*  	p_fsm_item_tab;     //The FSM item tabe.
 	UINT8         			u8StateTotalNum;	//The total status number of FSM
 	UINT8				    u8InitStateId;      //It define the initial status id of the FSM,after initialized, the u8CurStateId is the same u8InitStateId.
 	UINT8         			u8PreStateId;       //It indicate the previous status id;
@@ -42,7 +42,7 @@ typedef struct
 	UINT16				    u16TrigEven;      //The happen action in current status, whether the status need to be changed, it is based on it
 }fsm_obj_t;
 
-extern void  fsm_emit_event(fsm_obj_t* p_fsm, uint16_t u16Event);
+extern void  fsm_emit_event(fsm_obj_t* p_fsm, UINT16 u16Event);
 extern void  fsm_fun(fsm_obj_t* p_fsm);
 extern void  fsm_init(fsm_obj_t* p_fsm);
 extern UINT8 get_fsm_status(fsm_obj_t* p_fsm);

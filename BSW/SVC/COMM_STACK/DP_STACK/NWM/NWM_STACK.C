@@ -107,7 +107,9 @@ void Nwm_Rx_Frame(void){
     UINT16 *p_u16Data;
     INT16 i16FrameRxStatus;
     UINT8 i;
-//jackey    UINT16 u16DataLen = 0;
+#if(NODE_ROUTE_ENABLE == 1)
+    UINT16 u16DataLen = 0;
+#endif
     const LINK_HAL_ITEM *p_stLinkHalItem = NULL;
     for(i = 0; i < (sizeof(gc_stLinkItemTab)/sizeof(LINK_HAL_ITEM)); i++){
         p_stLinkHalItem = &gc_stLinkItemTab[i];
