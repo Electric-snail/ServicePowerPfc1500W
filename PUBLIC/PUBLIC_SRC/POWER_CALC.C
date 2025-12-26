@@ -6,6 +6,8 @@
  */
 #include    "PUBLIC_INC/POWER_CALC.H"
 #include    "SOFTWARE_ENV_CFG.H"
+#include    "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
+#include    "math.h"
 #define  	AC_MIN_FRQ_CNT             (CTR_FRQ/(2*5.0f))
 #define     AC_MAX_FRQ_CNT			   (CTR_FRQ/(2*100.0f))
 
@@ -71,6 +73,7 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         		p_stPolFrqObj->stInner.u16NegN = 0;
         	}else if(p_stPolFrqObj->stInner.u16PosN > 5){
         		p_stPolFrqObj->stInner.u16NegN 			-= 6;
+#if(1)
         		f32Temp0												= __divf32(1.0f,		p_stPolFrqObj->stInner.u16NegN);
         		p_stPolFrqObj->stOut.f32Sin2OmegT 	= __sinpuf32(f32Temp0);
         		p_stPolFrqObj->stOut.f32Cos2OmegT 	= __cospuf32(f32Temp0);
@@ -78,6 +81,15 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         		p_stPolFrqObj->stOut.f32Frq         		= CTR_FRQ * f32Temp0;
         		p_stPolFrqObj->stOut.f32SinOmegT  	=   __sinpuf32(f32Temp0);
         		p_stPolFrqObj->stOut.f32CosOmegT	 	=  __cospuf32(f32Temp0);
+#else
+        		p_stPolFrqObj->stOut.f32Frq                 =  0.5f * CTR_FRQ/p_stPolFrqObj->stInner.u16NegN;
+        		f32Temp0                                                = 2.0f*3.1415926f*p_stPolFrqObj->stOut.f32Frq*CTR_PERIOD;
+        		p_stPolFrqObj->stOut.f32SinOmegT 		= sinf(f32Temp0);
+        		p_stPolFrqObj->stOut.f32CosOmegT 	= cosf(f32Temp0);
+        		f32Temp0                                                = 2.0f*3.1415926f*2.0f*p_stPolFrqObj->stOut.f32Frq*CTR_PERIOD;
+        		p_stPolFrqObj->stOut.f32Sin2OmegT  	=  sinf(f32Temp0);
+        		p_stPolFrqObj->stOut.f32Cos2OmegT	=  cosf(f32Temp0);
+#endif
         		p_stPolFrqObj->stOut.u16Type  			= AC_TYPE;
         		p_stPolFrqObj->stInner.u16NegN 			= 0;
         	}
@@ -88,6 +100,7 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         		p_stPolFrqObj->stInner.u16PosN = 0;
         	}else if(p_stPolFrqObj->stInner.u16NegN > 5){
         		p_stPolFrqObj->stInner.u16PosN 			-= 6;
+#if(1)
         		f32Temp0												= __divf32(1.0f,		p_stPolFrqObj->stInner.u16PosN);
         		p_stPolFrqObj->stOut.f32Sin2OmegT 	= __sinpuf32(f32Temp0);
         		p_stPolFrqObj->stOut.f32Cos2OmegT 	= __cospuf32(f32Temp0);
@@ -95,6 +108,15 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         		p_stPolFrqObj->stOut.f32Frq         		= CTR_FRQ * f32Temp0;
         		p_stPolFrqObj->stOut.f32SinOmegT  	=   __sinpuf32(f32Temp0);
         		p_stPolFrqObj->stOut.f32CosOmegT	 	=  __cospuf32(f32Temp0);
+#else
+        		p_stPolFrqObj->stOut.f32Frq                 =  0.5f * CTR_FRQ/p_stPolFrqObj->stInner.u16PosN;
+        		f32Temp0                                                = 2.0f*3.1415926f*p_stPolFrqObj->stOut.f32Frq*CTR_PERIOD;
+        		p_stPolFrqObj->stOut.f32SinOmegT 		= sinf(f32Temp0);
+        		p_stPolFrqObj->stOut.f32CosOmegT 	= cosf(f32Temp0);
+        		f32Temp0                                                = 2.0f*3.1415926f*2.0f*p_stPolFrqObj->stOut.f32Frq*CTR_PERIOD;
+        		p_stPolFrqObj->stOut.f32Sin2OmegT  	=  sinf(f32Temp0);
+        		p_stPolFrqObj->stOut.f32Cos2OmegT	=  cosf(f32Temp0);
+#endif
         		p_stPolFrqObj->stOut.u16Type  			=  AC_TYPE;
         		p_stPolFrqObj->stInner.u16PosN = 0;
         	}

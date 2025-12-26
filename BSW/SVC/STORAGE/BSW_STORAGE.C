@@ -7,7 +7,7 @@
 #include "SOFTWARE_ENV_CFG.H"
 #include "PUBLIC_INC/MEM_HANDLE.H"
 #include "HAL_INC/BSW_HAL_STORAGE.H"
-#include "STORAGE/BSW_SVC_STORAGE.H"
+#include "STORAGE/BSW_STORAGE.H"
 
 extern const UINT8 crc_table[];                   // CRC table.
 

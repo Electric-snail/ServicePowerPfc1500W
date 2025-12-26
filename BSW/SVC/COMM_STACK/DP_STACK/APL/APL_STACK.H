@@ -48,7 +48,7 @@ typedef struct
     {DATA_LOG_CMD_SET,  	DataLogCmdSetLink},    	    \
 	{SW_SCOPE_CMD_SET,   	SwScopeCmdSetLink}, 		\
 /*	{BOOTLOAD_CMD_SET,      bootload_cmd_set_link},   */  \
-/*    {PERFOR_TEST_CMD_SET,   PerformaceCmdSetLink}, */     \
+    {PERFOR_TEST_CMD_SET,   PerformaceCmdSetLink}, \
 /*    {COMM_TEST_CMD_SET,     CommTestCmdSetLink},  */      \
 /*    {SFRA_CMD_SET,          SfraCmdSetLink},    */        \
 	{PARAM_CALIB_CMD_SET,   ParamCalibCmdSetLink},\

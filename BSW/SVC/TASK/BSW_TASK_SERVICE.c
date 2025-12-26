@@ -11,6 +11,7 @@
 #include "DEBUG_PLATFORM/SFRA/SFRA.h"
 #include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
 #include "COMM_STACK/DP_STACK/APL/APL_STACK.H"
+#include "HAL_INC/BSW_HAL_TIMER.H"
 #endif
 
 #include "ISR_INC/BSW_ISR_CPUTIMER.h"
@@ -91,7 +92,7 @@ void bsw_svc_sche_exe_task(void)
      UINT32 u32task_timer = get_sys_timer();
      if(TIME_OVER_U32(s_u32task_timer_pre,u32task_timer)){
         #if(TASK_CPU_LOAD_TEST == 1)
-        UINT32 u32TaskTestTemp = 0xFFFFFFFF - GetTaskTestTimer();
+        UINT32 u32TaskTestTemp = 0xFFFFFFFF - get_performace_test_timer();
         g_u32CpuLoadTotalTimer += u32TaskTestTemp;
         g_u16CpuLoadCnt ++;
         #endif
@@ -102,11 +103,11 @@ void bsw_svc_sche_exe_task(void)
                 &&(p_task_reg->enable == 1)){
                 if(p_task_reg->taskProc != NULL){ //Judge if the task is NULL
                    #if(TASK_CPU_LOAD_TEST == 1)
-                   ResetTaskTestTimer();
+                   reset_performace_test_timer();
                    #endif
                    p_task_reg->taskProc();
                    #if(TASK_CPU_LOAD_TEST == 1)
-                   u32TaskTestTemp = GetTaskTestTimer();
+                   u32TaskTestTemp = get_performace_test_timer();
                    g_TaskScheVars.ua32TaskRunMinCnt[i] = (u32TaskTestTemp > g_TaskScheVars.ua32TaskRunMinCnt[i])?u32TaskTestTemp:g_TaskScheVars.ua32TaskRunMinCnt[i];
                    g_TaskScheVars.ua32TaskRunMaxCnt[i] = (u32TaskTestTemp < g_TaskScheVars.ua32TaskRunMaxCnt[i])?u32TaskTestTemp:g_TaskScheVars.ua32TaskRunMaxCnt[i];
                    #endif
@@ -116,7 +117,7 @@ void bsw_svc_sche_exe_task(void)
             p_task_reg++;
          }
         #if (TASK_CPU_LOAD_TEST == 1)
-          ResetTaskTestTimer();
+          reset_performace_test_timer();
         #endif
      }
 

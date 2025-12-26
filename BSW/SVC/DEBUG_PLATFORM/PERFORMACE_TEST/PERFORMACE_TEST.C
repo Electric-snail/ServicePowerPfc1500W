@@ -11,13 +11,14 @@
  *  Created on: 2022-07-18
  *      Author: Hongbo.jiang
  */
+#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
 #include "BSW_SVC_BASIC.h"
+#include "PUBLIC_INC/AUTO_REGISTER.H"
 #include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DEBUG_PLATFORM/DBG_BASIC.H"
-#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
-#include "HAL_INC/BSW_HAL_TIMER.H"
+#include "TASK/BSW_TASK_SERVICE.H"
 #include "string.h"
 
 #if(TASK_CPU_LOAD_TEST == 1)
@@ -36,20 +37,19 @@ void TaskGetCntAction(APL_DOMAIN *p_stAplDm)
 {
     FRAME_PROTOCOL_FORMAT   stFrame_info = {0};
     UINT16 ua16TaskCnt[2];
-    stFrame_info.stAplDm.unAplCmd.u16all             = p_stAplDm->unAplCmd.u16all;
-    stFrame_info.stNwmDm.unNwmAddr.bits.ul8DestAddr  = PC_NODE_ADDR;
-    stFrame_info.stAplDm.u16AplDLC                   = 4;
-    ua16TaskCnt[0]                                   = g_TaskScheVars.u8NumOfTasks;
-    ua16TaskCnt[1]                                   = GetTaskTestTimeInv();
-    stFrame_info.p_u16AppData                        = ua16TaskCnt;
+    stFrame_info.stAplDm.unAplCmd.u16all             				= p_stAplDm->unAplCmd.u16all;
+    stFrame_info.stNwmDm.unNwmAddr.bits.ul8DestAddr  	= PC_NODE_ADDR;
+    stFrame_info.stAplDm.u16AplDLC                   					= 4;
+    ua16TaskCnt[0]                                   								= g_TaskScheVars.u8NumOfTasks;
+    ua16TaskCnt[1]                                   								= get_performace_test_timer_inv();
+    stFrame_info.p_u16AppData                        						= ua16TaskCnt;
     Tpl_Single_Frame_Send(&stFrame_info);
 }
 
 
 void TaskGetItemAction(APL_DOMAIN *p_stAplDm)
 {
-    AUTO_REG_OBJ *p_auto_reg = NULL;
-    TASK_ITEM_OBJ *p_task_reg = NULL;
+    const TASK_ITEM_OBJ *p_task_reg = NULL;
     FRAME_PROTOCOL_FORMAT     stTaskGetItemFrame = {0};
     UINT16 *p_u16TempData = ((UINT16 *)p_stAplDm + sizeof(APL_DOMAIN));
     UINT16 ua16TaskItemBuff[((TASK_FUNC_NAME_MAX_LEN + 1)>> 1) + sizeof(TASK_ITEM_OBJ) + 4] = {0};
@@ -59,8 +59,7 @@ void TaskGetItemAction(APL_DOMAIN *p_stAplDm)
     if(p_stAplDm->u16AplDLC != 2)
         return;
     UINT16 i = *p_u16TempData;
-    p_auto_reg = (AUTO_REG_OBJ *)&TaskRegLoadStart;//&SvcRegLoadStart
-    p_u8char                        = p_auto_reg[i].name;
+    p_u8char                        = gc_stTaskItemTab[i].name;
     for(u8DataCnt = 0; u8DataCnt < ((TASK_FUNC_NAME_MAX_LEN + 1)>> 1);u8DataCnt ++){
         ua16TaskItemBuff[u8DataCnt] = *p_u8char;
         if(*p_u8char == '\0'){
@@ -76,7 +75,7 @@ void TaskGetItemAction(APL_DOMAIN *p_stAplDm)
     if(*p_u8char != '\0')
     ua16TaskItemBuff[u8DataCnt] = '\0';
     u8DataCnt ++;
-    p_task_reg = (TASK_ITEM_OBJ *)p_auto_reg[i].p_reg_data;
+    p_task_reg = &gc_stTaskItemTab[i];
     ua16TaskItemBuff[u8DataCnt++] = p_task_reg->enable;
     ua16TaskItemBuff[u8DataCnt++] = p_task_reg->u16Period;
     ua16TaskItemBuff[u8DataCnt++] = p_task_reg->u16Offset;
@@ -116,7 +115,7 @@ void TaskGetCpuLoadAction(APL_DOMAIN *p_stAplDm)
     Tpl_Single_Frame_Send(&stFrame_info);
 }
 
-void CpuLoadCalculate(void){
+void cpu_load_calc_task(void){
     static UINT8 s_u8FirstRunFlg = 1;
     if(s_u8FirstRunFlg == 1){
        s_u8FirstRunFlg = 0;
@@ -136,7 +135,8 @@ void CpuLoadCalculate(void){
 extern unsigned int HWI_STKBOTTOM;
 extern unsigned int HWI_STKTOP;
 extern unsigned int HWI_STKSIZE;
-void StackUsageCalculate(void){
+
+void stack_usage_calc_task(void){
     unsigned short *p_u16Temp    = (unsigned short *)&HWI_STKTOP;
     unsigned short *p_u16TempRef = (unsigned short *)&HWI_STKBOTTOM;
     unsigned long u32StackSize  = (unsigned long)&HWI_STKSIZE;
@@ -162,9 +162,9 @@ void IsrTestGetCntAction(APL_DOMAIN *p_stAplDm)
     stFrame_info.stAplDm.unAplCmd.u16all             = p_stAplDm->unAplCmd.u16all;
     stFrame_info.stNwmDm.unNwmAddr.bits.ul8DestAddr  = PC_NODE_ADDR;
     stFrame_info.stAplDm.u16AplDLC                   = 4;
-    ua16TaskCnt[0]                                   = u16IsrTestNum;
-    ua16TaskCnt[1]                                   = GetTaskTestTimeInv();
-    stFrame_info.p_u16AppData                        = ua16TaskCnt;
+    ua16TaskCnt[0]                                   			   = u16IsrTestNum;
+    ua16TaskCnt[1]                                   				= get_performace_test_timer_inv();
+    stFrame_info.p_u16AppData                       	 	= ua16TaskCnt;
     Tpl_Single_Frame_Send(&stFrame_info);
 }
 
@@ -202,7 +202,7 @@ void IsrTestGetItemAction(APL_DOMAIN *p_stAplDm)
     u32RunTimeTemp = (0xFFFFFFFF - p_isr_test_reg->u32RunTime);
     ua16IsrTestItemBuff[u8DataCnt++] = (u32RunTimeTemp) & 0x0000FFFF;
     ua16IsrTestItemBuff[u8DataCnt++] = (u32RunTimeTemp >> 16);
-    u32RunTimeTemp = 0;//(0xFFFFFFFF - p_isr_test_reg->u32RunMinTime);
+    u32RunTimeTemp = (0xFFFFFFFF - p_isr_test_reg->u32RunMinTime);
     ua16IsrTestItemBuff[u8DataCnt++] = (u32RunTimeTemp & 0x0000FFFF);
     ua16IsrTestItemBuff[u8DataCnt++] = (u32RunTimeTemp >> 16);
     u32RunTimeTemp = (0xFFFFFFFF - p_isr_test_reg->u32RunMaxTime);
@@ -217,13 +217,15 @@ void IsrTestGetItemAction(APL_DOMAIN *p_stAplDm)
 }
 #elif(MEASURE_TIME_TEST == 1)
 float g_f32MeasureTime = 0.0f;
-extern unsigned long g_u32TimerCnt;
-void MeasureTimeCalc(void){
+unsigned short g_u16TimerLockFlag = 0;
+unsigned long  g_u32TimerCnt = 0;
+
+void measure_time_calc_task(void){
     g_f32MeasureTime = (float)g_u32TimerCnt * GetCpuTimer1Inv()/1000000.0f;
 }
 
-//REG_TASK(MeasureTimeCalc,	1,  200, 	111)
-REG_CFG_ITEM_F32(MEASURE_TIME, g_f32MeasureTime, VAR_RD, 0, 0, 1000000);
+//REG_TASK(measure_time_calc_task,	1,  200, 	111)
+//REG_CFG_ITEM_F32(MEASURE_TIME, g_f32MeasureTime, VAR_RD, 0, 0, 1000000);
 #endif
 
 
@@ -242,9 +244,6 @@ void PerformaceCmdSetLink(void *p_stAplDmTemp){
         case CMD_ID_GET_CPU_LOAD:
             TaskGetCpuLoadAction(p_stAplDm);
         break;
-
-
-
 #elif((ISR_CPU_LOAD_TEST == 1)||(NESTING_ISR_CPU_LOAD_TEST == 1))
         case CMD_ID_GET_ISR_TEST_CNT:
             IsrTestGetCntAction(p_stAplDm);

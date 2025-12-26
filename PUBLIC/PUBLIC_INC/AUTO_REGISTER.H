@@ -29,12 +29,12 @@ enum AUTO_REG_TYPE
     AUTO_REG_ISR_INIT           = 0x07,
 };
 
-typedef struct __auto_reg_
+typedef struct
 {
-    const char            *name;
-    enum AUTO_REG_TYPE    emType;
-    void                  *p_reg_data;
-    unsigned long         u32Rvs;
+    const char            					*name;
+    enum AUTO_REG_TYPE   	 emType;
+    void                  						*p_reg_data;
+    unsigned long         					u32Rvs;
 }AUTO_REG_OBJ;
 
 #define AUTO_REG_SECTION  __attribute__((used,section(".AUTO_REG_SECTION"),retain))

@@ -15,6 +15,7 @@ Copyright Notice:
 #include "MCAL_INC/BSW_MCAL_GPIO.h"
 #include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
 #include "DEBUG_PLATFORM/SFRA/SFRA.H"
+#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
 #endif
 
 #include "HAL_INC/BSW_HAL_PWM.h"
@@ -27,6 +28,10 @@ Copyright Notice:
 #include "PFC_CTR/PFC_CTR.H"
 #include "POWER_FSM/POWER_FSM.h"
 
+#if(ISR_CPU_LOAD_TEST == 1)
+ISR_EXE_VAR_ENTITY(adcA1ISR)
+#endif
+
 #ifndef  DLLX64
 #pragma  CODE_SECTION(adcA1ISR, 				".TI.ramfunc");
 #pragma  DATA_SECTION(g_stAnaPhyRaw, 		".CtrlVariableSector");
@@ -37,12 +42,6 @@ Copyright Notice:
 
 
 #define        ADC_INT1                  						 (1 << 0)
-
-
-#if(ISR_CPU_LOAD_TEST == 1)
-ISR_EXE_VAR_ENTITY(ADCA1_ISR)
-#endif
-
 /*********variable declaration region *************************************/
 
 
@@ -59,6 +58,7 @@ unsigned short				         g_u16PllFirstStart;
 volatile unsigned short         g_u16FaultDetetFlag = 0;
 unsigned short						g_u16LoopWorkMode =  LOOP_INVALID_MODE;
 float										g_f32OpenDuty = 0.0f;
+
 void adc_isr_init(void)
 {
 /*	gs_stSogi.stCoff.f32Kp = 1.414f;
@@ -104,6 +104,7 @@ void adc_isr_init(void)
 	g_u16PllFirstStart                                           = 1;
 }
 
+//The run time is 8.5us
 INTERRUPT void adcA1ISR(void)
 {
             float 		f32VinL,		f32VinN,		f32Vpfc,			f32CurInductorAveH, 			f32CurInductorAveL,		f32IinL,		f32IinH;
@@ -114,10 +115,10 @@ INTERRUPT void adcA1ISR(void)
 
 			//测试CPU load 和任务执行时间时使用
 			#if(TASK_CPU_LOAD_TEST == 1)
-			 UINT16 u16TaskTestTimerStatus = GetTaskTestTimerStatus();
-			 StopTaskTestTimer();
+			 UINT16 u16TaskTestTimerStatus = get_performace_test_timer_status();
+			 stop_performace_test_timer();
 			#elif(ISR_CPU_LOAD_TEST == 1)
-			 ResetTaskTestTimer();
+			 reset_performace_test_timer();
 			#endif
 
 			 //计算各个采样值.
@@ -244,9 +245,9 @@ INTERRUPT void adcA1ISR(void)
 
 			//调用CPUload 和任务执行时间测试函数.
 			#if(TASK_CPU_LOAD_TEST == 1)
-				ReloadTaskTestTimerStatus(u16TaskTestTimerStatus);
+				reload_performace_test_timer_status(u16TaskTestTimerStatus);
 			#elif(ISR_CPU_LOAD_TEST == 1)
-				ISR_EXE_VAR_CALL(ADCA1_ISR);
+				ISR_EXE_VAR_CALL(adcA1ISR);
 			#endif
 				//Clear the interrupt flag
 				AdcaRegs.ADCINTFLGCLR.all |= ADC_INT1;

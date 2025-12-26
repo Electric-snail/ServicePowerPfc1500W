@@ -12,21 +12,12 @@
 #endif
 #include "ENV_CFG/SOFTWARE_ENV_CFG.h"
 
-extern unsigned short g_u16TimerLockFlag;
-extern unsigned long  g_u32TimerCnt;
-#define ResetTaskTestTimer()                {CpuTimer1Regs.TIM.all = 0xFFFFFFFF; CpuTimer1Regs.TCR.bit.TSS  = 0;}
-#define GetTaskTestTimer()                  (CpuTimer1Regs.TIM.all)
-#define StopTaskTestTimer()                 (CpuTimer1Regs.TCR.bit.TSS = 1)
-#define GetTaskTestTimerStatus()            (CpuTimer1Regs.TCR.all)
-#define ReloadTaskTestTimerStatus(Status)   (CpuTimer1Regs.TCR.all = Status)
-#define GetTaskTestTimeInv()                GetCpuTimer1Inv()
 
-#if(MEASURE_TIME_TEST == 1)
-#define ResetMeasureTimerLock()                    if(g_u16TimerLockFlag == 0){ CpuTimer1Regs.TIM.all = 0xFFFFFFFF; CpuTimer1Regs.TCR.bit.TSS  = 0; g_u16TimerLockFlag = 1;}
-#define GetMeasureTimerUnlock()                    if(g_u16TimerLockFlag == 1){ g_u32TimerCnt = 0xFFFFFFFFUL - CpuTimer1Regs.TIM.all;  g_u16TimerLockFlag = 0;}
-#else
-#define ResetMeasureTimerLock()
-#define GetMeasureTimerUnlock()
-#endif
+#define reset_performace_test_timer()                			{CpuTimer1Regs.TIM.all = 0xFFFFFFFF; CpuTimer1Regs.TCR.bit.TSS  = 0;}
+#define get_performace_test_timer()                 				 CpuTimer1Regs.TIM.all
+#define stop_performace_test_timer()                 			 CpuTimer1Regs.TCR.bit.TSS = 1
+#define get_performace_test_timer_status()            					 CpuTimer1Regs.TCR.all
+#define reload_performace_test_timer_status(Status)     CpuTimer1Regs.TCR.all = Status
+#define get_performace_test_timer_inv()                        GetCpuTimer1Inv()
 
 #endif /*_BSW_HAL_TIMER_H_ */

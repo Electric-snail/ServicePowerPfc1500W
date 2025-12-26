@@ -4,7 +4,7 @@
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
 #include "DP_STACK/APL/APL_STACK.H"
-#include "STORAGE/BSW_SVC_STORAGE.H"
+#include "STORAGE/BSW_STORAGE.H"
 #include "PUBLIC_INC/MEM_HANDLE.H"
 #include "TASK/BSW_TASK_SERVICE.H"
 #include "string.h"

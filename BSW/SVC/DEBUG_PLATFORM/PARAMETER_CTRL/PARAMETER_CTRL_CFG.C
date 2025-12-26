@@ -56,3 +56,8 @@ REG_CFG_ITEM_F32(VIN_RMS_FLT,			g_stMeasureOut.f32VinRmsLpf,			        					VAR_
 REG_CFG_ITEM_F32(PIN_AVE,						g_stMeasureOut.f32PinLpf,			        							VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
 
 REG_CFG_ITEM_F32(IIN_RMS,						g_stMeasureOut.f32IinRmsLpf,			        					VAR_RD,		      0,			      										  		0.0f,						 								 	0.0f);
+
+#if(MEASURE_TIME_TEST == 1)
+extern float g_f32MeasureTime;
+REG_CFG_ITEM_F32(MEASURE_TIME, g_f32MeasureTime, VAR_RD, 0, 0, 1000000);
+#endif

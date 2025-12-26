@@ -119,7 +119,7 @@ typedef enum
 //Whether to enable the CLA function in system.
 #define     CLA_ENABLE                      0
 
-//#define 		DB_TOOL_ENABLE          			TRUE
+#define 		DB_TOOL_ENABLE          			TRUE
 #define 		SFRA_ENABLED            				FALSE
 #define 		PARAM_CALIB_ENABLE      	FALSE
 
@@ -127,7 +127,7 @@ typedef enum
 #define     ISR_CPU_LOAD_TEST               				0
 #define     TASK_CPU_LOAD_TEST              			0
 #define     NESTING_ISR_CPU_LOAD_TEST       	0
-#define     MEASURE_TIME_TEST               			0
+#define     MEASURE_TIME_TEST               			1
 
 #if((ISR_CPU_LOAD_TEST == 1)&&(TASK_CPU_LOAD_TEST == 1))
 #error "Only one function can be done"

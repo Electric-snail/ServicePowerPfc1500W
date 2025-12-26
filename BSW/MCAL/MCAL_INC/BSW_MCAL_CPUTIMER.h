@@ -38,7 +38,7 @@ struct CPU_TIMER_CFG_PARAM{
 #define CPU_TIMER_CFG_TAB \
 {\
     {CPU_TMER1,     COUTER_MODE,  		0,   			3000.0},\
-    {CPU_TMER2,     TIMER_MODE,   		1,   			1000.0},\
+    {CPU_TMER2,     TIMER_MODE,   		    1,   			1000.0},\
 }
 
 #define  GetCpuTimer1Inv()               10.0f

@@ -27,7 +27,6 @@ typedef struct
   {storage_init,                		1},\
 /*  {sfra_init,                   1},*/\
   {sw_scope_init,               	1},\
-  {adc_isr_init,						1},\
 }
 #else
 #define SVC_INIT_TAB \

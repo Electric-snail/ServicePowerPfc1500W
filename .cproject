@@ -103,7 +103,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="BSW/CHIP_PACK/driverlib|ASW/SYS_FSM|BSW/MCAL/CMD/280013x_launchxl_demo_flash_lnk.cmd|BSW/MCAL/CMD/280013x_generic_flash_lnk.cmd|BSW/MCAL/CMD/280013x_flash_api_lnk.cmd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="BSW/CHIP_PACK/driverlib|ASW/SYS_FSM" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
