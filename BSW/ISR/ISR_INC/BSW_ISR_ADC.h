@@ -1,9 +1,9 @@
 /*********************************************************************
 File name:       BSW_ISR_ADC..h
-Purpose :         1. Define macro
-                          2.  Define data type, such as structure/enum
-                          3. import variables  by  including head file(s)
-                          4. export variables by keywords( extern)
+Purpose :           1. Define macro
+                          2. Define data type, such as structure/enum
+                          3. Import variables  by  including head file(s)
+                          4. Export variables by keywords(extern)
  
  *  Created on: 2022-07-13
  *      Author: Hongbo.jiang
@@ -43,7 +43,6 @@ extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
 extern 	volatile SOGI_OBJ_T   						gs_stSogi;
 extern 	volatile NOTCH_OBJ_T					gs_stVpfcNotchFilt;
 extern 	volatile ORTH_PLL_OBJ_T  				gs_stOrthPll;
-extern      volatile unsigned short						g_u16FaultDetetFlag;
 extern 	unsigned short										g_u16LoopWorkMode;
 extern		 float														g_f32OpenDuty;
 extern volatile float                  g_f32VpfcIsrLpf;
@@ -62,8 +61,6 @@ extern volatile float                  g_f32VpfcIsrLpf;
 #define f32_get_curr_inductor_ave()         g_stAnaPhyRaw.f32IlAve
 
 #define f32_get_vpfc_isr_lpf()               g_f32VpfcIsrLpf
-#define IsFastFaultDetect()                     g_u16FaultDetetFlag
-#define ClrFastFaultDetectFlag()            g_u16FaultDetetFlag = 0
 
 extern INTERRUPT void adcA1ISR(void);
 

@@ -5,7 +5,7 @@
  *      Author: xj8r1j
  */
 //CRC-8       x8+x5+x4+1
-#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
+#include "SOFTWARE_ENV_CFG.h"
 const UINT8 crc_table[] =
 {
    0, 94, 188, 226, 97, 63, 221, 131, 194, 156, 126, 32, 163, 253, 31, 65,

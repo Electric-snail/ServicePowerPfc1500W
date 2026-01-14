@@ -16,5 +16,6 @@ extern 	float g_f32VpfcSetTarget;
 
 extern 	void 	vpfc_mgt_init(void);
 
+extern     void 	vpfc_mgt_10ms_task(void);
 
 #endif /* ASW_VPFC_MGT_VPFC_MGT_H_ */

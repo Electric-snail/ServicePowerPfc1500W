@@ -43,7 +43,6 @@ typedef struct
 
 #define REG_CMD_LINK_ACTION_TAB  \
 {\
-    {PRI_SEC_DATA_CMD_SET,  pfc_llc_comm_rx_hander},   \
     {PARAM_CFG_CMD_SET,  	ParamCfgCmdSetLink},    	\
     {DATA_LOG_CMD_SET,  	DataLogCmdSetLink},    	    \
 	{SW_SCOPE_CMD_SET,   	SwScopeCmdSetLink}, 		\

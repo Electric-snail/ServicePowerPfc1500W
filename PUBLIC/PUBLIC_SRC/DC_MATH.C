@@ -1,8 +1,8 @@
 /*
  * DC_MATH.C
  *
- *  Created on: 2024Äê8ÔÂ28ÈÕ
- *      Author: xj8r1j
+ *  Created on: 	2024.8.28
+ *      	Author:  	Hongbo.Jiang
  */
 #include "PUBLIC_INC/DC_MATH.H"
 

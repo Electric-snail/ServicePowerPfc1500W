@@ -42,15 +42,15 @@ void 	pfc_controller_init(void){
 	//	g_f32VpfcPiKpFast									    = 100;
 	//	g_f32VpfcPiKiTsFast									= 5 * 2*3.1415926f * 5 * CTR_PERIOD;
 
-		g_f32VpfcPiKpSlow									    = 50.0f;
-		g_f32VpfcPiKiTsSlow									= 6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+		g_f32VpfcPiKpSlow									= 25.0f;
+		g_f32VpfcPiKiTsSlow								= 6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
 
 		gs_stVpfcPiCtrl.stIn.f32Fb                          = 0.0f;
 		gs_stVpfcPiCtrl.stIn.f32Ref                        = 0.0f;
 		gs_stVpfcPiCtrl.stCoff.f32Kp						= g_f32VpfcPiKpSlow;
 		gs_stVpfcPiCtrl.stCoff.f32KiTs					= g_f32VpfcPiKiTsSlow;
-		gs_stVpfcPiCtrl.stInner.f32Integrate			= 0;
-		gs_stVpfcPiCtrl.stInner.f32Err						= 0;
+		gs_stVpfcPiCtrl.stInner.f32Integrate			= -1000.0f;;
+		gs_stVpfcPiCtrl.stInner.f32Err					= 0;
 
 		gs_stIacPiGainCtrl.stCoff.f32IntegrateMax			= 0.95f;
 		gs_stIacPiGainCtrl.stCoff.f32IntegrateMin			= -1.0f;
@@ -62,10 +62,10 @@ void 	pfc_controller_init(void){
 	//	gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.2f * 666.6 * 380f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		gs_stIacPiGainCtrl.stCoff.f32Kp						= 20.0f;
 		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 20.0f * 4000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
-		gs_stIacPiGainCtrl.stInner.f32Integrate			= 0;
+		gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
 
-		gs_f32FeedCoff											    = 1.0f;
+		gs_f32FeedCoff											    = 0.65f;
 		g_stPfcOut.f32Duty											= 0.0f;
 }
 
@@ -75,16 +75,18 @@ void 	pfc_controller(void){
 		float f32Duty;
 	    float f32VacPll		= f32_get_vac_volt_pll();
 		float f32VpfcNpf    = f32_get_vpfc_npf();
-		float f32VpfcLpf    = f32_get_vpfc_isr_lpf();
+		float f32VpfcLpf     = f32_get_vpfc_isr_lpf();
 		float f32VinAbs		= ABSF(f32_get_vin_raw());
 		float f32VinRms		= f32_get_vin_rms_flt();
 		float f32Temp;
 		float f32IlRefTemp;
+		float f32PinAve;
 
 		gs_stVpfcPiCtrl.stIn.f32Ref = f32_get_vpfc_set();
 		gs_stVpfcPiCtrl.stIn.f32Fb = f32VpfcNpf;  //f32VpfcLpf;
 		
-		/*		f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
+		/*
+	   f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
    	   if (f32VpfcErrAbs < 10) {
 			gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
 			gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
@@ -99,9 +101,11 @@ void 	pfc_controller(void){
 		ctrl_pi_position(&gs_stVpfcPiCtrl);
 		//in case of the vpfc overshoot too high
 		f32Temp	   = f32VpfcLpf -  15.0f;
-		if(f32Temp	 > gs_stVpfcPiCtrl.stIn.f32Ref){
-			gs_stVpfcPiCtrl.stInner.f32Integrate = 0.0f;
-			gs_stVpfcPiCtrl.stOut.f32Out           = 0.0f;
+
+		if(f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref){
+			gs_stVpfcPiCtrl.stInner.f32Integrate 				= -1000.0f;
+			gs_stVpfcPiCtrl.stOut.f32Out           				= -1000.0f;
+			gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		}
 
 		if (f32VinRms < 35.0f)  f32VinRms = 35.0f;
@@ -133,6 +137,15 @@ void 	pfc_controller(void){
 		gs_stIacPiGainCtrl.stIn.f32Gain = 1/f32VpfcLpf;
 
 		ctrl_pi_gain_position(&gs_stIacPiGainCtrl);
+
+		f32PinAve =  f32_get_pin_lpf();
+		if(f32PinAve < 150){
+			gs_f32FeedCoff = 0.55f;
+		}else if(f32PinAve > 450.0f){
+			gs_f32FeedCoff  = 0.90f;
+		}else{
+			gs_f32FeedCoff = 0.55f + (f32PinAve - 150.0f)*0.0011666667f;
+		}
 
 		//Õ¼¿Õ±ÈÇ°À¡ feedforwared for vin & vout
 	 

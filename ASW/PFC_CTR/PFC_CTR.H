@@ -15,9 +15,9 @@ typedef struct {
 
 extern PFC_CTR_OUT				g_stPfcOut;
 
-#define             NOTICH_FILT_ENABLE				TRUE
-#define				f32_get_pwm_duty()             g_stPfcOut.f32Duty
-#define              f32_get_vin_pll_out()          g_stPfcOut.f32VinPll
+#define             	NOTICH_FILT_ENABLE				TRUE
+#define				f32_get_pwm_duty()             			g_stPfcOut.f32Duty
+#define              	f32_get_vin_pll_out()          			g_stPfcOut.f32VinPll
 
 extern		void 		pfc_controller(void);
 extern		void 		pfc_controller_init(void);

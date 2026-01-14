@@ -177,37 +177,37 @@ typedef struct
 //=================PARAM_CFG
 #ifndef DLLX64
 #define REG_CFG_ITEM_U8(var_name,var,attr,def,min,max) \
-        const param_item_cfg_u8_t   param_cfg_##var_name= {#var_name,attr,def,min,max,&(var)};\
+        const param_item_cfg_u8_t   param_cfg_##var_name= {#var_name,attr,def,min,max,(UINT8 *)&(var)};\
         param_item_t                param_##var_name = {(const void *)&param_cfg_##var_name,eu_uint8,sizeof(var),NULL};\
         AUTO_REG_ITEM(param_item_##var_name,AUTO_REG_PARAM_CFG,(void*)&param_##var_name)
 
 #define REG_CFG_ITEM_I8(var_name,var,attr,def,min,max) \
-        const param_item_cfg_i8_t   param_cfg_##var_name= {#var_name,attr,def,min,max,&(var)};\
+        const param_item_cfg_i8_t   param_cfg_##var_name= {#var_name,attr,def,min,max,(INT8 *)&(var)};\
         param_item_t                param_##var_name = {(const void *)&param_cfg_##var_name,eu_int8,sizeof(var),NULL};\
         AUTO_REG_ITEM(param_item_##var_name,AUTO_REG_PARAM_CFG,(void*)&param_##var_name)
 
 #define REG_CFG_ITEM_U16(var_name,var,attr,def,min,max) \
-        const param_item_cfg_u16_t  param_cfg_##var_name= {#var_name,attr,def,min,max,&(var)};\
+        const param_item_cfg_u16_t  param_cfg_##var_name= {#var_name,attr,def,min,max,(UINT16 *)&(var)};\
         param_item_t                param_##var_name = {(const void *)&param_cfg_##var_name,eu_uint16,sizeof(var),NULL};\
         AUTO_REG_ITEM(param_item_##var_name,AUTO_REG_PARAM_CFG,(void*)&param_##var_name)
 
 #define REG_CFG_ITEM_I16(var_name,var,attr,def,min,max) \
-        const param_item_cfg_i16_t  param_cfg_##var_name= {#var_name,attr,def,min,max,&(var)};\
+        const param_item_cfg_i16_t  param_cfg_##var_name= {#var_name,attr,def,min,max,(INT16 *)&(var)};\
         param_item_t                param_##var_name = {(const void *)&param_cfg_##var_name,eu_int16,sizeof(var),NULL};\
         AUTO_REG_ITEM(param_item_##var_name,AUTO_REG_PARAM_CFG,(void*)&param_##var_name)
 
 #define REG_CFG_ITEM_U32(var_name,var,attr,def,min,max) \
-        const param_item_cfg_u32_t  param_cfg_##var_name= {#var_name,attr,def,min,max,&(var)};\
+        const param_item_cfg_u32_t  param_cfg_##var_name= {#var_name,attr,def,min,max,(UINT32 *)&(var)};\
         param_item_t                param_##var_name = {(const void *)&param_cfg_##var_name, eu_uint32,sizeof(var), NULL};\
         AUTO_REG_ITEM(param_item_##var_name,AUTO_REG_PARAM_CFG,(void*)&param_##var_name)
 
 #define REG_CFG_ITEM_I32(var_name,var,attr,def,min,max) \
-        const param_item_cfg_i32_t  param_cfg_##var_name= {#var_name,attr,def,min,max,&(var)};\
+        const param_item_cfg_i32_t  param_cfg_##var_name= {#var_name,attr,def,min,max,(INT32 *)&(var)};\
         param_item_t                param_##var_name = {(const void *)&param_cfg_##var_name,eu_int32,sizeof(var),NULL};\
         AUTO_REG_ITEM(param_item_##var_name,AUTO_REG_PARAM_CFG,(void*)&param_##var_name)
 
 #define REG_CFG_ITEM_F32(var_name,var,attr,def,min,max) \
-        const param_item_cfg_f32_t  param_cfg_##var_name= {#var_name,attr,def,min,max,&(var)};\
+        const param_item_cfg_f32_t  param_cfg_##var_name= {#var_name,attr,def,min,max,(float *)&(var)};\
         param_item_t                param_##var_name = {(const void *)&param_cfg_##var_name,eu_fp32,sizeof(var),NULL};\
         AUTO_REG_ITEM(param_item_##var_name,AUTO_REG_PARAM_CFG,(void*)&param_##var_name)
 

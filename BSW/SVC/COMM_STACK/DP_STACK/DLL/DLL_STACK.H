@@ -31,7 +31,7 @@ enum DLL_RX_FMS{
     DLC_BYTE0_FMS,
     DLC_BYTE1_FMS,
     DATA_BYTE_FMS,
-    CRC_CHECK_BYTE_FMS,
+    DATA1_BYTE_FMS,
 };
 
 //The head word0 bits defined,

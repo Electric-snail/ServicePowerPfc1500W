@@ -11,8 +11,8 @@
 #include "ENV_CFG/SOFTWARE_ENV_CFG.H"
 #include "DP_STACK/DP_STACK_CFG.H"
 
-#define   SCI_TO_PC_FIFO             FIFO_16_WORD
-#define   SCI_TO_CTR_FIFO            FIFO_8_WORD
+#define   SCI_TO_PC_FIFO               	FIFO_16_WORD
+#define   SCI_TO_CTR_FIFO            	FIFO_8_WORD
 #if(DP_SCIA_ENABLE == 1)
     extern UINT16  g_au16DllSciaRxMsgBuff[];
 #endif
@@ -74,6 +74,7 @@ extern void scia_err_handler(void);
 extern void scia_send_from_ring(void);
 
 extern INT16 dll_scib_frame_write(void *);
+extern INT16 dll_scib_frame_write1(UINT16 *p_u16TxData,  UINT16 u16TxWordSize);
 extern INT16 dll_scib_frame_read(UINT16 *);
 extern INT16 dll_scib_frame_read_fifo(UINT16 *);
 extern void scib_err_handler(void);

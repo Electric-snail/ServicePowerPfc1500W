@@ -12,21 +12,21 @@
 
 enum AUTO_REG_TYPE
 {
-    AUTO_REG_TYPE_RESV          = 0x00,
+    AUTO_REG_TYPE_RSV          	= 0x00,
 
-    AUTO_REG_TASK               = 0x01,
+    AUTO_REG_TASK               		= 0x01,
 
-    AUTO_REG_SVC_INIT           = 0x02,
+    AUTO_REG_SVC_INIT           	= 0x02,
 
-    AUTO_REG_PARAM_CFG          = 0x03,
+    AUTO_REG_PARAM_CFG         = 0x03,
 
-    AUTO_REG_PARAM_CFG_CB       = 0X04,
+    AUTO_REG_PARAM_CFG_CB  = 0x04,
 
-    AUTO_REG_ASW_INIT           = 0X05,
+    AUTO_REG_ASW_INIT              = 0x05,
 
-    AUTO_REG_ISR_TEST           = 0x06,
+    AUTO_REG_ISR_TEST              = 0x06,
 
-    AUTO_REG_ISR_INIT           = 0x07,
+    AUTO_REG_ISR_INIT               = 0x07,
 };
 
 typedef struct

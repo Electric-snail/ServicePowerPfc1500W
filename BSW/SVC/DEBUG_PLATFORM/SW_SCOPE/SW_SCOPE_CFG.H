@@ -10,7 +10,9 @@
 #include "ISR_INC/BSW_ISR_ADC.H"
 #include "PUBLIC_INC/DC_MATH.H"
 #include "PUBLIC_INC/DF_MATH.H"
+#include "PFC_CTR/PFC_CTR.H"
 #include "MEASURE/MEASURE.H"
+#include "DIAGNOSTIC/DIAGNOSTIC.H"
 #include "PUBLIC_INC/POWER_CALC.H"
 
 extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
@@ -36,7 +38,7 @@ extern    VIN_DROP_DIG_OBJ_T       				g_stVinDropDiag;
 //Unit --> ms
 #define SW_SCOPE_TASK_PERIOD        	1
 
-#define STARTUP_MODE     			STARTUP_ITSELF
+#define STARTUP_MODE     			STARTUP_GUI
 #define F32_THRD_VALUE              60.0f
 #define TRIGG_INDEX                     2
 #define ACQ_MODE                          CTR_FRE
@@ -46,8 +48,8 @@ extern    VIN_DROP_DIG_OBJ_T       				g_stVinDropDiag;
 
 //-------------name------------------------------startup_mode------------cache_size
 SW_SCOPE_START(PFC_SCOPE,		 STARTUP_MODE,  SW_SCOPE_CASH_SIZE)
-SW_SCOPE_ITEM(g_stAnaPhyRaw.f32Vin)
-SW_SCOPE_ITEM(gs_stOrthPll.stOut.f32SigAlpha)
-SW_SCOPE_ITEM(gs_stOrthPll.stOut.f32SigBeta)
+SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn. f32Fb)
+SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Ref)
+SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stOut.f32Out)
 SW_SCOPE_END()
 

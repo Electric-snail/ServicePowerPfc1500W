@@ -83,12 +83,12 @@
 #define 	 FULL_RANGE_CUR_INDUCTOR_H								70.91f
 #define 	 HW_OFFSET_CUR_INDUCTOR_H								0.032f
 
-#define 	 FULL_RANGE_IIN_L										35.455f
-#define 	 HW_OFFSET_IIN_L                						0.064f
+#define 	 FULL_RANGE_IIN_L														35.455f
+#define 	 HW_OFFSET_IIN_L                											0.064f
 
-#define 	 FULL_RANGE_IIN_H									70.91f
-#define 	 HW_OFFSET_IIN_H                						0.032f
+#define 	 FULL_RANGE_IIN_H														70.91f
+#define 	 HW_OFFSET_IIN_H                											0.032f
 
-#define    IL_CBC_VALUE												20.0f
-#define   VPFC_HW_OVP												445.0f
+#define    IL_CBC_VALUE																	28.0f
+#define   VPFC_HW_OVP																	455.0f
 #endif /* BSW_BASIC_HARDWARE_BASIC_ENV_H_ */

@@ -22,6 +22,7 @@
 #include "DERATING/DERATING.h"
 #include "SYS_FSM/SYS_FSM.h"
 #include "POWER_FSM/POWER_FSM.h"
+#include "VPFC_MGT/VPFC_MGT.H"
 #include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 
 extern UINT32 TaskRegLoadStart;

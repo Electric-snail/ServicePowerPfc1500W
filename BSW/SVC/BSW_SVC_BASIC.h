@@ -31,9 +31,8 @@ typedef struct
 #else
 #define SVC_INIT_TAB \
 {\
-  {bsw_svc_vScheInit,			1},\
-  {storage_init,			    1},\
-  {adc_isr_init,				1},\
+	{bsw_svc_vScheInit,			1},\
+	{sys_fsm_init	,			1},\
 }
 #endif
 extern void bsw_svc_init(void);

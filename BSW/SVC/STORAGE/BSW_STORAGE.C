@@ -1,8 +1,8 @@
 /*
- * BSW_SVC_STORAGE.C
+ * BSW_STORAGE.c
  *
- *  Created on: 2025.8.26
- *      Author: jhb72
+ *  Created on: 2023.3.20
+ *      Author:  Hongbo.Jiang
  */
 #include "SOFTWARE_ENV_CFG.H"
 #include "PUBLIC_INC/MEM_HANDLE.H"
@@ -12,11 +12,10 @@
 extern const UINT8 crc_table[];                   // CRC table.
 
 volatile UINT16 g_u16StoreFlag = 0;
-
+STORAGE_DATA_T g_stStoreData;
 
 #pragma DATA_SECTION(gc_stStoreData, ".STORAGE_REG_SECTION");
-const STORAGE_DATA_T gc_stStoreData;     //存储在Flash 区
-STORAGE_DATA_T 			g_stStoreData;      //存储在RAM区
+const STORAGE_DATA_T gc_stStoreData;
 
 void storage_init(void){
      UINT16 i = 0;

@@ -1,13 +1,14 @@
 /*
- * BSW_STORAGE.H
+ * BSW_STORAGE.h
  *
- *  Created on: 2025.8.26.
- *      Author:  Hongbo.jiang
+ *  Created on: 2023.3.20
+ *      Author: hongbo.jiang
  */
 
 #ifndef BSW_SVC_STORAGE_BSW_STORAGE_H_
 #define BSW_SVC_STORAGE_BSW_STORAGE_H_
 
+#include    "SOFTWARE_ENV_CFG.h"
 #include    "DEBUG_PLATFORM/PARAMETER_CALIB/PARAMETER_CALIB.h"
 
 typedef struct{

@@ -121,7 +121,7 @@ typedef enum
 
 #define 		DB_TOOL_ENABLE          			TRUE
 #define 		SFRA_ENABLED            				FALSE
-#define 		PARAM_CALIB_ENABLE      	FALSE
+#define 		PARAM_CALIB_ENABLE      	    FALSE
 
 #if(DB_TOOL_ENABLE == TRUE)
 #define     ISR_CPU_LOAD_TEST               				0

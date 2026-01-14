@@ -16,6 +16,7 @@ Copyright Notice:
 #include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
 #include "DEBUG_PLATFORM/SFRA/SFRA.H"
 #include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
+#include "DEBUG_PLATFORM/PARAMETER_CALIB/PARAMETER_CALIB.H"
 #endif
 
 #include "HAL_INC/BSW_HAL_PWM.h"
@@ -33,11 +34,11 @@ ISR_EXE_VAR_ENTITY(adcA1ISR)
 #endif
 
 #ifndef  DLLX64
-#pragma  CODE_SECTION(adcA1ISR, 				".TI.ramfunc");
-#pragma  DATA_SECTION(g_stAnaPhyRaw, 		".CtrlVariableSector");
+#pragma  CODE_SECTION(adcA1ISR, 					".TI.ramfunc");
+#pragma  DATA_SECTION(g_stAnaPhyRaw, 			".CtrlVariableSector");
 //#pragma  DATA_SECTION(gs_stSogi, 					".CtrlVariableSector");
-#pragma  DATA_SECTION(gs_stVpfcNotchFilt, ".CtrlVariableSector");
-#pragma  DATA_SECTION(gs_stOrthPll, 			".CtrlVariableSector");
+#pragma  DATA_SECTION(gs_stVpfcNotchFilt, 		".CtrlVariableSector");
+#pragma  DATA_SECTION(gs_stOrthPll, 				".CtrlVariableSector");
 #endif
 
 
@@ -55,7 +56,6 @@ volatile ORTH_PLL_OBJ_T  		    gs_stOrthPll;
 
 volatile float                  		g_f32VpfcIsrLpf = 0.0f;
 unsigned short				         g_u16PllFirstStart;
-volatile unsigned short         g_u16FaultDetetFlag = 0;
 unsigned short						g_u16LoopWorkMode =  LOOP_INVALID_MODE;
 float										g_f32OpenDuty = 0.0f;
 
@@ -108,23 +108,23 @@ void adc_isr_init(void)
 INTERRUPT void adcA1ISR(void)
 {
             float 		f32VinL,		f32VinN,		f32Vpfc,			f32CurInductorAveH, 			f32CurInductorAveL,		f32IinL,		f32IinH;
-
+            float        f32CalibK,   f32CalibOffset;
             float       f32Duty;
 
             UINT16 	u16PwmCounter;
 
 			//测试CPU load 和任务执行时间时使用
 			#if(TASK_CPU_LOAD_TEST == 1)
-			 UINT16 u16TaskTestTimerStatus = get_performace_test_timer_status();
-			 stop_performace_test_timer();
+				 UINT16 u16TaskTestTimerStatus = get_performace_test_timer_status();
+				 stop_performace_test_timer();
 			#elif(ISR_CPU_LOAD_TEST == 1)
-			 reset_performace_test_timer();
+				 reset_performace_test_timer();
 			#endif
 
 			 //计算各个采样值.
 			f32VinL 							= bsw_hal_calc_vin_l();
 			f32VinN 							= bsw_hal_calc_vin_n();
-			f32Vpfc 							=	 bsw_hal_calc_vpfc();
+			f32Vpfc 							= bsw_hal_calc_vpfc();
 			f32CurInductorAveH		= bsw_hal_calc_cur_inductor_ave_h();
 			f32CurInductorAveL		= bsw_hal_calc_cur_inductor_ave_l();
 			f32IinL 							= bsw_hal_calc_iin_l();
@@ -133,41 +133,25 @@ INTERRUPT void adcA1ISR(void)
 			//校准各个采样值
 			#if(PARAM_CALIB_ENABLE == TRUE)
 			//0~10： low;  10-40 high
-				   f32CalibK 		= (float)i16_get_param_calib_k(IL_CALIB_L)*0.00390625f;
-				   f32CalibOffset	= (float)i16_get_param_calib_offset(IL_CALIB_L)*0.00390625f;
-				   g_stAnaPhyRaw.f32IlAveL = f32CurInductorAveTempL * f32CalibK + f32CalibOffset;
-
-				   f32CalibK 		= (float)i16_get_param_calib_k(IL_CALIB_H)*0.00390625f;
-				   f32CalibOffset	= (float)i16_get_param_calib_offset(IL_CALIB_H)*0.00390625f;
-				   g_stAnaPhyRaw.f32IlAveH = f32CurInductorAveTempH * f32CalibK + f32CalibOffset;
-
-				   f32CalibK 		= (float)i16_get_param_calib_k(VIN_L_CALI)*0.00390625f;
-				   f32CalibOffset	= (float)i16_get_param_calib_offset(VIN_L_CALI)*0.00390625f;
-				   g_stAnaPhyRaw.f32VinL = f32VinL * f32CalibK + f32CalibOffset;
-
-				   f32CalibK 		= (float)i16_get_param_calib_k(VIN_N_CALI)*0.00390625f;
-				   f32CalibOffset	= (float)i16_get_param_calib_offset(VIN_N_CALI)*0.00390625f;
-				   g_stAnaPhyRaw.f32VinN= f32VinN * f32CalibK + f32CalibOffset;
-
-				   f32CalibK 		= (float)i16_get_param_calib_k(VPFC_CALI)*0.00390625f;
-				   f32CalibOffset	= (float)i16_get_param_calib_offset(VPFC_CALI)*0.00390625f;
+				   f32CalibK 		= (float)i16_get_param_calib_k(VOUT_CALIB)*0.00390625f;
+				   f32CalibOffset	= (float)i16_get_param_calib_offset(VOUT_CALIB)*0.00390625f;
 				   g_stAnaPhyRaw.f32Vpfc= f32Vpfc * f32CalibK + f32CalibOffset;
 
-				   f32CalibK 			= (float)i16_get_param_calib_k(IIN_L_CALI)*0.00390625f;
-				   f32CalibOffset	= (float)i16_get_param_calib_offset(IIN_L_CALI)*0.00390625f;
-				   g_stAnaPhyRaw.f32IinL		= f32IinL * f32CalibK + f32CalibOffset;
-
-				   f32CalibK 			= (float)i16_get_param_calib_k(IIN_H_CALI)*0.00390625f;
-				   f32CalibOffset	= (float)i16_get_param_calib_offset(IIN_H_CALI)*0.00390625f;
-				   g_stAnaPhyRaw.f32IinH		= f32IinH * f32CalibK + f32CalibOffset;
+				   g_stAnaPhyRaw.f32IlAveL  		= f32CurInductorAveL;
+				   g_stAnaPhyRaw.f32IlAveH 	 	= f32CurInductorAveH;
+				   g_stAnaPhyRaw.f32VinL 			= f32VinL;
+				   g_stAnaPhyRaw.f32VinN 		= f32VinN;
+				   g_stAnaPhyRaw.f32Vpfc			= f32Vpfc;
+				   g_stAnaPhyRaw.f32IinL        	= f32IinL;
+				   g_stAnaPhyRaw.f32IinH        	= f32IinH;
 			#else
 				   g_stAnaPhyRaw.f32IlAveL  	= f32CurInductorAveL;
 				   g_stAnaPhyRaw.f32IlAveH 	    = f32CurInductorAveH;
-				   g_stAnaPhyRaw.f32VinL 		= f32VinL;
+				   g_stAnaPhyRaw.f32VinL 			= f32VinL;
 				   g_stAnaPhyRaw.f32VinN 		= f32VinN;
-				   g_stAnaPhyRaw.f32Vpfc		= f32Vpfc;
-				   g_stAnaPhyRaw.f32IinL        = f32IinL;
-				   g_stAnaPhyRaw.f32IinH        = f32IinH;
+				   g_stAnaPhyRaw.f32Vpfc			= f32Vpfc;
+				   g_stAnaPhyRaw.f32IinL        	= f32IinL;
+				   g_stAnaPhyRaw.f32IinH        	= f32IinH;
 			#endif
 
 			//将L,N各采样值，准换成Vin, 根据采样信号的大小，选择信号通道
@@ -183,7 +167,7 @@ INTERRUPT void adcA1ISR(void)
 			else
 				g_stAnaPhyRaw.f32Iin  = g_stAnaPhyRaw.f32IinL;
 
-			LPF(g_f32VpfcIsrLpf, g_stAnaPhyRaw.f32Vpfc, 5000.0f, (float)CTR_PERIOD);
+			LPF(g_f32VpfcIsrLpf, g_stAnaPhyRaw.f32Vpfc, 8000.0f, (float)CTR_PERIOD);
 			//执行需要在中断执行的MEASURE的任务
 			measure_fast_task();
 
@@ -225,7 +209,7 @@ INTERRUPT void adcA1ISR(void)
 			}
 
 #elif (defined CLOSE_LOOP_CTR)||(defined IL_CLOSE_LOOP_MODE)
-			 if ((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)) {
+			 if ((u16_get_fault_flag() == 0)&&(u16_get_controller_cmd() == 1)) {
 				 pfc_controller();
 				 f32Duty 		        = f32_get_pwm_duty();
 				 set_pfc_pwm_duty(f32Duty,   u16PwmCounter);

@@ -29,10 +29,10 @@ REG_CFG_ITEM_F32(VPFC_TARGET,			   g_f32VpfcSetTarget,						    							VAR_WR,		
 REG_CFG_ITEM_F32(VPFC_FILT_DC,			   gs_stVpfcNotchFilt.stCoff.f32Width0,						    VAR_WR,		      		0.001,			      										0.00001,						 							0.1);
 REG_CFG_ITEM_F32(VPFC_FILT_AC,			   gs_stVpfcNotchFilt.stCoff.f32Width1,						    VAR_WR,		      		0.0083,			      								    0.000083f,						 						0.83);
 
-REG_CFG_ITEM_U16(LLC_HISTORY_AUTO_FAULT, 		g_stDiagHisStatus.unAutoRecvFault.u16All,     VAR_WR,     0,    								 0,    				0xFFFF);
-REG_CFG_ITEM_U16(LLC_HISTORY_NO_FAULT,   			g_stDiagHisStatus.unNoRecvFault.u16All,      	VAR_WR,     0,     							 0,    				0xFFFF);
-REG_CFG_ITEM_U16(LLC_CURRENT_AUTO_FAULT, 		g_stDiagStatus.unAutoRecvFault.u16All,       		VAR_RD,     0,     							 0,    				0xFFFF);
-REG_CFG_ITEM_U16(LLC_CURRENT_NO_FAULT,   			g_stDiagStatus.unNoRecvFault.u16All,         		VAR_RD,     0,     							 0,    				0xFFFF);
+REG_CFG_ITEM_U16(HISTORY_AUTO_FAULT, 		g_stDiagHisStatus.unAutoRecvFault.u16All,     VAR_WR,     0,    								 0,    				0xFFFF);
+REG_CFG_ITEM_U16(HISTORY_NO_FAULT,   			g_stDiagHisStatus.unNoRecvFault.u16All,      	VAR_WR,     0,     							 0,    				0xFFFF);
+REG_CFG_ITEM_U16(CURRENT_AUTO_FAULT, 		g_stDiagStatus.unAutoRecvFault.u16All,       		VAR_RD,     0,     							 0,    				0xFFFF);
+REG_CFG_ITEM_U16(CURRENT_NO_FAULT,   			g_stDiagStatus.unNoRecvFault.u16All,         		VAR_RD,     0,     							 0,    				0xFFFF);
 
 REG_CFG_ITEM_U16(PWR_FSM,	   					fsm_obj_POWER_FSM.u8CurStateId,						VAR_RD,			  0,						  										0,																4);
 

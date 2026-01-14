@@ -13,7 +13,6 @@
  */
 #include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
 #include "BSW_SVC_BASIC.h"
-#include "PUBLIC_INC/AUTO_REGISTER.H"
 #include "DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/NWM/NWM_STACK.H"
 #include "DP_STACK/TPL/TPL_STACK.H"
@@ -38,11 +37,11 @@ void TaskGetCntAction(APL_DOMAIN *p_stAplDm)
     FRAME_PROTOCOL_FORMAT   stFrame_info = {0};
     UINT16 ua16TaskCnt[2];
     stFrame_info.stAplDm.unAplCmd.u16all             				= p_stAplDm->unAplCmd.u16all;
-    stFrame_info.stNwmDm.unNwmAddr.bits.ul8DestAddr  	= PC_NODE_ADDR;
-    stFrame_info.stAplDm.u16AplDLC                   					= 4;
-    ua16TaskCnt[0]                                   								= g_TaskScheVars.u8NumOfTasks;
-    ua16TaskCnt[1]                                   								= get_performace_test_timer_inv();
-    stFrame_info.p_u16AppData                        						= ua16TaskCnt;
+    stFrame_info.stNwmDm.unNwmAddr.bits.ul8DestAddr  				= PC_NODE_ADDR;
+    stFrame_info.stAplDm.u16AplDLC                   				= 4;
+    ua16TaskCnt[0]                                   				= g_TaskScheVars.u8NumOfTasks;
+    ua16TaskCnt[1]                                   				= get_performace_test_timer_inv();
+    stFrame_info.p_u16AppData                        				= ua16TaskCnt;
     Tpl_Single_Frame_Send(&stFrame_info);
 }
 
@@ -162,9 +161,9 @@ void IsrTestGetCntAction(APL_DOMAIN *p_stAplDm)
     stFrame_info.stAplDm.unAplCmd.u16all             = p_stAplDm->unAplCmd.u16all;
     stFrame_info.stNwmDm.unNwmAddr.bits.ul8DestAddr  = PC_NODE_ADDR;
     stFrame_info.stAplDm.u16AplDLC                   = 4;
-    ua16TaskCnt[0]                                   			   = u16IsrTestNum;
-    ua16TaskCnt[1]                                   				= get_performace_test_timer_inv();
-    stFrame_info.p_u16AppData                       	 	= ua16TaskCnt;
+    ua16TaskCnt[0]                                   = u16IsrTestNum;
+    ua16TaskCnt[1]                                   = get_performace_test_timer_inv();
+    stFrame_info.p_u16AppData                        = ua16TaskCnt;
     Tpl_Single_Frame_Send(&stFrame_info);
 }
 

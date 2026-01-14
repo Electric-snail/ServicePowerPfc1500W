@@ -132,10 +132,15 @@ void  power_softstart_exe(void) {
 			}
 		}
 	}
+	if (u16_get_fault_flag() == TRUE) {
+		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
+	}
 }
 
 UINT8 power_softstart_cond(UINT16 u16TrigEven) {
-	if (u16TrigEven == PWR_SOFTSTART_CMP)		return PWR_STATUS_RUN;
+	if (u16TrigEven == PWR_SOFTSTART_CMP)					return PWR_STATUS_RUN;
+	if (u16TrigEven == PWR_FAULT_EVEN)			    			return PWR_STATUS_FAULT;
+
 	return PWR_STATUS_SOFTSTART;
 }
 
@@ -145,13 +150,16 @@ void  power_run_in(void) {
 
 void  power_run_exe(void) {
 	float f32VpfcSetTarget = f32_get_vpfc_set_target();
-	if (g_stPwrFsmOut.f32VpfcSet < f32VpfcSetTarget) {
-		EMIT_FSM(POWER_FSM, PWR_SOFTSTART_REQ_EVEN);
-	}
-	else {
+
+	if((f32VpfcSetTarget <= 423.0f)&&(f32VpfcSetTarget >=399.0f))
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
-	}
-	if (IsFastFaultDetect() == TRUE) {
+//	if (g_stPwrFsmOut.f32VpfcSet < f32VpfcSetTarget) {
+//		EMIT_FSM(POWER_FSM, PWR_SOFTSTART_REQ_EVEN);
+//	}
+//	else {
+//		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
+//	}
+	if (u16_get_fault_flag() == TRUE) {
 		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
 	}
 }
@@ -179,7 +187,11 @@ void  power_fault_exe(void) {
 		    }
 	}
 
-	if((g_u16PwrFsmTimerCnt > 50) ||	(f32VpfcLpf < 270.0f)){
+	if(f32VpfcLpf < 350.0f){
+		   BSW_HAL_RELAY_OFF();
+	}
+
+	if((g_u16PwrFsmTimerCnt > 40) ||	(f32VpfcLpf < 340.0f)){
 		 BSW_HAL_BUCK_NOT_OK();
 		 if((u16_get_auto_recv_diag() == 0x0000)&&(u16_get_no_recv_diag() == 0x0000)){
 				u16_clr_fault_flag();

@@ -19,7 +19,8 @@ typedef struct {
     unsigned short  b1VinOfp    : 1;
     unsigned short  b1VinUfp    : 1;
     unsigned short  b1VinDrop  : 1;
-    unsigned short  b11Rvs      :  11;
+    unsigned short  b3Rvs         :  3;
+    unsigned short  b8Rvs		  : 8;
 }AUTO_RECV_FAULT_BITS;
 
 typedef struct {
@@ -28,11 +29,18 @@ typedef struct {
     unsigned short  b1VpfcSlowOvp 	: 1;
     unsigned short  b1VpfcFastUvp 	: 1;
     unsigned short  b1VpfcSlowUvp 	: 1;
+    unsigned short  b3Rvs					: 3;
     unsigned short  b1InOpp       			: 1;
     unsigned short  b1InRmsOcp    		: 1;
     unsigned short  b1IlCbbp      			: 1;
-    unsigned short  b6Rvs         			: 8;
+    unsigned short  b5Rvs         			: 5;
 }NO_RECV_FAULT_BITS;
+
+typedef struct {
+    unsigned short  b1VinOvw   			: 1;
+    unsigned short  b1VinUvw				: 1;
+    unsigned short  b14Rvs         			: 14;
+}WARN_BITS;
 
 typedef union {
     unsigned short 			u16All;
@@ -44,11 +52,15 @@ typedef union {
     NO_RECV_FAULT_BITS      bits;
 }NO_RECV_FAULT_WORD_U;
 
-
+typedef union {
+    unsigned short 			u16All;
+    WARN_BITS      			bits;
+}WARN_WORD_U;
 
 typedef struct {
     AUTO_RECV_FAULT_WORD_U  unAutoRecvFault;
-    NO_RECV_FAULT_WORD_U    unNoRecvFault;
+    NO_RECV_FAULT_WORD_U       unNoRecvFault;
+    WARN_WORD_U                           unWarn;
 }DIAG_STATUS_T;
 
 
@@ -81,18 +93,18 @@ typedef struct
 /*---emSwDiagId-----------------u16ErrCnt-------u16RcvrCnt------f32PrtctThreshold------f32RcvrThreshold*/
 #define DIAG_PARAM_TAB          \
 {\
-    { VIN_RMS_OVP_ID,               5,           10,            270,                    265},\
-    { VIN_RMS_UVP_ID,               5,           10,             80,                     85 },\
-    { VIN_OFP_ID,                   	   5,           10,             65,                     66 },\
-    { VIN_UFP_ID,              	           5,           10,             44,                     45 },\
-    { VPFC_OVP_HW_ID,             1,           0,              0.5,                    0 },\
-    { IL_CBBP_ID,                			100,          0,              0.5,                    0 },\
-    { VPFC_FAST_OVP_ID,          10,          0,              440,                    0 },\
-    { VPFC_SLOW_OVP_ID,          20,          0,            435,                    0},\
-    { VPFC_FAST_UVP_ID,            5,           0,              280,                     0},\
-    { VPFC_SLOW_UVP_ID,          20,          0,             260,                     0},\
-    { IN_OPP_ID,                    			5,           0,              1000,                   0 },\
-    { IN_RMS_OCP_ID,               		5,           0,              15,                     0 },\
+    { VIN_RMS_OVP_ID,               5,           				10,            			285,                    280},\
+    { VIN_RMS_UVP_ID,               5,          				10,             			80,                      85 },\
+    { VIN_OFP_ID,                   	   5,           				10,             			65,                      66 },\
+    { VIN_UFP_ID,              	           5,           				10,             			44,                      45 },\
+    { VPFC_OVP_HW_ID,              1,           				0,              			0.5,                     0 },\
+    { IL_CBBP_ID,                			100,          			0,              			0.5,                     0 },\
+    { VPFC_FAST_OVP_ID,           5,          				0,              			450,                    0 },\
+    { VPFC_SLOW_OVP_ID,          20,          				0,            				442,                    0},\
+    { VPFC_FAST_UVP_ID,            5,           				0,              			280,                     0},\
+    { VPFC_SLOW_UVP_ID,          20,          				0,             			260,                     0},\
+    { IN_OPP_ID,                    			5,           				0,              			1000,                   0 },\
+    { IN_RMS_OCP_ID,               	5,           				0,              			15,                       0 },\
 };
 
 #define  ASW_DiagSWFaultOverNoRecv(Flag, PhysVal, PrtctThreshold, u8Count, ERR_CNT)  \
@@ -201,8 +213,11 @@ typedef struct
 
 extern  DIAG_STATUS_T 					  	g_stDiagStatus;
 extern  DIAG_STATUS_T 				 	  	g_stDiagHisStatus;
+extern volatile unsigned short         g_u16FaultDetetFlag;
 #define	u16_get_auto_recv_diag()       g_stDiagStatus.unAutoRecvFault.u16All
 #define 	u16_get_no_recv_diag()          g_stDiagStatus.unNoRecvFault.u16All
+#define 	u16_get_warn_diag()               g_stDiagStatus.unWarn.u16All
+
 #define	clr_no_recv_diag_fault()			  g_stDiagStatus.unNoRecvFault.u16All = 0
 #define  	u16_clr_fault_flag()                 g_u16FaultDetetFlag = 0
 #define 	u16_get_fault_flag()                 g_u16FaultDetetFlag

@@ -28,7 +28,7 @@
 DIAG_STATUS_T 					g_stDiagStatus;
 DIAG_STATUS_T 					g_stDiagHisStatus;
 
-
+volatile unsigned short         g_u16FaultDetetFlag = 0;
 UINT16 g_u16SwDiagCount[SW_DIAG_ID_MAX] = { 0 };
 
 const SWDIAG_PARAM_CFG_T  gc_stSwdiagCfgParam[SW_DIAG_ID_MAX] = DIAG_PARAM_TAB; 
@@ -60,11 +60,15 @@ void diagnostic_init(void){
 #endif
 
 void diagnostic_fast_task(void) {
-	float f32IlCbcFlg = (float)read_pfc_drv_dcaevt2_flag();
+	float f32IlCbcFlg;
 	float f32Temp;
+    UINT16 u16PwrStatus = u16_get_pwr_status();
 
-	clr_pfc_drv_deaevt2_flag();
-	ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1IlCbbp, f32IlCbcFlg, gc_stSwdiagCfgParam[IL_CBBP_ID].f32PrtctThreshold, g_u16SwDiagCount[IL_CBBP_ID], gc_stSwdiagCfgParam[IL_CBBP_ID].u16ErrCnt);
+	if((PWR_STATUS_SOFTSTART == u16PwrStatus)||(PWR_STATUS_RUN == u16PwrStatus)){
+			 f32IlCbcFlg = (float)read_pfc_drv_dcaevt2_flag();
+		     clr_pfc_drv_deaevt2_flag();
+			ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1IlCbbp, f32IlCbcFlg, gc_stSwdiagCfgParam[IL_CBBP_ID].f32PrtctThreshold, g_u16SwDiagCount[IL_CBBP_ID], gc_stSwdiagCfgParam[IL_CBBP_ID].u16ErrCnt);
+	}
 
 	if(read_vpfc_hw_ovp_flag() == 1){
 	 	g_stDiagStatus.unNoRecvFault.bits.b1VfpcHwOvp = 1;

@@ -13,7 +13,8 @@
 #define  			PFC_TO_LLC_DATA_ITEM_CMD_ID            0x10
 #define  			LLC_TO_PFC_DATA_ITEM_CMD_ID            0x11
 #define            CALIB_DATA_ITEM_CMD_ID        				0x12
-
+#define           PFC_TO_LLC_MSG_LEN                                 16
+#define           LLC_TO_PFC_MSG_LEN                                 6
 
 extern UINT16 g_SciCommTimeOutCnt;
 
@@ -27,13 +28,18 @@ typedef struct{
 extern 	PFC_LLC_COMM_OUT    		g_stPfcLlcCommOut;
 extern		unsigned short 		g_u16VpfcRef;
 extern		unsigned short 		g_u16PfcStopCmd;
+
+extern UINT16  g_ua16RxData[LLC_TO_PFC_MSG_LEN >> 1];
+extern UINT16  g_u16AppRxFlag;
 //#define 	u16_get_vpfc_set()				 		  g_stPfcLlcCommOut.	u16VpfcRef
 //#define 	u8_get_pfc_stop_cmd()				  g_stPfcLlcCommOut.	u8PfcStopCmd
 
 #define 	u16_get_vpfc_set()					g_u16VpfcRef
 #define 	u8_get_pfc_stop_cmd()			g_u16PfcStopCmd
+#define    u16_set_app_rx_flag()           g_u16AppRxFlag = 1
+#define    u16_get_app_buff_pointer()   g_ua16RxData
 
-extern void pfc_llc_comm_rx_hander(void *p_stAplDmTemp);
-extern void pfc_send_msg_50ms_task(void);
+extern void pfc_llc_msg_50ms_task(void);
 extern void pfc_llc_comm_init(void);
+
 #endif /* _PFC_LLC_COMM_H_ */

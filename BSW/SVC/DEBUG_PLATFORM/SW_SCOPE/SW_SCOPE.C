@@ -107,13 +107,13 @@ void sw_scope_task(void)
 		st_ScopeDataFrame.stNwmDm.unNwmAddr.bits.ul8DestAddr = PC_NODE_ADDR;
 		st_ScopeDataFrame.stAplDm.unAplCmd.bits.ul8CmdSet    		= SW_SCOPE_CMD_SET;
 		st_ScopeDataFrame.stAplDm.unAplCmd.bits.uh8CmdId     		= SW_SCOPE_DATA_CMD_ID;
-		st_ScopeDataFrame.stAplDm.u16AplDLC                  				= (g_stScopeRingCtrl.i16TotalSize - g_stScopeRingCtrl.i16IdelSize)*TYPE_8_BYTE_SIZE;
-		st_ScopeDataFrame.p_u16AppData                       						= g_ua16ScopeBuff;
-		st_ScopeDataBuffCtrl.enBuffType                      						= RING_BUFF_TYPE;
-		st_ScopeDataBuffCtrl.p_BuffObj                       							= (void *)&g_stScopeRingCtrl;
+		st_ScopeDataFrame.stAplDm.u16AplDLC                  		= (g_stScopeRingCtrl.i16TotalSize - g_stScopeRingCtrl.i16IdelSize)*TYPE_8_BYTE_SIZE;
+		st_ScopeDataFrame.p_u16AppData                       		= g_ua16ScopeBuff;
+		st_ScopeDataBuffCtrl.enBuffType                      		= RING_BUFF_TYPE;
+		st_ScopeDataBuffCtrl.p_BuffObj                       		= (void *)&g_stScopeRingCtrl;
 		memcpy((void *)&g_stScopeCopyRingCtrl,(void *)&g_stScopeRingCtrl,sizeof(RING_ITEM));
-        g_stScopeRingCtrl.enRingStaus                        							= RING_FULL;
-        g_stScopeRingCtrl.enRingCmd                          							= RING_REQUEST_READ;
+        g_stScopeRingCtrl.enRingStaus                        		= RING_FULL;
+        g_stScopeRingCtrl.enRingCmd                          		= RING_REQUEST_READ;
 
         if(g_stGuiCfgSwScope.u8StartMode == STARTUP_ITSELF){
         	  	if(g_stScopeCtrlInfo.u8GetDataFlag == 1){

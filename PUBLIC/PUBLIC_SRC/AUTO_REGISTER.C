@@ -5,7 +5,7 @@
  *      Author: Hongbo.jiang
  */
 #include "PUBLIC_INC/AUTO_REGISTER.H"
-#include "ENV_CFG/SOFTWARE_ENV_CFG.h"
+#include "SOFTWARE_ENV_CFG.h"
 
 
 extern unsigned long AutoRegLoadStart;

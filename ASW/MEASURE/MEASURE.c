@@ -84,16 +84,16 @@ void measure_fast_task(void)
     g_stMeasureOut.stVinRmsObj.stIn.i16Pol = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
     rms_calc(&g_stMeasureOut.stVinRmsObj);
 
-    g_stMeasureOut.stIinRmsObj.stIn.f32Var           = f32_get_iin_low_raw();
-    LPF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum, (g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stIinRmsObj.stIn.f32Var), 0.3f, (CTR_PERIOD));
-    g_stMeasureOut.stIinRmsObj.stOut.f32Rms          = SQRTF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum);
-    //g_stIinRmsObj.stIn.i16Pol = g_stVinPolFrqObj.stOut.u16Pol;
-    //RmsCal(&g_stIinRmsObj);
+    g_stMeasureOut.stIinRmsObj.stIn.f32Var      = f32_get_iin_low_raw();
+  //  LPF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum, (g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stIinRmsObj.stIn.f32Var), 0.3f, (CTR_PERIOD));
+  //  g_stMeasureOut.stIinRmsObj.stOut.f32Rms          = SQRTF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum);
+    g_stMeasureOut.stIinRmsObj.stIn.i16Pol      = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
+    rms_calc(&g_stMeasureOut.stIinRmsObj);
 
 //    g_stMeasureOut.stPinAveObj.stIn.f32Var = g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stVinRmsObj.stIn.f32Var;
 //    LPF(g_stMeasureOut.stPinAveObj.stOut.f32Ave, g_stMeasureOut.stPinAveObj.stIn.f32Var,  0.3f,   (CTR_PERIOD));
-   // g_stPinAveObj.stIn.i16Pol = g_stVinPolFrqObj.stOut.u16Pol;
-   // AveCal(&g_stPinAveObj);
+  //  g_stPinAveObj.stIn.i16Pol = g_stVinPolFrqObj.stOut.u16Pol;
+  //  AveCal(&g_stPinAveObj);
 }
 
 /*************************************************
@@ -139,14 +139,14 @@ void measure_10ms_task(void)
 	static float s_f32VinRmsSum = 0;
 	static float s_f32IinRmsSum = 0;
     float f32PinTemp;
-	float f32Temp = s_f32VinRmsSum * 0.5f; 
+	float f32Temp = s_f32VinRmsSum * 0.0625f;
 	s_f32VinRmsSum += g_stMeasureOut.stVinRmsObj.stOut.f32Rms - f32Temp;
-	g_stMeasureOut.f32VinRmsLpf = s_f32VinRmsSum * 0.5f;
+	g_stMeasureOut.f32VinRmsLpf = s_f32VinRmsSum * 0.0625f;
 
-	f32Temp = s_f32IinRmsSum * 0.5f;
+	f32Temp = s_f32IinRmsSum * 0.125f;
 	s_f32IinRmsSum += g_stMeasureOut.stIinRmsObj.stOut.f32Rms - f32Temp;
 
-	g_stMeasureOut.f32IinRmsLpf = s_f32IinRmsSum * 0.5f;
+	g_stMeasureOut.f32IinRmsLpf = s_f32IinRmsSum * 0.125f  + 0.2f;
 
 	f32PinTemp = g_stMeasureOut.f32IinRmsLpf * g_stMeasureOut.f32VinRmsLpf;
 

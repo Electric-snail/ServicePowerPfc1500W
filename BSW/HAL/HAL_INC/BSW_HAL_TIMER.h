@@ -1,8 +1,8 @@
 /*
  * BSW_HAL_TIMER.h
  *
- *  Created on: 2022Äê12ÔÂ16ÈÕ
- *      Author: xj8r1j
+ *  Created on: 2022.12.16
+ *      Author:    Hongbo.Jiang
  */
 
 #ifndef _BSW_HAL_TIMER_H_
