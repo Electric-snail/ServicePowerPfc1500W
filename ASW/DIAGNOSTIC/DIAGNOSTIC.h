@@ -39,7 +39,8 @@ typedef struct {
 typedef struct {
     unsigned short  b1VinOvw   			: 1;
     unsigned short  b1VinUvw				: 1;
-    unsigned short  b14Rvs         			: 14;
+    unsigned short  b1VinDrop				: 1;
+    unsigned short  b13Rvs         			: 13;
 }WARN_BITS;
 
 typedef union {

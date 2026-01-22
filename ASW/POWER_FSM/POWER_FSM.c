@@ -127,7 +127,6 @@ void  power_softstart_exe(void) {
 			g_u16PwrFsmTimerCnt++;
 			if (g_u16PwrFsmTimerCnt > 3) {
 				BSW_HAL_BUCK_OK();
-				BSW_HAL_ALERT_CLR();
 				EMIT_FSM(POWER_FSM, PWR_SOFTSTART_CMP);
 			}
 		}
@@ -191,7 +190,7 @@ void  power_fault_exe(void) {
 		   BSW_HAL_RELAY_OFF();
 	}
 
-	if((g_u16PwrFsmTimerCnt > 40) ||	(f32VpfcLpf < 340.0f)){
+	if((g_u16PwrFsmTimerCnt > 30) ||	(f32VpfcLpf < 340.0f)){
 		 BSW_HAL_BUCK_NOT_OK();
 		 if((u16_get_auto_recv_diag() == 0x0000)&&(u16_get_no_recv_diag() == 0x0000)){
 				u16_clr_fault_flag();

@@ -54,19 +54,19 @@
 
 /* Define variable type */
 
-typedef short               INT8;
-typedef unsigned short      UINT8;
+typedef short               				INT8;
+typedef unsigned short      			UINT8;
 
-typedef short               INT16;
-typedef unsigned short      UINT16;
-typedef long                INT32;
-typedef unsigned long       UINT32;
-typedef unsigned long long  UINT64;
-typedef signed long long    INT64;
-typedef float               FLOAT32;
+typedef short               				INT16;
+typedef unsigned short      			UINT16;
+typedef long                				INT32;
+typedef unsigned long       			UINT32;
+typedef unsigned long long  		UINT64;
+typedef signed long long    		INT64;
+typedef float               				FLOAT32;
 
-typedef void*               HANDLE;
-typedef unsigned short      BOOLEAN;
+typedef void*               				HANDLE;
+typedef unsigned short      			BOOLEAN;
 
 typedef enum
 {

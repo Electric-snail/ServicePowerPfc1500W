@@ -129,29 +129,26 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
 #ifndef  DLLX64
 #pragma  CODE_SECTION(vin_drop_diag, 		".TI.ramfunc");
 #endif
-
 void vin_drop_diag(VIN_DROP_DIG_OBJ_T *p_stVinDropObj){
         if(p_stVinDropObj->stIn.f32VinAbsTrans < p_stVinDropObj->stCoff.f32DropTransThrd){
+         	 p_stVinDropObj->stInner.u16RecvN = 0;
         	p_stVinDropObj->stInner.u16DropN++;
-        	if(p_stVinDropObj->stInner.u16DropN > p_stVinDropObj->stCoff.u16DropCntThrd){
-        		p_stVinDropObj->stOut.u16VinDropFlag   = 1;
-        		p_stVinDropObj->stInner.u16DropN 			= p_stVinDropObj->stCoff.u16DropCntThrd;
-            	p_stVinDropObj->stInner.u16RecvN 			= 0;
+        	if(p_stVinDropObj->stInner.u16DropN > p_stVinDropObj->stCoff.u16DropWarnCntThrd){
+        		p_stVinDropObj->stOut.u16VinDropWarnFlag   = 1;
+        	}
+        	if(p_stVinDropObj->stInner.u16DropN > p_stVinDropObj->stCoff.u16DropFaultCntThrd){
+        		p_stVinDropObj->stOut.u16VinDropFaultFlag   = 1;
         	}
         }else{
         	p_stVinDropObj->stInner.u16DropN = 0;
+        	 if((1 == p_stVinDropObj->stOut.u16VinDropFaultFlag)||(p_stVinDropObj->stOut.u16VinDropWarnFlag == 1)){
+        	 	 p_stVinDropObj->stInner.u16RecvN++;
+        	 	 if(p_stVinDropObj->stInner.u16RecvN >= p_stVinDropObj->stCoff.u16DropRecvCntThrd){
+        	 			   p_stVinDropObj->stOut.u16VinDropFaultFlag  = 0;
+        	 			   p_stVinDropObj->stOut.u16VinDropWarnFlag = 0;
+        	 	 }
+        	 }else{
+        	 	 p_stVinDropObj->stInner.u16RecvN++;
+        	 }
         }
-}
-
-void vin_drop_recv_diag(VIN_DROP_DIG_OBJ_T *p_stVinDropObj){
-	   if(1 == p_stVinDropObj->stOut.u16VinDropFlag){
-		     if(p_stVinDropObj->stIn.f32VinRms > p_stVinDropObj->stCoff.f32RecvRmsThrd){
-		    	 	 p_stVinDropObj->stInner.u16RecvN++;
-		    	 	 if(p_stVinDropObj->stInner.u16RecvN >= 2){
-		    	 		p_stVinDropObj->stOut.u16VinDropFlag  = 0;
-		    	 	 }
-		     }else{
-		    	 p_stVinDropObj->stInner.u16RecvN = 0;
-		     }
-	   }
 }

@@ -37,11 +37,20 @@ VIN_DROP_DIG_OBJ_T       		g_stVinDropDiag;
 void diagnostic_init(void){
 	g_stDiagStatus.unAutoRecvFault.u16All 		= 0x0000;
 	g_stDiagStatus.unNoRecvFault.u16All    		= 0x0000;
-	g_stVinDropDiag.stCoff.f32DropTransThrd 	= 36.0f;
-	g_stVinDropDiag.stCoff.f32RecvRmsThrd     = 40.0f;
-	// arcsin(36.0f/(1.414*70)) = 2*3.1415926 * 40 * (N/2)/65000;     65000 is the diagnostic caller frequency --->  N = arcsin(36.0f/(1.414*70)) *65000/(40 * 3.1415926)
-	//The diagnostic time is = 192/65000 = 2.95ms
-	g_stVinDropDiag.stCoff.u16DropCntThrd      =  192;
+
+	g_stVinDropDiag.stCoff.f32DropTransThrd 			  = 45.0f;
+	// arcsin(45.0f/(1.414*75)) = 2*3.1415926 * 45 * (N/2)/65000;     65000 is the diagnostic caller frequency --->  N = arcsin(45.0f/(1.414*75)) *65000/(45 * 3.1415926)
+	//The diagnostic time is = 200/65000 = 3.08ms
+	g_stVinDropDiag.stCoff.u16DropWarnCntThrd      =  200;
+
+	g_stVinDropDiag.stCoff.u16DropFaultCntThrd      =  722 +200;
+
+	//N_Half = 65000 * 1/(2 * 45) = 722;
+	// arcsin(45.0f/(1.414*80)) = 2*3.1415926 * 45 * (N/2)/65000;     65000 is the diagnostic caller frequency --->  RECV_N = N_Half - arcsin(45.0f/(1.414*80)) *65000/(45 * 3.1415926) = 722 - 188 =
+	g_stVinDropDiag.stCoff.u16DropRecvCntThrd    = 534;
+
+	g_stVinDropDiag.stOut.u16VinDropFaultFlag      = 0;
+	g_stVinDropDiag.stOut.u16VinDropWarnFlag     = 1;
 }
 /*************************************************
 *  Function:       fast_diagnostic_task
@@ -80,7 +89,13 @@ void diagnostic_fast_task(void) {
 
 	vin_drop_diag(&g_stVinDropDiag);
 
-	g_stDiagStatus.unAutoRecvFault.bits.b1VinDrop = g_stVinDropDiag.stOut.u16VinDropFlag;
+	g_stDiagStatus.unAutoRecvFault.bits.b1VinDrop = g_stVinDropDiag.stOut.u16VinDropFaultFlag;
+	g_stDiagStatus.unWarn.bits.b1VinDrop				   = g_stVinDropDiag.stOut.u16VinDropWarnFlag;
+	if(g_stDiagStatus.unWarn.bits.b1VinDrop == 1){
+		 BSW_HAL_ALERT_SET();
+	}else if(g_stDiagStatus.unAutoRecvFault.u16All == 0x0000){
+		BSW_HAL_ALERT_CLR();
+	}
 
     if ((g_stDiagStatus.unNoRecvFault.u16All != 0x0000)||(g_stDiagStatus.unAutoRecvFault.u16All != 0x0000)) {
 		g_stDiagHisStatus.unAutoRecvFault.u16All = g_stDiagStatus.unAutoRecvFault.u16All;
@@ -133,10 +148,6 @@ void diag_10ms_task(void)
 
 	ASW_DiagSWFaultUnderRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsUvp, f32TempValue, gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].f32PrtctThreshold, \
 		gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_RMS_UVP_ID], gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].u16RcvrCnt);
-
-	g_stVinDropDiag.stIn.f32VinRms = f32TempValue;
-
-	vin_drop_recv_diag(&g_stVinDropDiag);
 
 	f32TempValue = f32_get_vin_freq();
 
