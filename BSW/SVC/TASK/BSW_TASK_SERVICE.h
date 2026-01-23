@@ -58,7 +58,6 @@ extern void BSW_SVC_ScheExcuTask(void);
     {vpfc_mgt_10ms_task,         		"vpfc_mgt_10ms_task",            			1,          10,                 5},\
     {diag_10ms_task,           			 	"diagnostic_10ms_task",         			1,          10,                 6},\
     {diag_100ms_task,           			"diag_100ms_task",              				1,          100,                11},\
-	{derating_20ms_task,       			"derating_task",              						1,          20,                 13},\
 	{pfc_llc_msg_50ms_task,       	"pfc_llc_msg_50ms_task",               	1,          20,                 17},\
     {sw_scope_task,             			"sw_scope_task",              					1,          1,                    0},\
 	{apl_main,                  					"apl_main",                   						1,          3,                  2},\

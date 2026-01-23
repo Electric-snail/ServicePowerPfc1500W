@@ -12,11 +12,11 @@
 #include "MEASURE/MEASURE.h"
 #include "PUBLIC_INC/DC_MATH.H"
 
-#define     XCAP_COMP_EN											1
+#define     XCAP_COMP_EN											0
 #define 	 Cx																		2.22e-6
 #ifndef  DLLX64
 #pragma  CODE_SECTION(pfc_controller, 					".TI.ramfunc");
-#pragma  CODE_SECTION(ctrl_pi_gain_position, 		".TI.ramfunc");
+#pragma  CODE_SECTION(ctrl_pi_gain_position, 			".TI.ramfunc");
 #pragma  CODE_SECTION(ctrl_pi_position, 				".TI.ramfunc");
 #pragma  DATA_SECTION(gs_stIacPiGainCtrl, ".CtrlVariableSector");
 #endif
@@ -100,35 +100,39 @@ void 	pfc_controller(void){
 
 		ctrl_pi_position(&gs_stVpfcPiCtrl);
 		//in case of the vpfc overshoot too high
+		
+#if defined IL_CLOSE_LOOP_MODE
+		gs_stVpfcPiCtrl.stOut.f32Out = g_f32PowerOpenSet;
+#endif
+		//in case of the vpfc overshoot too high
 		f32Temp	   = f32VpfcLpf -  15.0f;
 
 		if(f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref){
 			gs_stVpfcPiCtrl.stInner.f32Integrate 				= -1000.0f;
-			gs_stVpfcPiCtrl.stOut.f32Out           				= -1000.0f;
+			gs_stVpfcPiCtrl.stOut.f32Out           			= -1000.0f;
 			gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		}
 
 		if (f32VinRms < 35.0f)  f32VinRms = 35.0f;
 
-		#if(XCAP_COMP_EN == 1)
-				f32Temp 			           	= Cx * 1.414f * 2 * pi * 50.0f * f32_get_vac_volt_q_pll() * (-1.0f);
-				f32IlRefTemp				= gs_stVpfcPiCtrl.stOut.f32Out * f32VacPll / (f32VinRms * f32VinRms) + f32Temp;
+		f32IlRefTemp = gs_stVpfcPiCtrl.stOut.f32Out * f32VacPll / (f32VinRms * f32VinRms);
 
-				f32Temp						= f32VacPll * f32IlRefTemp;
-
-				//if need to compensate the reative power, set as the zero, becasue this topology can't to compensate the reative power
-				if (f32Temp <= 0)
-					gs_stIacPiGainCtrl.stIn.f32Ref = 0;
+		if (gs_stVpfcPiCtrl.stOut.f32Out <= 0) {
+				gs_stIacPiGainCtrl.stIn.f32Ref = -1.0f;
+		}
+		else {
+            #if(XCAP_COMP_EN == 1)
+				f32Temp = Cx * 1.414f * 2 * pi * 50.0f * f32_get_vac_volt_q_pll();
+				f32IlRefTemp = f32IlRefTemp + f32Temp;
+				f32Temp		 = f32IlRefTemp * f32VacPll;
+				if (f32Temp >= 0)
+					gs_stIacPiGainCtrl.stIn.f32Ref  = ABSF(f32IlRefTemp);
 				else
-					gs_stIacPiGainCtrl.stIn.f32Ref = ABSF(f32IlRefTemp);
-		#else
-				f32IlRefTemp								= gs_stVpfcPiCtrl.stOut.f32Out * f32VacPll / (f32VinRms * f32VinRms);
-				gs_stIacPiGainCtrl.stIn.f32Ref	= ABSF(f32IlRefTemp);
-		#endif
-
-		#if defined IL_CLOSE_LOOP_MODE
-				gs_stIacPiGainCtrl.stIn.f32Ref	= g_f32PowerOpenSet * ABSF(f32VacPll)/(f32VinRms * f32VinRms);
-		#endif
+					gs_stIacPiGainCtrl.stIn.f32Ref = -0.1f;
+			#else
+				gs_stIacPiGainCtrl.stIn.f32Ref= ABSF(f32IlRefTemp);
+            #endif
+		}
 
 		gs_stIacPiGainCtrl.stIn.f32Fb	= f32_get_curr_inductor_ave();
 

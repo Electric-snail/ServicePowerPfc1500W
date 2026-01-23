@@ -49,7 +49,7 @@ void diagnostic_init(void){
 	// arcsin(45.0f/(1.414*80)) = 2*3.1415926 * 45 * (N/2)/65000;     65000 is the diagnostic caller frequency --->  RECV_N = N_Half - arcsin(45.0f/(1.414*80)) *65000/(45 * 3.1415926) = 722 - 188 =
 	g_stVinDropDiag.stCoff.u16DropRecvCntThrd    = 534;
 
-	g_stVinDropDiag.stOut.u16VinDropFaultFlag      = 0;
+	g_stVinDropDiag.stOut.u16VinDropFaultFlag    = 0;
 	g_stVinDropDiag.stOut.u16VinDropWarnFlag     = 1;
 }
 /*************************************************
@@ -90,7 +90,7 @@ void diagnostic_fast_task(void) {
 	vin_drop_diag(&g_stVinDropDiag);
 
 	g_stDiagStatus.unAutoRecvFault.bits.b1VinDrop = g_stVinDropDiag.stOut.u16VinDropFaultFlag;
-	g_stDiagStatus.unWarn.bits.b1VinDrop				   = g_stVinDropDiag.stOut.u16VinDropWarnFlag;
+	g_stDiagStatus.unWarn.bits.b1VinDrop		  = g_stVinDropDiag.stOut.u16VinDropWarnFlag;
 	if(g_stDiagStatus.unWarn.bits.b1VinDrop == 1){
 		 BSW_HAL_ALERT_SET();
 	}else if(g_stDiagStatus.unAutoRecvFault.u16All == 0x0000){

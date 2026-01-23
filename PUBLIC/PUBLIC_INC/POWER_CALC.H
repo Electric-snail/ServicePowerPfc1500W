@@ -82,8 +82,8 @@ typedef struct {
 
 typedef struct {
     float           		  f32DropTransThrd;
-    unsigned short u16DropWarnCntThrd;
     unsigned short u16DropFaultCntThrd;
+    unsigned short u16DropWarnCntThrd;
     unsigned short u16DropRecvCntThrd;
 }VIN_DROP_DIG_COFF_T;
 

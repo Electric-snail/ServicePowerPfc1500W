@@ -13,7 +13,6 @@
 #include "HAL/HAL_INC/BSW_HAL_GPIO.h"
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
 #include "MEASURE/MEASURE.h"
-#include "DERATING/DERATING.h"
 #include "SYS_FSM/SYS_FSM.h"
 #include "POWER_FSM/POWER_FSM.h"
 #include "PFC_CTR/PFC_CTR.H"

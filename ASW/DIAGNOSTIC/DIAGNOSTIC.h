@@ -214,14 +214,14 @@ typedef struct
 
 extern  DIAG_STATUS_T 					  	g_stDiagStatus;
 extern  DIAG_STATUS_T 				 	  	g_stDiagHisStatus;
-extern volatile unsigned short         g_u16FaultDetetFlag;
-#define	u16_get_auto_recv_diag()       g_stDiagStatus.unAutoRecvFault.u16All
+extern volatile unsigned short         		g_u16FaultDetetFlag;
+#define		u16_get_auto_recv_diag()       	g_stDiagStatus.unAutoRecvFault.u16All
 #define 	u16_get_no_recv_diag()          g_stDiagStatus.unNoRecvFault.u16All
-#define 	u16_get_warn_diag()               g_stDiagStatus.unWarn.u16All
+#define 	u16_get_warn_diag()             g_stDiagStatus.unWarn.u16All
 
-#define	clr_no_recv_diag_fault()			  g_stDiagStatus.unNoRecvFault.u16All = 0
-#define  	u16_clr_fault_flag()                 g_u16FaultDetetFlag = 0
-#define 	u16_get_fault_flag()                 g_u16FaultDetetFlag
+#define	clr_no_recv_diag_fault()			g_stDiagStatus.unNoRecvFault.u16All = 0
+#define  	u16_clr_fault_flag()            g_u16FaultDetetFlag = 0
+#define 	u16_get_fault_flag()            g_u16FaultDetetFlag
 
 extern void diagnostic_init(void);
 extern void diagnostic_fast_task(void);

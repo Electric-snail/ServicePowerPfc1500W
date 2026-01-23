@@ -19,7 +19,6 @@
 #include "ASW_BASIC.h"
 #include "MEASURE/MEASURE.h"
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
-#include "DERATING/DERATING.h"
 #include "SYS_FSM/SYS_FSM.h"
 #include "POWER_FSM/POWER_FSM.h"
 #include "VPFC_MGT/VPFC_MGT.H"
