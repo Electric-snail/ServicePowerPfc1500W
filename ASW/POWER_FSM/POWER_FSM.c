@@ -15,7 +15,6 @@
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
 #include "MEASURE/MEASURE.h"
 #include "SYS_FSM/SYS_FSM_INF.h"
-#include "VPFC_MGT/VPFC_MGT.H"
 
 void  power_standby_in(void);
 void  power_standby_exe(void);
@@ -150,14 +149,8 @@ void  power_run_in(void) {
 void  power_run_exe(void) {
 	float f32VpfcSetTarget = f32_get_vpfc_set_target();
 
-	if((f32VpfcSetTarget <= 423.0f)&&(f32VpfcSetTarget >=399.0f))
+	if((f32VpfcSetTarget <= 423.0f)&&(f32VpfcSetTarget > 390.0f))
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
-//	if (g_stPwrFsmOut.f32VpfcSet < f32VpfcSetTarget) {
-//		EMIT_FSM(POWER_FSM, PWR_SOFTSTART_REQ_EVEN);
-//	}
-//	else {
-//		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
-//	}
 	if (u16_get_fault_flag() == TRUE) {
 		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
 	}

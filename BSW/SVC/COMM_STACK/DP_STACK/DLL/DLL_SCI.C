@@ -439,7 +439,7 @@ INT16 dll_scib_frame_read(UINT16 *p_u16Data)
         	   s_u8CrcData   = crc_table[s_u8CrcData ^ u8DataTemp];
 			   if(s_u16DataCnt >= LLC_TO_PFC_MSG_LEN){
 				   if(s_u8CrcData == 0){
-					  u16_set_app_rx_flag();
+					     app_rx_msg_handle();
 				   }
 				   s_enDllRxFsm = HEAD_BYTE0_FMS;
 			   }else{

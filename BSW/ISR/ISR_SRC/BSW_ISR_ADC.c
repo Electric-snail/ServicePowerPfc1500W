@@ -99,7 +99,7 @@ void adc_isr_init(void)
 	g_stAnaPhyRaw.f32IlAveH								 = 0.0f;
 	g_stAnaPhyRaw.f32IlAveL								= 0.0f;
 	g_stAnaPhyRaw.f32Vin									= 0.0f;
-	g_stAnaPhyRaw.f32VinL									= 0.0f;
+	g_stAnaPhyRaw.f32VinL								= 0.0f;
 	g_stAnaPhyRaw.f32VinN								= 0.0f;
 	g_u16PllFirstStart                                           = 1;
 }
@@ -126,8 +126,8 @@ INTERRUPT void adcA1ISR(void)
 			f32VinN 							= bsw_hal_calc_vin_n();
 			f32Vpfc 							= bsw_hal_calc_vpfc();
 			f32CurInductorAveH		= bsw_hal_calc_cur_inductor_ave_h();
-			f32CurInductorAveL		    = bsw_hal_calc_cur_inductor_ave_l();
-			f32IinL 							    = bsw_hal_calc_iin_l();
+			f32CurInductorAveL		= bsw_hal_calc_cur_inductor_ave_l();
+			f32IinL 							= bsw_hal_calc_iin_l();
 			f32IinH 							= bsw_hal_calc_iin_h();
 
 			//校准各个采样值
@@ -178,7 +178,7 @@ INTERRUPT void adcA1ISR(void)
 					//	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT = 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
 						gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT =   f32_get_vin_cos_2omgt();
 						gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT  =   f32_get_vin_sin_2omgt();
-						gs_stVpfcNotchFilt.stIn.f32In 					    =    g_stAnaPhyRaw.f32Vpfc;
+						gs_stVpfcNotchFilt.stIn.f32In 					 =   g_stAnaPhyRaw.f32Vpfc;
 						notch_filter(&gs_stVpfcNotchFilt);
 					#endif
 					//对输入电压进行锁相环

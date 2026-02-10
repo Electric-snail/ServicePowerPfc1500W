@@ -18,15 +18,12 @@
 
 
 UINT16  g_ua16RxData[LLC_TO_PFC_MSG_LEN >> 1] ={0};
-UINT16  g_u16AppRxFlag = 0;
  PFC_LLC_COMM_OUT    g_stPfcLlcCommOut;
- unsigned short g_u16VpfcRef             = 400;
- unsigned short g_u16PfcStopCmd      = 1;
 
 void pfc_llc_comm_init(void)
 {
-	g_stPfcLlcCommOut.u16VpfcRef 		= 400;
-	g_stPfcLlcCommOut.u8PfcStopCmd 	= 1;
+	g_stPfcLlcCommOut.f32VpfcRef 		= 395;
+	g_stPfcLlcCommOut.u16BootReq 	    = 0;
 }
 
 
@@ -52,12 +49,23 @@ void pfc_llc_msg_50ms_task(void)
     ua16AppTxBuff[7]                                                                 =  u16_get_warn_diag();
 
     dll_scib_frame_write1(ua16AppTxBuff,     (PFC_TO_LLC_MSG_LEN >> 1));
+}
 
-    if(1 == g_u16AppRxFlag){
-  	  g_stPfcLlcCommOut.u16VpfcRef 			 = g_ua16RxData[0];
-  	  g_stPfcLlcCommOut.u8PfcStopCmd      = g_ua16RxData[1];
-  	  g_u16AppRxFlag = 0;
-    }
+void app_rx_msg_handle(void){
+	 unsigned short u16Iout;
+	 u16Iout		  = g_ua16RxData[0];
+	 if(u16Iout < 18){
+		 g_stPfcLlcCommOut.f32VpfcRef = 400;
+	 }else if((u16Iout >= 18)&&(u16Iout < 23)){
+		 g_stPfcLlcCommOut.f32VpfcRef = 400.0f +2.0f*(u16Iout -18);
+	 }else if((u16Iout >= 23)&&(u16Iout  < 90)){
+		 g_stPfcLlcCommOut.f32VpfcRef = 410.0f;
+	 }else if(u16Iout >= 108){
+		 g_stPfcLlcCommOut.f32VpfcRef = 427.0f;
+	 }else{
+		 g_stPfcLlcCommOut.f32VpfcRef = 410.0f +0.94444f*(u16Iout -90);
+	 }
+	  g_stPfcLlcCommOut.u16BootReq      = g_ua16RxData[1];
 }
 
 

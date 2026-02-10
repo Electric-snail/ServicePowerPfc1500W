@@ -12,6 +12,7 @@
 #include "PUBLIC_INC/DF_MATH.H"
 #include "PFC_CTR/PFC_CTR.H"
 #include "MEASURE/MEASURE.H"
+#include "POWER_FSM/POWER_FSM.H"
 #include "DIAGNOSTIC/DIAGNOSTIC.H"
 #include "PUBLIC_INC/POWER_CALC.H"
 
@@ -48,8 +49,8 @@ extern    VIN_DROP_DIG_OBJ_T       				g_stVinDropDiag;
 
 //-------------name------------------------------startup_mode------------cache_size
 SW_SCOPE_START(PFC_SCOPE,		 STARTUP_MODE,  SW_SCOPE_CASH_SIZE)
-SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn. f32Fb)
-SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stIn.f32Ref)
-SW_SCOPE_ITEM(gs_stIacPiGainCtrl.stOut.f32Out)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Fb)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Ref)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stOut.f32Out)
 SW_SCOPE_END()
 

@@ -61,7 +61,7 @@ void 	pfc_controller_init(void){
 	//	gs_stIacPiGainCtrl.stCoff.f32Kp						= 0.02 * 380f;
 	//	gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.2f * 666.6 * 380f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		gs_stIacPiGainCtrl.stCoff.f32Kp						= 20.0f;
-		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 20.0f * 4000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
+		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 20.0f * 8000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
 
@@ -81,37 +81,39 @@ void 	pfc_controller(void){
 		float f32Temp;
 		float f32IlRefTemp;
 		float f32PinAve;
+		float f32VpfcErrAbs;
 
 		gs_stVpfcPiCtrl.stIn.f32Ref = f32_get_vpfc_set();
-		gs_stVpfcPiCtrl.stIn.f32Fb = f32VpfcNpf;  //f32VpfcLpf;
+		gs_stVpfcPiCtrl.stIn.f32Fb  = f32VpfcNpf;  //f32VpfcLpf;
 		
-		/*
+
 	   f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
-   	   if (f32VpfcErrAbs < 10) {
+   	   if (f32VpfcErrAbs <= 10) {
 			gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
 			gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
 		}
 		else {
 			gs_stVpfcPiCtrl.stCoff.f32Kp     = ((f32VpfcErrAbs - 10) * 0.1 + 1.0f)*g_f32VpfcPiKpSlow;
 			gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((f32VpfcErrAbs - 10) * 0.1 + 1.0f) * g_f32VpfcPiKiTsSlow;
-		}*/
-		gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
-		gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
+		}
+	//	gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
+	//	gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
+		//in case of the vpfc overshoot too high
+		f32Temp	   = f32VpfcLpf -  20.0f;
 
+		if(f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref){
+			gs_stVpfcPiCtrl.stInner.f32Integrate 				= -500.0f;
+			gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
+		}
+		f32Temp = f32VpfcLpf + 5.0f;
+		if((f32Temp < gs_stVpfcPiCtrl.stIn.f32Ref)&&(gs_stVpfcPiCtrl.stInner.f32Integrate < 0)){
+				gs_stVpfcPiCtrl.stInner.f32Integrate 				= 0.0f;
+		}
 		ctrl_pi_position(&gs_stVpfcPiCtrl);
 		//in case of the vpfc overshoot too high
-		
 #if defined IL_CLOSE_LOOP_MODE
 		gs_stVpfcPiCtrl.stOut.f32Out = g_f32PowerOpenSet;
 #endif
-		//in case of the vpfc overshoot too high
-		f32Temp	   = f32VpfcLpf -  15.0f;
-
-		if(f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref){
-			gs_stVpfcPiCtrl.stInner.f32Integrate 				= -1000.0f;
-			gs_stVpfcPiCtrl.stOut.f32Out           			= -1000.0f;
-			gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
-		}
 
 		if (f32VinRms < 35.0f)  f32VinRms = 35.0f;
 
