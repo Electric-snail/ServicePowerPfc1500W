@@ -118,7 +118,7 @@ void  power_softstart_in(void) {
 }
 
 void  power_softstart_exe(void) {
-	float f32VpfcSetTarget = f32_get_vpfc_set_target();
+	float f32VpfcSetTarget = f32_get_vpfc_set_target_llc();
 	g_stPwrFsmOut.f32VpfcSet += 0.2f;
 	if (g_stPwrFsmOut.f32VpfcSet > f32VpfcSetTarget) {
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
@@ -147,9 +147,9 @@ void  power_run_in(void) {
 }
 
 void  power_run_exe(void) {
-	float f32VpfcSetTarget = f32_get_vpfc_set_target();
+	float f32VpfcSetTarget = f32_get_vpfc_set_target_llc();
 
-	if((f32VpfcSetTarget <= 423.0f)&&(f32VpfcSetTarget > 390.0f))
+	if((f32VpfcSetTarget <= 427.1f)&&(f32VpfcSetTarget > 390.0f))
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
 	if (u16_get_fault_flag() == TRUE) {
 		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);

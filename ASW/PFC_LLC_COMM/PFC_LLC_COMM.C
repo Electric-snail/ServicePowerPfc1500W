@@ -22,7 +22,7 @@ UINT16  g_ua16RxData[LLC_TO_PFC_MSG_LEN >> 1] ={0};
 
 void pfc_llc_comm_init(void)
 {
-	g_stPfcLlcCommOut.f32VpfcRef 		= 395;
+	g_stPfcLlcCommOut.f32VpfcRef 		= 400;
 	g_stPfcLlcCommOut.u16BootReq 	    = 0;
 }
 
@@ -54,6 +54,7 @@ void pfc_llc_msg_50ms_task(void)
 void app_rx_msg_handle(void){
 	 unsigned short u16Iout;
 	 u16Iout		  = g_ua16RxData[0];
+	 g_stPfcLlcCommOut.u16LlcIout = u16Iout;
 	 if(u16Iout < 18){
 		 g_stPfcLlcCommOut.f32VpfcRef = 400;
 	 }else if((u16Iout >= 18)&&(u16Iout < 23)){

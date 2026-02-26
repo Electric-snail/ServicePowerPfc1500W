@@ -30,12 +30,12 @@ typedef struct {
 }POWER_FSM_OUT_T;
 
 
-extern		fsm_obj_t			fsm_obj_POWER_FSM;
+extern			fsm_obj_t										fsm_obj_POWER_FSM;
 
-extern		POWER_FSM_OUT_T		g_stPwrFsmOut;
+extern			POWER_FSM_OUT_T				g_stPwrFsmOut;
 
-#define 		u16_get_controller_cmd()         		g_stPwrFsmOut.u16CtrCmd
-#define         f32_get_vpfc_set()						g_stPwrFsmOut.f32VpfcSet			
+#define 		u16_get_controller_cmd()         	g_stPwrFsmOut.u16CtrCmd
+#define       f32_get_vpfc_set()						g_stPwrFsmOut.f32VpfcSet
 
 #define 		u16_get_pwr_status()             		(fsm_obj_POWER_FSM.u8CurStateId)
 

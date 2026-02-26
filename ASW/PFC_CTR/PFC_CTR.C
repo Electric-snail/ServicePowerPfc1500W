@@ -42,8 +42,8 @@ void 	pfc_controller_init(void){
 	//	g_f32VpfcPiKpFast									    = 100;
 	//	g_f32VpfcPiKiTsFast									= 5 * 2*3.1415926f * 5 * CTR_PERIOD;
 
-		g_f32VpfcPiKpSlow									= 25.0f;
-		g_f32VpfcPiKiTsSlow								= 6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+		g_f32VpfcPiKpSlow									= 30.0f;
+		g_f32VpfcPiKiTsSlow								=  0.01f;  //6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
 
 		gs_stVpfcPiCtrl.stIn.f32Fb                          = 0.0f;
 		gs_stVpfcPiCtrl.stIn.f32Ref                        = 0.0f;
@@ -93,8 +93,8 @@ void 	pfc_controller(void){
 			gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
 		}
 		else {
-			gs_stVpfcPiCtrl.stCoff.f32Kp     = ((f32VpfcErrAbs - 10) * 0.1 + 1.0f)*g_f32VpfcPiKpSlow;
-			gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((f32VpfcErrAbs - 10) * 0.1 + 1.0f) * g_f32VpfcPiKiTsSlow;
+			gs_stVpfcPiCtrl.stCoff.f32Kp     = ((f32VpfcErrAbs - 10) * 0.2 + 1.0f)*g_f32VpfcPiKpSlow;
+			gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((f32VpfcErrAbs - 10) * 0.2 + 1.0f) * g_f32VpfcPiKiTsSlow;
 		}
 	//	gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
 	//	gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;

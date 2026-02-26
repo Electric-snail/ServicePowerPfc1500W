@@ -146,12 +146,12 @@ INTERRUPT void adcA1ISR(void)
 				   g_stAnaPhyRaw.f32IinH        	= f32IinH;
 			#else
 				   g_stAnaPhyRaw.f32IlAveL  		= f32CurInductorAveL;
-				   g_stAnaPhyRaw.f32IlAveH 	    = f32CurInductorAveH;
+				   g_stAnaPhyRaw.f32IlAveH 	    	= f32CurInductorAveH;
 				   g_stAnaPhyRaw.f32VinL 			= f32VinL;
 				   g_stAnaPhyRaw.f32VinN 			= f32VinN;
-				   g_stAnaPhyRaw.f32Vpfc			= f32Vpfc;
-				   g_stAnaPhyRaw.f32IinL        	= f32IinL;
-				   g_stAnaPhyRaw.f32IinH        	= f32IinH;
+				   g_stAnaPhyRaw.f32Vpfc				= f32Vpfc;
+				   g_stAnaPhyRaw.f32IinL        		= f32IinL;
+				   g_stAnaPhyRaw.f32IinH        		= f32IinH;
 			#endif
 
 			//将L,N各采样值，准换成Vin, 根据采样信号的大小，选择信号通道
