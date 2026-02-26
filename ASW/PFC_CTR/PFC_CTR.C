@@ -43,7 +43,7 @@ void 	pfc_controller_init(void){
 	//	g_f32VpfcPiKiTsFast									= 5 * 2*3.1415926f * 5 * CTR_PERIOD;
 
 		g_f32VpfcPiKpSlow									= 30.0f;
-		g_f32VpfcPiKiTsSlow								=  0.01f;  //6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+		g_f32VpfcPiKiTsSlow								=  0.005f;  //6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
 
 		gs_stVpfcPiCtrl.stIn.f32Fb                          = 0.0f;
 		gs_stVpfcPiCtrl.stIn.f32Ref                        = 0.0f;
