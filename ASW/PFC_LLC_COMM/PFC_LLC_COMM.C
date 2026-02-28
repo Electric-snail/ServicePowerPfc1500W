@@ -18,8 +18,8 @@
 
 
 UINT16  g_ua16RxData[LLC_TO_PFC_MSG_LEN >> 1] ={0};
- PFC_LLC_COMM_OUT    g_stPfcLlcCommOut;
-
+PFC_LLC_COMM_OUT    g_stPfcLlcCommOut;
+float g_f32VpfcTestTarget = 0.0f;
 void pfc_llc_comm_init(void)
 {
 	g_stPfcLlcCommOut.f32VpfcRef 		= 400;
@@ -39,7 +39,7 @@ void pfc_llc_msg_50ms_task(void)
     u16Temp																					= (unsigned short)(f32_get_pin_lpf() * 10.0f);
     ua16AppTxBuff[2]																	=    u16Temp;
 
-    u16Temp																					= (unsigned short)(f32_get_vpfc_lpf_measure() * 10.0f);
+    u16Temp																					= (unsigned short)(f32_get_vpfc_slow_lpf() * 10.0f);
     ua16AppTxBuff[3]																	=   u16Temp;
     u16Temp																					= (unsigned short)(f32_get_vin_freq()  * 100.0f);
     ua16AppTxBuff[4]																	=  u16Temp;
@@ -69,5 +69,25 @@ void app_rx_msg_handle(void){
 	  g_stPfcLlcCommOut.u16BootReq      = g_ua16RxData[1];
 }
 
+float f32_get_vpfc_set_target_llc(void){
+	float f32VpfcRef;
+	float f32VrmsValue = f32_get_vin_rms();
+	if(g_f32VpfcTestTarget > 300.0f){
+		f32VpfcRef = g_f32VpfcTestTarget;
+	}else{
+		if(f32VrmsValue <= 270.0f){
+			f32VpfcRef = 400.0f;
+		}else if(f32VrmsValue <= 280.0f){
+			f32VpfcRef = 400.0f + 2.0*(f32VrmsValue - 270.0f);
+		}else{
+			f32VpfcRef = 420.0f + 0.5f*(f32VrmsValue - 280.0f);
+		}
+		if(g_stPfcLlcCommOut.f32VpfcRef > f32VpfcRef)
+			f32VpfcRef = g_stPfcLlcCommOut.f32VpfcRef;
+	}
+	if(f32VpfcRef > 435.0)   f32VpfcRef  = 435.0f;
+
+	return f32VpfcRef;
+}
 
 

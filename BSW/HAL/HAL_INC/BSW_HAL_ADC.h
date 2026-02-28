@@ -14,10 +14,10 @@
 #include "HARDWARE_ENV_CFG.H"
 
 #define 	VIN_L_KP                              		 				(FULL_RANGE_VIN_L/4095)
-//#define 	VIN_L_OFFSET                     						(HW_OFFSET_VIN_L * FULL_RANGE_VIN_L/ HW_ADC_REF_VOLT)
 
 #define 	VIN_N_KP                              						(FULL_RANGE_VIN_N/4095)
-//#define 	VIN_N_OFFSET                    		 				(HW_OFFSET_VIN_N * FULL_RANGE_VIN_N/ HW_ADC_REF_VOLT)
+
+#define 	VIN_OFFSET                    		 				       4.5.f
 
 #define 	VPFC_KP                               						(FULL_RANGE_VPFC/4095)
 #define 	VPFC_OFFSET                     						(HW_OFFSET_VPFC* FULL_RANGE_VPFC/ HW_ADC_REF_VOLT)
@@ -35,8 +35,8 @@
 #define 	IIN_H_OFFSET           									(HW_OFFSET_IIN_H *  FULL_RANGE_IIN_H/ HW_ADC_REF_VOLT)
 
 #ifndef DLLX64
-#define 		bsw_hal_calc_vin_l()    							((FLOAT32)AdcaResultRegs.ADCRESULT2    * 	VIN_L_KP    -  VIN_L_OFFSET)
-#define 		bsw_hal_calc_vin_n()    							((FLOAT32)AdccResultRegs.ADCRESULT2    * 	VIN_N_KP    -  VIN_N_OFFSET)
+#define 		bsw_hal_calc_vin_l()    							((FLOAT32)AdcaResultRegs.ADCRESULT2    * 	VIN_L_KP)
+#define 		bsw_hal_calc_vin_n()    							((FLOAT32)AdccResultRegs.ADCRESULT2    * 	VIN_N_KP)
 
 #define 		bsw_hal_calc_iin_l()								((FLOAT32)AdcaResultRegs.ADCRESULT1    * 	IIN_L_KP    -  IIN_L_OFFSET)
 #define 		 bsw_hal_calc_iin_h()								((FLOAT32)AdccResultRegs.ADCRESULT1    * 	IIN_H_KP    -  IIN_H_OFFSET)

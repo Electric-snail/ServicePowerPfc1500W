@@ -27,7 +27,7 @@ typedef struct {
 	RMS_CALC_OBJ_T          		stIinRmsObj;
 	POL_FRQ_CALC_OBJ_T      stVinPolFrqObj;
 	float f32Temperature;
-	float f32VpfcLpf;
+	float f32VpfcSlowLpf;
 	float f32VinRmsLpf;
 	float f32IinRmsLpf;
 	float f32PinLpf;
@@ -58,6 +58,6 @@ extern		MEASURE_OUT_T					    		g_stMeasureOut;
 #define     f32_get_vin_cos_omgt()                        g_stMeasureOut.stVinPolFrqObj.stOut.f32CosOmegT
 #define     f32_get_vin_cos_2omgt()                      g_stMeasureOut.stVinPolFrqObj.stOut.f32Cos2OmegT
 
-#define     f32_get_vpfc_lpf_measure()					g_stMeasureOut.f32VpfcLpf
+#define     f32_get_vpfc_slow_lpf()						g_stMeasureOut.f32VpfcSlowLpf
 
 #endif /* MEASURE_H_ */

@@ -94,7 +94,7 @@ typedef struct
 /*---emSwDiagId-----------------u16ErrCnt-------u16RcvrCnt------f32PrtctThreshold------f32RcvrThreshold*/
 #define DIAG_PARAM_TAB          \
 {\
-    { VIN_RMS_OVP_ID,               5,           				10,            			285,                    280},\
+    { VIN_RMS_OVP_ID,               5,           				10,            			305,                    290},\
     { VIN_RMS_UVP_ID,               5,          				10,             			80,                      85 },\
     { VIN_OFP_ID,                   	   5,           				10,             			65,                      66 },\
     { VIN_UFP_ID,              	           5,           				10,             			44,                      45 },\

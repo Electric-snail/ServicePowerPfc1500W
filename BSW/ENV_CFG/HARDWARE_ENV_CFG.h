@@ -68,11 +68,9 @@
 
 #define    HW_ADC_REF_VOLT										3.3f
 
-#define 	 FULL_RANGE_VIN_L										535.182f
-#define 	VIN_N_OFFSET                     								-0.7f
+#define 	 FULL_RANGE_VIN_L										525.436 //535.182f
 
-#define 	 FULL_RANGE_VIN_N										535.182f
-#define 	VIN_L_OFFSET                     								-0.7f
+#define 	 FULL_RANGE_VIN_N								    525.436 //535.182f
 
 #define 	 FULL_RANGE_VPFC										509.465f
 #define 	 HW_OFFSET_VPFC                      						0.0f

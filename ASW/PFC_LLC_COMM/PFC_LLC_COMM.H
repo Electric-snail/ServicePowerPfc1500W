@@ -30,10 +30,11 @@ extern 	PFC_LLC_COMM_OUT    		g_stPfcLlcCommOut;
 
 extern UINT16  g_ua16RxData[LLC_TO_PFC_MSG_LEN >> 1];
 
-#define 	f32_get_vpfc_set_target_llc()			g_stPfcLlcCommOut.f32VpfcRef
+//#define 	f32_get_vpfc_set_target_llc()			g_stPfcLlcCommOut.f32VpfcRef
 #define    u16_get_app_buff_pointer()   	g_ua16RxData
 
-extern void pfc_llc_msg_50ms_task(void);
-extern void pfc_llc_comm_init(void);
-extern void app_rx_msg_handle(void);
+extern float 	f32_get_vpfc_set_target_llc(void);
+extern void 	pfc_llc_msg_50ms_task(void);
+extern void 	pfc_llc_comm_init(void);
+extern void 	app_rx_msg_handle(void);
 #endif /* _PFC_LLC_COMM_H_ */

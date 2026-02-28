@@ -147,8 +147,6 @@ void vin_drop_diag(VIN_DROP_DIG_OBJ_T *p_stVinDropObj){
         	 			   p_stVinDropObj->stOut.u16VinDropFaultFlag  = 0;
         	 			   p_stVinDropObj->stOut.u16VinDropWarnFlag = 0;
         	 	 }
-        	 }else{
-        	 	 p_stVinDropObj->stInner.u16RecvN++;
         	 }
         }
 }

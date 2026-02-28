@@ -81,33 +81,34 @@ void 	pfc_controller(void){
 		float f32Temp;
 		float f32IlRefTemp;
 		float f32PinAve;
-		float f32VpfcErrAbs;
+	//	float f32VpfcErrAbs;
+		float f32VpfcFastLpf = f32_get_vpfc_isr_lpf();
 
 		gs_stVpfcPiCtrl.stIn.f32Ref = f32_get_vpfc_set();
 		gs_stVpfcPiCtrl.stIn.f32Fb  = f32VpfcNpf;  //f32VpfcLpf;
 		
 
-	   f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
-   	   if (f32VpfcErrAbs <= 10) {
-			gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
-			gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
+	 //  f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
+
+		if (f32VpfcFastLpf <= 395.0f) {
+			//fast jump from the integration saturation status.
+			  if(gs_stVpfcPiCtrl.stInner.f32Integrate < 200){
+				  gs_stVpfcPiCtrl.stInner.f32Integrate = 200;
+			  }
+   		      gs_stVpfcPiCtrl.stCoff.f32Kp     = ((395.0f - f32VpfcFastLpf) * 0.4 + 1.0f)*g_f32VpfcPiKpSlow;
+   			  gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((395.0f - f32VpfcFastLpf) * 0.4 + 1.0f) * g_f32VpfcPiKiTsSlow;
 		}
 		else {
-			gs_stVpfcPiCtrl.stCoff.f32Kp     = ((f32VpfcErrAbs - 10) * 0.2 + 1.0f)*g_f32VpfcPiKpSlow;
-			gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((f32VpfcErrAbs - 10) * 0.2 + 1.0f) * g_f32VpfcPiKiTsSlow;
+			  gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
+			  gs_stVpfcPiCtrl.stCoff.f32KiTs	   = g_f32VpfcPiKiTsSlow;
 		}
 	//	gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
 	//	gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
 		//in case of the vpfc overshoot too high
-		f32Temp	   = f32VpfcLpf -  20.0f;
-
+		f32Temp	   = f32VpfcFastLpf -  20.0f;
 		if(f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref){
 			gs_stVpfcPiCtrl.stInner.f32Integrate 				= -500.0f;
 			gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
-		}
-		f32Temp = f32VpfcLpf + 5.0f;
-		if((f32Temp < gs_stVpfcPiCtrl.stIn.f32Ref)&&(gs_stVpfcPiCtrl.stInner.f32Integrate < 0)){
-				gs_stVpfcPiCtrl.stInner.f32Integrate 				= 0.0f;
 		}
 		ctrl_pi_position(&gs_stVpfcPiCtrl);
 		//in case of the vpfc overshoot too high

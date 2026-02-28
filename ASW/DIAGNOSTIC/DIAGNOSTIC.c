@@ -47,7 +47,7 @@ void diagnostic_init(void){
 
 	//N_Half = 65000 * 1/(2 * 45) = 722;
 	// arcsin(45.0f/(1.414*80)) = 2*3.1415926 * 45 * (N/2)/65000;     65000 is the diagnostic caller frequency --->  RECV_N = N_Half - arcsin(45.0f/(1.414*80)) *65000/(45 * 3.1415926) = 722 - 188 =
-	g_stVinDropDiag.stCoff.u16DropRecvCntThrd    = 534;
+	g_stVinDropDiag.stCoff.u16DropRecvCntThrd    = 490;
 
 	g_stVinDropDiag.stOut.u16VinDropFaultFlag    = 0;
 	g_stVinDropDiag.stOut.u16VinDropWarnFlag     = 1;
@@ -160,7 +160,7 @@ void diag_10ms_task(void)
 
 	}
 
-	f32TempValue = f32_get_vpfc_lpf_measure();
+	f32TempValue = f32_get_vpfc_slow_lpf();
 	ASW_DiagSWFaultOverNoRecv(g_stDiagStatus.unNoRecvFault.bits.b1VpfcSlowOvp, f32TempValue, gc_stSwdiagCfgParam[VPFC_SLOW_OVP_ID].f32PrtctThreshold, \
 		g_u16SwDiagCount[VPFC_SLOW_OVP_ID], gc_stSwdiagCfgParam[VPFC_SLOW_OVP_ID].u16ErrCnt);
 

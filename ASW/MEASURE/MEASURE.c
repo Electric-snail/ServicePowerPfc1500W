@@ -51,7 +51,7 @@ void measure_init(void)
 
 	g_stMeasureOut.f32PinLpf										  = 0.0f;
 
-	g_stMeasureOut.f32VpfcLpf                                      = 0.0f;
+	g_stMeasureOut.f32VpfcSlowLpf                            = 0.0f;
 	g_stMeasureOut.f32Temperature                        		  = 0.0f;
 }
 
@@ -116,7 +116,7 @@ void measure_1ms_task(void)
 {
     float f32Temp = f32_get_vpfc_raw();
 
-    LPF(g_stMeasureOut.f32VpfcLpf, f32Temp, 0.5f, 0.001f);
+    LPF(g_stMeasureOut.f32VpfcSlowLpf, f32Temp, 0.5f, 0.001f);
 
 }
 

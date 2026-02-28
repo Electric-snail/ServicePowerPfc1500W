@@ -83,7 +83,7 @@ void  power_standby_exe(void){
 		}
 	}
 	f32VpfcPrechargeThrd	= 0.85f * 1.414f * f32_get_vin_rms_flt();
-	f32VpfcLpf						=  f32_get_vpfc_lpf_measure();
+	f32VpfcLpf						=  f32_get_vpfc_slow_lpf();
 	g_u16PwrFsmTimerCnt++;
 
 	if ((g_u16PwrFsmTimerCnt > 800)&&(1 == u16PolRvsFlag)&&(f32VpfcLpf > f32VpfcPrechargeThrd)&&(0x0000 == u16_get_auto_recv_diag())){
@@ -147,10 +147,7 @@ void  power_run_in(void) {
 }
 
 void  power_run_exe(void) {
-	float f32VpfcSetTarget = f32_get_vpfc_set_target_llc();
-
-	if((f32VpfcSetTarget <= 427.1f)&&(f32VpfcSetTarget > 390.0f))
-		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
+	g_stPwrFsmOut.f32VpfcSet = f32_get_vpfc_set_target_llc();
 	if (u16_get_fault_flag() == TRUE) {
 		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
 	}
