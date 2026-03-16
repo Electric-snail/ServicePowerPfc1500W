@@ -16,6 +16,7 @@
 #include "SYS_FSM/SYS_FSM.h"
 #include "POWER_FSM/POWER_FSM.h"
 #include "PFC_CTR/PFC_CTR.H"
+#include "VPFC_ADJUST/VPFC_ADJUST.H"
 #include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 
 

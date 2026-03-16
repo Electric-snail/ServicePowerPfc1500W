@@ -141,22 +141,26 @@ void diag_1ms_task(void)
 *************************************************/
 void diag_10ms_task(void)
 {
-	float f32TempValue  = f32_get_vin_rms();
+	float f32TempValue;
+	f32TempValue  = f32_get_vin_rms();
+	if (u16_get_vin_type() == AC_TYPE){
+		ASW_DiagSWFaultOverRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsOvp, f32TempValue, gc_stSwdiagCfgParam[VIN_AC_RMS_OVP_ID].f32PrtctThreshold, \
+								gc_stSwdiagCfgParam[VIN_AC_RMS_OVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_AC_RMS_OVP_ID], gc_stSwdiagCfgParam[VIN_AC_RMS_OVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_AC_RMS_OVP_ID].u16RcvrCnt);
+		ASW_DiagSWFaultUnderRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsUvp, f32TempValue, gc_stSwdiagCfgParam[VIN_AC_RMS_UVP_ID].f32PrtctThreshold, \
+			gc_stSwdiagCfgParam[VIN_AC_RMS_UVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_AC_RMS_UVP_ID], gc_stSwdiagCfgParam[VIN_AC_RMS_UVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_AC_RMS_UVP_ID].u16RcvrCnt);
 
-	ASW_DiagSWFaultOverRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsOvp, f32TempValue, gc_stSwdiagCfgParam[VIN_RMS_OVP_ID].f32PrtctThreshold, \
-							gc_stSwdiagCfgParam[VIN_RMS_OVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_RMS_OVP_ID], gc_stSwdiagCfgParam[VIN_RMS_OVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_RMS_OVP_ID].u16RcvrCnt);
-
-	ASW_DiagSWFaultUnderRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsUvp, f32TempValue, gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].f32PrtctThreshold, \
-		gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_RMS_UVP_ID], gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_RMS_UVP_ID].u16RcvrCnt);
-
-	f32TempValue = f32_get_vin_freq();
-
-	if (u16_get_vin_type() == AC_TYPE) {
+		f32TempValue = f32_get_vin_freq();
 		ASW_DiagSWFaultOverRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinOfp, f32TempValue, gc_stSwdiagCfgParam[VIN_OFP_ID].f32PrtctThreshold, \
 			gc_stSwdiagCfgParam[VIN_OFP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_OFP_ID], gc_stSwdiagCfgParam[VIN_OFP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_OFP_ID].u16RcvrCnt);
-
 		ASW_DiagSWFaultUnderRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinUfp, f32TempValue, gc_stSwdiagCfgParam[VIN_UFP_ID].f32PrtctThreshold, \
 			gc_stSwdiagCfgParam[VIN_UFP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_UFP_ID], gc_stSwdiagCfgParam[VIN_UFP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_UFP_ID].u16RcvrCnt);
+	}
+
+	if (u16_get_vin_type() == DC_TYPE){
+		ASW_DiagSWFaultOverRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsOvp, f32TempValue, gc_stSwdiagCfgParam[VIN_DC_RMS_OVP_ID].f32PrtctThreshold, \
+								gc_stSwdiagCfgParam[VIN_DC_RMS_OVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_DC_RMS_OVP_ID], gc_stSwdiagCfgParam[VIN_DC_RMS_OVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_DC_RMS_OVP_ID].u16RcvrCnt);
+		ASW_DiagSWFaultUnderRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsUvp, f32TempValue, gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].f32PrtctThreshold, \
+			gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_DC_RMS_UVP_ID], gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].u16RcvrCnt);
 
 	}
 

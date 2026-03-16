@@ -57,7 +57,7 @@ extern void BSW_SVC_ScheExcuTask(void);
     {measure_10ms_task,         			"measure_10ms_task",            				1,          10,                 4},\
     {diag_10ms_task,           			 	"diagnostic_10ms_task",         			1,          10,                 6},\
     {diag_100ms_task,           			"diag_100ms_task",              				1,          100,                11},\
-	{pfc_llc_msg_50ms_task,       		"pfc_llc_msg_50ms_task",               	1,          20,                 17},\
+	{pfc_llc_msg_20ms_task,       		"pfc_llc_msg_20ms_task",               	1,          20,                 17},\
     {sw_scope_task,             				"sw_scope_task",              					1,          1,                    0},\
 	{apl_main,                  					"apl_main",                   						1,          3,                  2},\
     {cpu_load_calc_task,        		    "cpu_load_calc_task",         				1,          3,                  1},\

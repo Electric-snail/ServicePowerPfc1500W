@@ -14,6 +14,7 @@
 #include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
 #include "MEASURE/MEASURE.h"
+#include "VPFC_ADJUST/VPFC_ADJUST.h"
 #include "SYS_FSM/SYS_FSM_INF.h"
 
 void  power_standby_in(void);
@@ -70,20 +71,19 @@ void  power_standby_exe(void){
 	unsigned short u16PolRvsFlag = 0;
 	float f32VpfcPrechargeThrd;
 	float f32VpfcLpf;
+	if (u16_get_vin_type() == INVALID_TYPE)   return;
 
-/*	if(u8_get_pfc_stop_cmd() == 1)
-		return;*/
 	if (u16_get_vin_type() == DC_TYPE) {
-		u16PolRvsFlag = 1;  //DC type 下默认输入极性出现跳变，控制继电器的吸合在过零点出.
-	}
-	else {
+		u16PolRvsFlag = 1;  //DC 下则直接吸合
+		f32VpfcPrechargeThrd	= f32_get_vin_rms_flt() - 5.0f;
+	}else {
 		if (s_u16PolLast != u16_get_vin_pol()) {
 			s_u16PolLast  = u16_get_vin_pol();
-			u16PolRvsFlag = 1;
+			u16PolRvsFlag = 1;  //AC 下在输入极性出现跳变，控制继电器的吸合在过零点出.
 		}
+		f32VpfcPrechargeThrd	= 0.85f * 1.414f * f32_get_vin_rms_flt();
 	}
-	f32VpfcPrechargeThrd	= 0.85f * 1.414f * f32_get_vin_rms_flt();
-	f32VpfcLpf						=  f32_get_vpfc_slow_lpf();
+	f32VpfcLpf	=  f32_get_vpfc_slow_lpf();
 	g_u16PwrFsmTimerCnt++;
 
 	if ((g_u16PwrFsmTimerCnt > 800)&&(1 == u16PolRvsFlag)&&(f32VpfcLpf > f32VpfcPrechargeThrd)&&(0x0000 == u16_get_auto_recv_diag())){
@@ -118,7 +118,7 @@ void  power_softstart_in(void) {
 }
 
 void  power_softstart_exe(void) {
-	float f32VpfcSetTarget = f32_get_vpfc_set_target_llc();
+	float f32VpfcSetTarget = f32_get_vpfc_adjust();
 	g_stPwrFsmOut.f32VpfcSet += 0.2f;
 	if (g_stPwrFsmOut.f32VpfcSet > f32VpfcSetTarget) {
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
@@ -137,7 +137,7 @@ void  power_softstart_exe(void) {
 
 UINT8 power_softstart_cond(UINT16 u16TrigEven) {
 	if (u16TrigEven == PWR_SOFTSTART_CMP)					return PWR_STATUS_RUN;
-	if (u16TrigEven == PWR_FAULT_EVEN)			    			return PWR_STATUS_FAULT;
+	if (u16TrigEven == PWR_FAULT_EVEN)			    		return PWR_STATUS_FAULT;
 
 	return PWR_STATUS_SOFTSTART;
 }
@@ -147,7 +147,7 @@ void  power_run_in(void) {
 }
 
 void  power_run_exe(void) {
-	g_stPwrFsmOut.f32VpfcSet = f32_get_vpfc_set_target_llc();
+	g_stPwrFsmOut.f32VpfcSet = f32_get_vpfc_adjust();
 	if (u16_get_fault_flag() == TRUE) {
 		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);
 	}

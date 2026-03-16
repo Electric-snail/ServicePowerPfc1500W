@@ -66,7 +66,7 @@ typedef struct
     pf_void_rec_func      rec_cfg_func;
 }REC_NODE_OBJ;
 
-extern   UINT32 g_u32SysTimerMs;
+extern   volatile UINT32 g_u32SysTimerMs;
 #define  REC_TIME_STAMP   			g_u32SysTimerMs
 
 extern void DataLogCmdSetLink(void *p_stAplDmTemp);

@@ -198,6 +198,9 @@ INTERRUPT void adcA1ISR(void)
 				//	gs_stOrthPll.stCoff.f32CosOmegT =  0.999990539f;
 				//	gs_stOrthPll.stCoff.f32SinOmegT =   0.004488344f;
 					orth_pll_proc_1p(&gs_stOrthPll);
+			}else{
+				gs_stVpfcNotchFilt.stOut.f32Out = g_f32VpfcIsrLpf;
+				LPF(gs_stOrthPll.stOut.f32SigAlpha, g_stAnaPhyRaw.f32Vin, 8000.0f, (float)CTR_PERIOD);
 			}
 			//执行快速保护任务
 			diagnostic_fast_task();

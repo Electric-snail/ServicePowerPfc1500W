@@ -77,18 +77,23 @@ void measure_init(void)
 
 void measure_fast_task(void)
 {
-	g_stMeasureOut.stVinPolFrqObj.stIn.f32VarTrans = f32_get_vin_raw();
+	float f32VinRaw = f32_get_vin_raw();
+	g_stMeasureOut.stVinPolFrqObj.stIn.f32VarTrans = f32VinRaw;
     pol_freq_calc(&g_stMeasureOut.stVinPolFrqObj);
 
-    g_stMeasureOut.stVinRmsObj.stIn.f32Var = f32_get_vin_raw();
-    g_stMeasureOut.stVinRmsObj.stIn.i16Pol = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
-    rms_calc(&g_stMeasureOut.stVinRmsObj);
+    if(g_stMeasureOut.stVinPolFrqObj.stOut.u16Type == AC_TYPE){
+			g_stMeasureOut.stVinRmsObj.stIn.f32Var = f32VinRaw;
+			g_stMeasureOut.stVinRmsObj.stIn.i16Pol = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
+			rms_calc(&g_stMeasureOut.stVinRmsObj);
 
-    g_stMeasureOut.stIinRmsObj.stIn.f32Var      = f32_get_iin_low_raw();
-  //  LPF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum, (g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stIinRmsObj.stIn.f32Var), 0.3f, (CTR_PERIOD));
-  //  g_stMeasureOut.stIinRmsObj.stOut.f32Rms          = SQRTF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum);
-    g_stMeasureOut.stIinRmsObj.stIn.i16Pol      = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
-    rms_calc(&g_stMeasureOut.stIinRmsObj);
+		    g_stMeasureOut.stIinRmsObj.stIn.f32Var      = f32_get_iin_low_raw();
+		  //  LPF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum, (g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stIinRmsObj.stIn.f32Var), 0.3f, (CTR_PERIOD));
+		  //  g_stMeasureOut.stIinRmsObj.stOut.f32Rms          = SQRTF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum);
+		    g_stMeasureOut.stIinRmsObj.stIn.i16Pol      = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
+		    rms_calc(&g_stMeasureOut.stIinRmsObj);
+    }
+
+
 
 //    g_stMeasureOut.stPinAveObj.stIn.f32Var = g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stVinRmsObj.stIn.f32Var;
 //    LPF(g_stMeasureOut.stPinAveObj.stOut.f32Ave, g_stMeasureOut.stPinAveObj.stIn.f32Var,  0.3f,   (CTR_PERIOD));
@@ -115,8 +120,12 @@ void measure_fast_task(void)
 void measure_1ms_task(void)
 {
     float f32Temp = f32_get_vpfc_raw();
-
     LPF(g_stMeasureOut.f32VpfcSlowLpf, f32Temp, 0.5f, 0.001f);
+
+    if(g_stMeasureOut.stVinPolFrqObj.stOut.u16Type == DC_TYPE){
+    	f32Temp = ABSF(f32_get_vin_raw());
+    	LPF(g_stMeasureOut.stVinRmsObj.stOut.f32Rms,  f32Temp,     50.0f,  0.001f);
+    }
 
 }
 

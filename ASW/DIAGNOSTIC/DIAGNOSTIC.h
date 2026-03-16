@@ -67,8 +67,10 @@ typedef struct {
 
 typedef enum SW_DIAG_ID
 {
-    VIN_RMS_OVP_ID = 0,
-    VIN_RMS_UVP_ID,
+    VIN_AC_RMS_OVP_ID = 0,
+    VIN_AC_RMS_UVP_ID,
+    VIN_DC_RMS_OVP_ID,
+    VIN_DC_RMS_UVP_ID,
     VIN_OFP_ID,
     VIN_UFP_ID,
     VPFC_OVP_HW_ID,
@@ -94,14 +96,16 @@ typedef struct
 /*---emSwDiagId-----------------u16ErrCnt-------u16RcvrCnt------f32PrtctThreshold------f32RcvrThreshold*/
 #define DIAG_PARAM_TAB          \
 {\
-    { VIN_RMS_OVP_ID,               5,           				10,            			305,                    290},\
-    { VIN_RMS_UVP_ID,               5,          				10,             			80,                      85 },\
+    { VIN_AC_RMS_OVP_ID,               5,           				10,            			305,                    290},\
+    { VIN_AC_RMS_UVP_ID,               5,          				10,             			80,                      85 },\
+    { VIN_DC_RMS_OVP_ID,               5,           				10,            			340,                    330},\
+    { VIN_DC_RMS_UVP_ID,               5,          				10,             			160,                    170},\
     { VIN_OFP_ID,                   	   5,           				10,             			65,                      66 },\
     { VIN_UFP_ID,              	           5,           				10,             			44,                      45 },\
     { VPFC_OVP_HW_ID,              1,           				0,              			0.5,                     0 },\
     { IL_CBBP_ID,                			100,          			0,              			0.5,                     0 },\
-    { VPFC_FAST_OVP_ID,           5,          				0,              			450,                    0 },\
-    { VPFC_SLOW_OVP_ID,          20,          				0,            				442,                    0},\
+    { VPFC_FAST_OVP_ID,           5,          				0,              			460,                    0 },\
+    { VPFC_SLOW_OVP_ID,          100,          			0,            			   445,                    0},\
     { VPFC_FAST_UVP_ID,            5,           				0,              			280,                     0},\
     { VPFC_SLOW_UVP_ID,          20,          				0,             			260,                     0},\
     { IN_OPP_ID,                    			5,           				0,              			1000,                   0 },\

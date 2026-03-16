@@ -88,5 +88,5 @@
 #define 	 HW_OFFSET_IIN_H                											0.032f
 
 #define    IL_CBC_VALUE																	28.0f
-#define   VPFC_HW_OVP																	455.0f
+#define   VPFC_HW_OVP																	465.0f
 #endif /* BSW_BASIC_HARDWARE_BASIC_ENV_H_ */

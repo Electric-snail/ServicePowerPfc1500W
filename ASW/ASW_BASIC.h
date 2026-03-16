@@ -24,6 +24,7 @@ typedef struct
 /*	{sys_fsm_init,		    			1},			 */   \
 	{power_fsm_init,	    		1},			      \
 	{pfc_llc_comm_init,		    1},			    \
+	{vpfc_adjust_init,				1},				\
 }
 
 

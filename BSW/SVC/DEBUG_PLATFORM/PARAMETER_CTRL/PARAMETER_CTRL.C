@@ -287,45 +287,59 @@ static param_item_t *reset_param_item(UINT8 u8ItemNum)
             switch(p_item->emType){
                 case eu_uint8:
                     p_ParamItemCfgU8 = (const param_item_cfg_u8_t *)p_item->p_item_cfg;
-                    u8CurDefVal = p_ParamItemCfgU8->u8def_val <= p_ParamItemCfgU8->u8max_val?p_ParamItemCfgU8->u8def_val:p_ParamItemCfgU8->u8max_val;
-                    u8CurDefVal = (u8CurDefVal >= p_ParamItemCfgU8->u8min_val)?u8CurDefVal:p_ParamItemCfgU8->u8min_val;
-                    *(p_ParamItemCfgU8->p_u8Value) = u8CurDefVal;
+                    if(p_ParamItemCfgU8->emAttr != VAR_RD){
+						u8CurDefVal = p_ParamItemCfgU8->u8def_val <= p_ParamItemCfgU8->u8max_val?p_ParamItemCfgU8->u8def_val:p_ParamItemCfgU8->u8max_val;
+						u8CurDefVal = (u8CurDefVal >= p_ParamItemCfgU8->u8min_val)?u8CurDefVal:p_ParamItemCfgU8->u8min_val;
+						*(p_ParamItemCfgU8->p_u8Value) = u8CurDefVal;
+                    }
                 break;
                 case eu_int8:
                     p_ParamItemCfgI8 = (const param_item_cfg_i8_t *)p_item->p_item_cfg;
-                    i8CurDefVal = p_ParamItemCfgI8->i8def_val <= p_ParamItemCfgI8->i8max_val?p_ParamItemCfgI8->i8def_val:p_ParamItemCfgI8->i8max_val;
-                    i8CurDefVal = (i8CurDefVal >= p_ParamItemCfgI8->i8min_val)?i8CurDefVal:p_ParamItemCfgI8->i8min_val;
-                    *(p_ParamItemCfgI8->p_i8Value) = i8CurDefVal;
+                    if(p_ParamItemCfgI8->emAttr != VAR_RD){
+						i8CurDefVal = p_ParamItemCfgI8->i8def_val <= p_ParamItemCfgI8->i8max_val?p_ParamItemCfgI8->i8def_val:p_ParamItemCfgI8->i8max_val;
+						i8CurDefVal = (i8CurDefVal >= p_ParamItemCfgI8->i8min_val)?i8CurDefVal:p_ParamItemCfgI8->i8min_val;
+						*(p_ParamItemCfgI8->p_i8Value) = i8CurDefVal;
+                    }
                 break;
                 case eu_uint16:
                     p_ParamItemCfgU16 = (const param_item_cfg_u16_t *)p_item->p_item_cfg;
-                    u16CurDefVal = p_ParamItemCfgU16->u16def_val <= p_ParamItemCfgU16->u16max_val?p_ParamItemCfgU16->u16def_val:p_ParamItemCfgU16->u16max_val;
-                    u16CurDefVal = (u16CurDefVal >= p_ParamItemCfgU16->u16min_val)?u16CurDefVal:p_ParamItemCfgU16->u16min_val;
-                    *(p_ParamItemCfgU16->p_u16Value) = u16CurDefVal;
+                    if(p_ParamItemCfgU16->emAttr != VAR_RD){
+						u16CurDefVal = p_ParamItemCfgU16->u16def_val <= p_ParamItemCfgU16->u16max_val?p_ParamItemCfgU16->u16def_val:p_ParamItemCfgU16->u16max_val;
+						u16CurDefVal = (u16CurDefVal >= p_ParamItemCfgU16->u16min_val)?u16CurDefVal:p_ParamItemCfgU16->u16min_val;
+						*(p_ParamItemCfgU16->p_u16Value) = u16CurDefVal;
+                    }
                 break;
                 case eu_int16:
                     p_ParamItemCfgI16 = (const param_item_cfg_i16_t *)p_item->p_item_cfg;
-                    i16CurDefVal = p_ParamItemCfgI16->i16def_val <= p_ParamItemCfgI16->i16max_val?p_ParamItemCfgI16->i16def_val:p_ParamItemCfgI16->i16max_val;
-                    i16CurDefVal = (i16CurDefVal >= p_ParamItemCfgI16->i16min_val)?i16CurDefVal:p_ParamItemCfgI16->i16min_val;
-                    *(p_ParamItemCfgI16->p_i16Value) = i16CurDefVal;
+                    if(p_ParamItemCfgI16->emAttr != VAR_RD){
+						i16CurDefVal = p_ParamItemCfgI16->i16def_val <= p_ParamItemCfgI16->i16max_val?p_ParamItemCfgI16->i16def_val:p_ParamItemCfgI16->i16max_val;
+						i16CurDefVal = (i16CurDefVal >= p_ParamItemCfgI16->i16min_val)?i16CurDefVal:p_ParamItemCfgI16->i16min_val;
+						*(p_ParamItemCfgI16->p_i16Value) = i16CurDefVal;
+                    }
                 break;
                 case eu_uint32:
                     p_ParamItemCfgU32 = (const param_item_cfg_u32_t *)p_item->p_item_cfg;
-                    u32CurDefVal = p_ParamItemCfgU32->u32def_val <= p_ParamItemCfgU32->u32max_val?p_ParamItemCfgU32->u32def_val:p_ParamItemCfgU32->u32max_val;
-                    u32CurDefVal = (u32CurDefVal >= p_ParamItemCfgU32->u32min_val)?u32CurDefVal:p_ParamItemCfgU32->u32min_val;
-                    *(p_ParamItemCfgU32->p_u32Value) = u32CurDefVal;
+                    if(p_ParamItemCfgU32->emAttr != VAR_RD){
+						u32CurDefVal = p_ParamItemCfgU32->u32def_val <= p_ParamItemCfgU32->u32max_val?p_ParamItemCfgU32->u32def_val:p_ParamItemCfgU32->u32max_val;
+						u32CurDefVal = (u32CurDefVal >= p_ParamItemCfgU32->u32min_val)?u32CurDefVal:p_ParamItemCfgU32->u32min_val;
+						*(p_ParamItemCfgU32->p_u32Value) = u32CurDefVal;
+                    }
                 break;
                 case eu_int32:
                     p_ParamItemCfgI32 = (const param_item_cfg_i32_t *)p_item->p_item_cfg;
-                    i32CurDefVal = p_ParamItemCfgI32->i32def_val <= p_ParamItemCfgI32->i32max_val?p_ParamItemCfgI32->i32def_val:p_ParamItemCfgI32->i32max_val;
-                    i32CurDefVal = (i32CurDefVal >= p_ParamItemCfgI32->i32min_val)?i32CurDefVal:p_ParamItemCfgI32->i32min_val;
-                    *(p_ParamItemCfgI32->p_i32Value) = i32CurDefVal;
+                    if(p_ParamItemCfgI32->emAttr != VAR_RD){
+						i32CurDefVal = p_ParamItemCfgI32->i32def_val <= p_ParamItemCfgI32->i32max_val?p_ParamItemCfgI32->i32def_val:p_ParamItemCfgI32->i32max_val;
+						i32CurDefVal = (i32CurDefVal >= p_ParamItemCfgI32->i32min_val)?i32CurDefVal:p_ParamItemCfgI32->i32min_val;
+						*(p_ParamItemCfgI32->p_i32Value) = i32CurDefVal;
+                    }
                 break;
                 case eu_fp32:
                     p_ParamItemCfgF32 = (const param_item_cfg_f32_t *)p_item->p_item_cfg;
-                    f32CurDefVal = p_ParamItemCfgF32->f32def_val <= p_ParamItemCfgF32->f32max_val?p_ParamItemCfgF32->f32def_val:p_ParamItemCfgF32->f32max_val;
-                    f32CurDefVal = (f32CurDefVal >= p_ParamItemCfgF32->f32min_val)?f32CurDefVal:p_ParamItemCfgF32->f32min_val;
-                    *(p_ParamItemCfgF32->p_f32Value) = f32CurDefVal;
+                    if(p_ParamItemCfgF32->emAttr != VAR_RD){
+						f32CurDefVal = p_ParamItemCfgF32->f32def_val <= p_ParamItemCfgF32->f32max_val?p_ParamItemCfgF32->f32def_val:p_ParamItemCfgF32->f32max_val;
+						f32CurDefVal = (f32CurDefVal >= p_ParamItemCfgF32->f32min_val)?f32CurDefVal:p_ParamItemCfgF32->f32min_val;
+						*(p_ParamItemCfgF32->p_f32Value) = f32CurDefVal;
+                    }
                 break;
                 default:break;
                }
@@ -359,33 +373,43 @@ static void reset_param_all(void)
         switch(p_item->emType){
             case eu_uint16:
             p_ParamItemCfgU16 = (const param_item_cfg_u16_t *)p_item->p_item_cfg;
-            u16CurDefVal = p_ParamItemCfgU16->u16def_val <= p_ParamItemCfgU16->u16max_val?p_ParamItemCfgU16->u16def_val:p_ParamItemCfgU16->u16max_val;
-            u16CurDefVal = (u16CurDefVal >= p_ParamItemCfgU16->u16min_val)?u16CurDefVal:p_ParamItemCfgU16->u16min_val;
-            *(p_ParamItemCfgU16->p_u16Value) = u16CurDefVal;
+            if(p_ParamItemCfgU16->emAttr != VAR_RD){
+				u16CurDefVal = p_ParamItemCfgU16->u16def_val <= p_ParamItemCfgU16->u16max_val?p_ParamItemCfgU16->u16def_val:p_ParamItemCfgU16->u16max_val;
+				u16CurDefVal = (u16CurDefVal >= p_ParamItemCfgU16->u16min_val)?u16CurDefVal:p_ParamItemCfgU16->u16min_val;
+				*(p_ParamItemCfgU16->p_u16Value) = u16CurDefVal;
+            }
             break;
             case eu_int16:
             p_ParamItemCfgI16 = (const param_item_cfg_i16_t *)p_item->p_item_cfg;
-            i16CurDefVal = p_ParamItemCfgI16->i16def_val <= p_ParamItemCfgI16->i16max_val?p_ParamItemCfgI16->i16def_val:p_ParamItemCfgI16->i16max_val;
-            i16CurDefVal = (i16CurDefVal >= p_ParamItemCfgI16->i16min_val)?i16CurDefVal:p_ParamItemCfgI16->i16min_val;
-            *(p_ParamItemCfgI16->p_i16Value) = i16CurDefVal;
+            if(p_ParamItemCfgI16->emAttr != VAR_RD){
+				i16CurDefVal = p_ParamItemCfgI16->i16def_val <= p_ParamItemCfgI16->i16max_val?p_ParamItemCfgI16->i16def_val:p_ParamItemCfgI16->i16max_val;
+				i16CurDefVal = (i16CurDefVal >= p_ParamItemCfgI16->i16min_val)?i16CurDefVal:p_ParamItemCfgI16->i16min_val;
+				*(p_ParamItemCfgI16->p_i16Value) = i16CurDefVal;
+            }
             break;
             case eu_uint32:
             p_ParamItemCfgU32 = (const param_item_cfg_u32_t *)p_item->p_item_cfg;
-            u32CurDefVal = p_ParamItemCfgU32->u32def_val <= p_ParamItemCfgU32->u32max_val?p_ParamItemCfgU32->u32def_val:p_ParamItemCfgU32->u32max_val;
-            u32CurDefVal = (u32CurDefVal >= p_ParamItemCfgU32->u32min_val)?u32CurDefVal:p_ParamItemCfgU32->u32min_val;
-            *(p_ParamItemCfgU32->p_u32Value) = u32CurDefVal;
+            if(p_ParamItemCfgU32->emAttr != VAR_RD){
+				u32CurDefVal = p_ParamItemCfgU32->u32def_val <= p_ParamItemCfgU32->u32max_val?p_ParamItemCfgU32->u32def_val:p_ParamItemCfgU32->u32max_val;
+				u32CurDefVal = (u32CurDefVal >= p_ParamItemCfgU32->u32min_val)?u32CurDefVal:p_ParamItemCfgU32->u32min_val;
+				*(p_ParamItemCfgU32->p_u32Value) = u32CurDefVal;
+            }
             break;
             case eu_int32:
             p_ParamItemCfgI32 = (const param_item_cfg_i32_t *)p_item->p_item_cfg;
-            i32CurDefVal = p_ParamItemCfgI32->i32def_val <= p_ParamItemCfgI32->i32max_val?p_ParamItemCfgI32->i32def_val:p_ParamItemCfgI32->i32max_val;
-            i32CurDefVal = (i32CurDefVal >= p_ParamItemCfgI32->i32min_val)?i32CurDefVal:p_ParamItemCfgI32->i32min_val;
-            *(p_ParamItemCfgI32->p_i32Value) = i32CurDefVal;
+            if(p_ParamItemCfgI32->emAttr != VAR_RD){
+				i32CurDefVal = p_ParamItemCfgI32->i32def_val <= p_ParamItemCfgI32->i32max_val?p_ParamItemCfgI32->i32def_val:p_ParamItemCfgI32->i32max_val;
+				i32CurDefVal = (i32CurDefVal >= p_ParamItemCfgI32->i32min_val)?i32CurDefVal:p_ParamItemCfgI32->i32min_val;
+				*(p_ParamItemCfgI32->p_i32Value) = i32CurDefVal;
+            }
             break;
             case eu_fp32:
             p_ParamItemCfgF32 = (const param_item_cfg_f32_t *)p_item->p_item_cfg;
-            f32CurDefVal = p_ParamItemCfgF32->f32def_val <= p_ParamItemCfgF32->f32max_val?p_ParamItemCfgF32->f32def_val:p_ParamItemCfgF32->f32max_val;
-            f32CurDefVal = (f32CurDefVal >= p_ParamItemCfgF32->f32min_val)?f32CurDefVal:p_ParamItemCfgF32->f32min_val;
-            *(p_ParamItemCfgF32->p_f32Value) = f32CurDefVal;
+            if(p_ParamItemCfgF32->emAttr != VAR_RD){
+				f32CurDefVal = p_ParamItemCfgF32->f32def_val <= p_ParamItemCfgF32->f32max_val?p_ParamItemCfgF32->f32def_val:p_ParamItemCfgF32->f32max_val;
+				f32CurDefVal = (f32CurDefVal >= p_ParamItemCfgF32->f32min_val)?f32CurDefVal:p_ParamItemCfgF32->f32min_val;
+				*(p_ParamItemCfgF32->p_f32Value) = f32CurDefVal;
+            }
             break;
             default:
             break;

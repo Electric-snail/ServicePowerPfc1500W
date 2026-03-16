@@ -33,11 +33,11 @@ typedef struct{
 }I16_CALIB_LIMIT_ITEM_T;
 
 #define GEN_PARAM_CALIB_VAR_F32_TYPE_ENTITY
-    #include "../DEBUG_PLATFORM/PARAMETER_CALIB/Parameter_Calib_Cfg.h"
+    #include "DEBUG_PLATFORM/PARAMETER_CALIB/PARAMETER_CALIB_CFG.H"
 #undef GEN_PARAM_CALIB_VAR_F32_TYPE_ENTITY
 
 #define GEN_PARAM_CALIB_VAR_I16_TYPE_ENTITY
-    #include "../DEBUG_PLATFORM/PARAMETER_CALIB/Parameter_Calib_Cfg.h"
+    #include "DEBUG_PLATFORM/PARAMETER_CALIB/PARAMETER_CALIB_CFG.H"
 #undef GEN_PARAM_CALIB_VAR_I16_TYPE_ENTITY
 
 //F32_CALIB_DATA_OBJ_T 包含了所用定义的浮点型定义的校准数组
@@ -74,6 +74,7 @@ typedef struct{
 #define u8_clc_calib_store_flag()              g_u8CalibStoreFlg = 0
 #define p_u8_get_calib_data_addr()             ((unsigned char *)&g_stCalibData)
 #define u16_get_calib_data_num()               sizeof(g_stCalibData)
+
 extern unsigned char       g_u8CalibStoreFlg;
 extern PARAME_CALIB_DATA_T g_stCalibData;
 extern void ParamCalibCmdSetLink(void *p_vAplDm);

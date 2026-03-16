@@ -40,16 +40,17 @@ extern    VIN_DROP_DIG_OBJ_T       				g_stVinDropDiag;
 #define SW_SCOPE_TASK_PERIOD        	1
 
 #define STARTUP_MODE     			STARTUP_GUI
-#define F32_THRD_VALUE              60.0f
-#define TRIGG_INDEX                     2
+#define F32_THRD_VALUE              360.0f
+#define TRIGG_INDEX                     1
 #define ACQ_MODE                          CTR_FRE
-#define ACQ_INTERVAL                   30
+#define ACQ_INTERVAL                   10
 #define TRIGG_METHOD                RISING_EDGE
 #endif
 
 //-------------name------------------------------startup_mode------------cache_size
 SW_SCOPE_START(PFC_SCOPE,		 STARTUP_MODE,  SW_SCOPE_CASH_SIZE)
-SW_SCOPE_ITEM(g_stVinDropDiag.stOut.u16VinDropFaultFlag)
-SW_SCOPE_ITEM(g_stVinDropDiag.stInner.u16RecvN)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Ref)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Fb)
+SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stOut.f32Out)
 SW_SCOPE_END()
 

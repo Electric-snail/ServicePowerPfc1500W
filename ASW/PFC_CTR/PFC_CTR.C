@@ -25,10 +25,12 @@ STATIC PI_POS_T				    gs_stVpfcPiCtrl;
 STATIC PI_GAIN_POS_T		gs_stIacPiGainCtrl;
 STATIC float							    gs_f32FeedCoff;
 PFC_CTR_OUT						g_stPfcOut;
-//float						g_f32VpfcPiKpFast;
-//float						g_f32VpfcPiKiTsFast;
-float							g_f32VpfcPiKpSlow;
-float							g_f32VpfcPiKiTsSlow;
+float										g_f32VpfcPiKpSlow;
+float										g_f32VpfcPiKiTsSlow;
+float										g_f32VpfcPiKpDcSlow;
+float										g_f32VpfcPiKiTsDcSlow;
+
+float                            g_f32VpfcPiGain;
 float                        g_f32PowerOpenSet;
 float 						f32DutyForwared;
 
@@ -42,8 +44,13 @@ void 	pfc_controller_init(void){
 	//	g_f32VpfcPiKpFast									    = 100;
 	//	g_f32VpfcPiKiTsFast									= 5 * 2*3.1415926f * 5 * CTR_PERIOD;
 
-		g_f32VpfcPiKpSlow									= 30.0f;
-		g_f32VpfcPiKiTsSlow								=  0.005f;  //6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+		g_f32VpfcPiKpSlow									= 5;//30.0f;
+		g_f32VpfcPiKiTsSlow								=  0.0025f;//0.005f;  //6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+
+		g_f32VpfcPiKpDcSlow                              = 50.0f;
+		g_f32VpfcPiKiTsDcSlow							=  0.015f;//0.005f;  //6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
+
+		g_f32VpfcPiGain                                        = 0.4f;
 
 		gs_stVpfcPiCtrl.stIn.f32Fb                          = 0.0f;
 		gs_stVpfcPiCtrl.stIn.f32Ref                        = 0.0f;
@@ -78,6 +85,7 @@ void 	pfc_controller(void){
 		float f32VpfcLpf     = f32_get_vpfc_isr_lpf();
 		float f32VinAbs		= ABSF(f32_get_vin_raw());
 		float f32VinRms		= f32_get_vin_rms_flt();
+		float f32VpfcErr0, f32VpfcErr1;
 		float f32Temp;
 		float f32IlRefTemp;
 		float f32PinAve;
@@ -90,23 +98,43 @@ void 	pfc_controller(void){
 
 	 //  f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
 
-		if (f32VpfcFastLpf <= 395.0f) {
+		if(u16_get_vin_type() == AC_TYPE){
+			f32VpfcErr0 = gs_stVpfcPiCtrl.stIn.f32Ref - f32VpfcFastLpf - 12.0f;
+			f32VpfcErr1 =395.0f - f32VpfcFastLpf;
+			if(((f32VpfcErr0 > 0.0f)||(f32VpfcErr1 > 0))&&(PWR_STATUS_RUN == u16_get_pwr_status())){
+				//fast jump from the integration saturation status.
+				  if(gs_stVpfcPiCtrl.stInner.f32Integrate < 0)
+					  gs_stVpfcPiCtrl.stInner.f32Integrate = 0;
+				  if(f32VpfcErr0 > f32VpfcErr1){
+					  	  gs_stVpfcPiCtrl.stCoff.f32Kp     = (f32VpfcErr0 * g_f32VpfcPiGain + 1.0f)*g_f32VpfcPiKpSlow;//f32VpfcErr0 * g_f32VpfcPiGain + g_f32VpfcPiKpSlow
+					  	  gs_stVpfcPiCtrl.stCoff.f32KiTs  = (f32VpfcErr0 * g_f32VpfcPiGain + 1.0f)*g_f32VpfcPiKiTsSlow; //f32VpfcErr0 * g_f32VpfcPiGain + g_f32VpfcPiKiTsSlow;
+				  }else{
+				  	      gs_stVpfcPiCtrl.stCoff.f32Kp     = (f32VpfcErr1 * g_f32VpfcPiGain + 1.0f)*g_f32VpfcPiKpSlow;//f32VpfcErr1 * g_f32VpfcPiGain + g_f32VpfcPiKpSlow;
+				  	      gs_stVpfcPiCtrl.stCoff.f32KiTs  = (f32VpfcErr1 * g_f32VpfcPiGain + 1.0f)*g_f32VpfcPiKiTsSlow;//f32VpfcErr1 * g_f32VpfcPiGain +  g_f32VpfcPiKiTsSlow;
+				  }
+			}
+			else {
+				  gs_stVpfcPiCtrl.stCoff.f32Kp	   = g_f32VpfcPiKpSlow;
+				  gs_stVpfcPiCtrl.stCoff.f32KiTs	   = g_f32VpfcPiKiTsSlow;
+			}
+			//in case of the vpfc overshoot too high
+			f32Temp	   = f32VpfcFastLpf -  25.0f;
+		}else{
 			//fast jump from the integration saturation status.
-			  if(gs_stVpfcPiCtrl.stInner.f32Integrate < 200){
-				  gs_stVpfcPiCtrl.stInner.f32Integrate = 200;
-			  }
-   		      gs_stVpfcPiCtrl.stCoff.f32Kp     = ((395.0f - f32VpfcFastLpf) * 0.4 + 1.0f)*g_f32VpfcPiKpSlow;
-   			  gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((395.0f - f32VpfcFastLpf) * 0.4 + 1.0f) * g_f32VpfcPiKiTsSlow;
+			if ((f32VpfcFastLpf <= 395.0f)&&(PWR_STATUS_RUN == u16_get_pwr_status())){
+				  if(gs_stVpfcPiCtrl.stInner.f32Integrate < 0)
+					  gs_stVpfcPiCtrl.stInner.f32Integrate = 0;
+				  gs_stVpfcPiCtrl.stCoff.f32Kp     = ((395.0f - f32VpfcFastLpf) * 0.4 + 1.0f) * g_f32VpfcPiKpDcSlow;
+				  gs_stVpfcPiCtrl.stCoff.f32KiTs  = ((395.0f - f32VpfcFastLpf) * 0.4 + 1.0f) * g_f32VpfcPiKiTsDcSlow;
+			}else{
+				  gs_stVpfcPiCtrl.stCoff.f32Kp	   = g_f32VpfcPiKpDcSlow;
+				  gs_stVpfcPiCtrl.stCoff.f32KiTs	   = g_f32VpfcPiKiTsDcSlow;
+			}
+			//in case of the vpfc overshoot too high
+			f32Temp	   = f32VpfcFastLpf -  10.0f;
 		}
-		else {
-			  gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
-			  gs_stVpfcPiCtrl.stCoff.f32KiTs	   = g_f32VpfcPiKiTsSlow;
-		}
-	//	gs_stVpfcPiCtrl.stCoff.f32Kp	    = g_f32VpfcPiKpSlow;
-	//	gs_stVpfcPiCtrl.stCoff.f32KiTs	= g_f32VpfcPiKiTsSlow;
-		//in case of the vpfc overshoot too high
-		f32Temp	   = f32VpfcFastLpf -  20.0f;
-		if(f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref){
+
+		if((f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref)||(f32VpfcFastLpf >= 455.0f)){
 			gs_stVpfcPiCtrl.stInner.f32Integrate 				= -500.0f;
 			gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		}
@@ -153,15 +181,11 @@ void 	pfc_controller(void){
 		}else{
 			gs_f32FeedCoff = 0.55f + (f32PinAve - 150.0f)*0.0011666667f;
 		}
-
 		//占空比前馈 feedforwared for vin & vout
-	 
 		f32DutyForwared = gs_f32FeedCoff * (f32VpfcLpf - f32VinAbs) /f32VpfcLpf;  //防止除以0
 
 		f32Duty = f32DutyForwared + gs_stIacPiGainCtrl.stOut.f32Out;
-
 		g_stPfcOut.f32Duty =  LIMIT(f32Duty, 0.0f, 0.98f);
-
 		/*if (f32Duty > 0.98f) {  //限最大值输出，以及防止正向饱和
 			g_stPfcOut.f32Duty = 0.98f;
 		//	f32Temp = 1.0f - f32DutyForwared;
