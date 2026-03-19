@@ -87,6 +87,6 @@
 #define 	 FULL_RANGE_IIN_H														70.91f
 #define 	 HW_OFFSET_IIN_H                											0.032f
 
-#define    IL_CBC_VALUE																	28.0f
-#define   VPFC_HW_OVP																	465.0f
+#define    IL_CBC_VALUE																	40.0f
+#define    VPFC_HW_OVP																	465.0f
 #endif /* BSW_BASIC_HARDWARE_BASIC_ENV_H_ */

@@ -35,10 +35,10 @@ float                        g_f32PowerOpenSet;
 float 						f32DutyForwared;
 
 void 	pfc_controller_init(void){
-		gs_stVpfcPiCtrl.stCoff.f32IntegrateMax			= 3500.0f;   //output is the input power£¬maximum the input power
-		gs_stVpfcPiCtrl.stCoff.f32IntegrateMin			= -1000.0f;
+		gs_stVpfcPiCtrl.stCoff.f32IntegrateMax		= 3000.0f;   //output is the input power£¬maximum the input power
+		gs_stVpfcPiCtrl.stCoff.f32IntegrateMin		= -1000.0f;
 
-		gs_stVpfcPiCtrl.stCoff.f32OutMax				= 3500.0f;   //output is the input power,maximum the input power
+		gs_stVpfcPiCtrl.stCoff.f32OutMax				= 3000.0f;   //output is the input power,maximum the input power
 		gs_stVpfcPiCtrl.stCoff.f32OutMin				= -1000.0f;
 
 	//	g_f32VpfcPiKpFast									    = 100;
@@ -67,7 +67,7 @@ void 	pfc_controller_init(void){
 
 	//	gs_stIacPiGainCtrl.stCoff.f32Kp						= 0.02 * 380f;
 	//	gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.2f * 666.6 * 380f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
-		gs_stIacPiGainCtrl.stCoff.f32Kp						= 20.0f;
+		gs_stIacPiGainCtrl.stCoff.f32Kp						= 15.0f;
 		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 20.0f * 8000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
@@ -99,7 +99,7 @@ void 	pfc_controller(void){
 	 //  f32VpfcErrAbs = ABSF(gs_stVpfcPiCtrl.stIn.f32Ref - gs_stVpfcPiCtrl.stIn.f32Fb);
 
 		if(u16_get_vin_type() == AC_TYPE){
-			f32VpfcErr0 = gs_stVpfcPiCtrl.stIn.f32Ref - f32VpfcFastLpf - 12.0f;
+			f32VpfcErr0 = gs_stVpfcPiCtrl.stIn.f32Ref - f32VpfcFastLpf - 15.0f;
 			f32VpfcErr1 =395.0f - f32VpfcFastLpf;
 			if(((f32VpfcErr0 > 0.0f)||(f32VpfcErr1 > 0))&&(PWR_STATUS_RUN == u16_get_pwr_status())){
 				//fast jump from the integration saturation status.
