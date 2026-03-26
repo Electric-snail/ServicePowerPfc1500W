@@ -14,13 +14,13 @@
 #define TTL_HIGH      1
 
 typedef struct {
-    unsigned short  b1VinRmsOvp : 1;
-    unsigned short  b1VinRmsUvp : 1;
-    unsigned short  b1VinOfp    : 1;
-    unsigned short  b1VinUfp    : 1;
-    unsigned short  b1VinDrop  : 1;
-    unsigned short  b3Rvs         :  3;
-    unsigned short  b8Rvs		  : 8;
+    unsigned short  b1VinRmsOvp :  1;
+    unsigned short  b1VinRmsUvp :  1;
+    unsigned short  b1VinOfp    		:  1;
+    unsigned short  b1VinUfp    		:  1;
+    unsigned short  b1VinDrop  		:  1;
+    unsigned short  b3Rvs         		:  3;
+    unsigned short  b8Rvs		  		:  8;
 }AUTO_RECV_FAULT_BITS;
 
 typedef struct {

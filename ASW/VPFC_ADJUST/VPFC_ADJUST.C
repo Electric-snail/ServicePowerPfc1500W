@@ -45,11 +45,16 @@ float f32_get_vpfc_adjust(void){
 				g_f32VpfcPiKpSlow    = g_f32VpfcPiKpMv;
 				g_f32VpfcPiKiTsSlow = g_f32VpfcPiKiTsMv;
 				g_f32VpfcPiGain         = g_f32VpfcPiGainMv;
+		}else if(f32VrmsValue >= 295.0f){
+			g_f32VpfcPiKpSlow    = g_f32VpfcPiKpHv;
+			g_f32VpfcPiKiTsSlow = g_f32VpfcPiKiTsHv;
+			g_f32VpfcPiGain         = g_f32VpfcPiGainHv;
+			f32VpfcRef 					= 430.0f;
 		}else{
-				f32VpfcRef = 420.0f + 1.0f*(f32VrmsValue - 285.0f);
-				g_f32VpfcPiKpSlow    = g_f32VpfcPiKpHv;
-				g_f32VpfcPiKiTsSlow = g_f32VpfcPiKiTsHv;
-				g_f32VpfcPiGain         = g_f32VpfcPiGainHv;
+			g_f32VpfcPiKpSlow    = g_f32VpfcPiKpHv;
+			g_f32VpfcPiKiTsSlow = g_f32VpfcPiKiTsHv;
+			g_f32VpfcPiGain         = g_f32VpfcPiGainHv;
+			f32VpfcRef 					= 420.0f + (f32VrmsValue - 285.0f);
 		}
 	}else{
 		f32VpfcRef = 400.0f;

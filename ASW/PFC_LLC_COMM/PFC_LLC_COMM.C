@@ -55,16 +55,16 @@ void app_rx_msg_handle(void){
 	 unsigned short u16Iout;
 	 u16Iout		  = g_ua16RxData[0];
 	 g_stPfcLlcCommOut.u16LlcIout = u16Iout;
-	 if(u16Iout < 18){
+	 if(u16Iout <= 25){
 		 g_stPfcLlcCommOut.f32VpfcRef = 400;
-	 }else if((u16Iout >= 18)&&(u16Iout < 23)){
-		 g_stPfcLlcCommOut.f32VpfcRef = 400.0f +2.0f*(u16Iout -18);
-	 }else if((u16Iout >= 23)&&(u16Iout  < 90)){
-		 g_stPfcLlcCommOut.f32VpfcRef = 410.0f;
-	 }else if(u16Iout >= 108){
-		 g_stPfcLlcCommOut.f32VpfcRef = 427.0f;
+	 }else if((u16Iout > 25)&&(u16Iout <= 30)){
+		 g_stPfcLlcCommOut.f32VpfcRef = 400.0f +(u16Iout -25);
+	 }else if((u16Iout > 30)&&(u16Iout  <= 93)){
+		 g_stPfcLlcCommOut.f32VpfcRef = 405.0f;
+	 }else if(u16Iout > 109){
+		 g_stPfcLlcCommOut.f32VpfcRef = 422.5f;
 	 }else{
-		 g_stPfcLlcCommOut.f32VpfcRef = 410.0f +0.94444f*(u16Iout -90);
+		 g_stPfcLlcCommOut.f32VpfcRef = 405.0f +1.09375f*(u16Iout -93);
 	 }
 	  g_stPfcLlcCommOut.u16BootReq      = g_ua16RxData[1];
 }
