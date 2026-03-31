@@ -23,10 +23,10 @@ extern float g_f32VpfcPiKiTsSlow;
 void vpfc_adjust_init(void){
 	g_f32VpfcPiKpLv 		= 5.0f;//30.0f;
 	g_f32VpfcPiKiTsLv 	= 0.0025f;
-	g_f32VpfcPiGainLv    = 0.4f;
+	g_f32VpfcPiGainLv    = 1.0f;
 	g_f32VpfcPiKpMv		= 5.0f;//30.0f;
 	g_f32VpfcPiKiTsMv	= 0.0015f;
-	g_f32VpfcPiGainMv   = 0.5f;
+	g_f32VpfcPiGainMv   = 0.8f;
 	g_f32VpfcPiKpHv		= 20.0f;//30.0f;
 	g_f32VpfcPiKiTsHv	= 0.005f;
 	g_f32VpfcPiGainHv   = 1.2f;

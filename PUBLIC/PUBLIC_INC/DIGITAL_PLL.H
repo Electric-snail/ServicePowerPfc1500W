@@ -8,18 +8,47 @@ typedef struct {
 }SOGI_INPUT_T;
 
 typedef struct {
-	unsigned char 		u8Ena2nd;
+	float         f32Alfa;
+	float         f32Beta;
+}SOGI_OUTPUT_T;
+
+typedef struct {
 	float         				f32Kp;
 	float         				f32Ts;
 	float         				f32Wn;
 }SOGI_COFF_T;
 
 typedef struct {
+	float f32IntegInN_1;
+	float f32IntegOutN;
+	float f32IntegInQN_1;
+	float f32IntegOutQN;
+}SOGI_INTER_T;
+
+typedef struct {
+	SOGI_INPUT_T  		stIn;
+	SOGI_COFF_T      	stCoff;
+	SOGI_INTER_T  		stInter;
+	SOGI_OUTPUT_T 	    stOut;
+}SOGI_OBJ_T;
+
+typedef struct {
+	float         f32SigIn;
+}SOGI_PLL_INPUT_T;
+
+typedef struct {
+	unsigned char 				u8Ena2nd;
+	float         				f32Kp;
+	float         				f32Ts;
+	float         				f32Wn;
+}SOGI_PLL_COFF_T;
+
+typedef struct {
 	float         f32SigOut;
 	float         f32SigOutQ;
 	float         f32SigOut2nd;
 	float         f32SigOut2ndQ;
-}SOGI_OUTPUT_T;
+}SOGI_PLL_OUTPUT_T;
 
 typedef struct {
 	float f32IntegInN_1;
@@ -34,14 +63,14 @@ typedef struct {
 	float f32IntegOut2ndN_1;
 	float f32IntegOut2ndQ;
 	float f32IntegOut2ndQN_1;
-}SOGI_INTER_T;
+}SOGI_PLL_INTER_T;
 
 typedef struct {
-	SOGI_INPUT_T  		stIn;
-	SOGI_COFF_T      	stCoff;
-	SOGI_OUTPUT_T 	stOut;
-	SOGI_INTER_T  		stInter;
-}SOGI_OBJ_T;
+	SOGI_PLL_INPUT_T  		stIn;
+	SOGI_PLL_COFF_T      	stCoff;
+	SOGI_PLL_OUTPUT_T 	stOut;
+	SOGI_PLL_INTER_T  		stInter;
+}SOGI_PLL_OBJ_T;
 
 typedef struct {
 	float         f32SigIn;
@@ -66,8 +95,14 @@ typedef struct {
 	ORTH_OUTPUT_T 		stOut;
 }ORTH_PLL_OBJ_T;
 
-void sogi_set_freq_1p(VOLATILE 		SOGI_OBJ_T *pst_Sogi, float f32Freq);
-extern void sogi_proc_1p(VOLATILE 	SOGI_OBJ_T *pst_Sogi);
+//set the central frequency of sogi pll
+#define	 sogi_pll_set_freq_1p(g_stSogiPll, f32Freq)				g_stSogiPll.stCoff.f32Wn = 2.0f * 3.1415926f * (f32Freq)
+
+extern void sogi_pll_proc_1p(VOLATILE 	SOGI_PLL_OBJ_T *pst_SogiPll);
+
+#define	    sogi_set_freq_1p(g_stSogi,   f32Freq)       g_stSogi.stCoff.f32Wn = 2.0f * 3.1415926f * (f32Freq)
+extern void sogi_front_proc_1p(VOLATILE SOGI_OBJ_T *pst_Sogi);
+extern void sogi_fall_proc_1p(VOLATILE SOGI_OBJ_T* pst_Sogi);
 
 extern void orth_pll_proc_1p(VOLATILE	ORTH_PLL_OBJ_T 	*pst_OrthPll);
 

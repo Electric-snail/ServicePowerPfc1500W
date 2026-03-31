@@ -8,7 +8,9 @@
 #ifndef BSW_BASIC_HARDWARE_BASIC_ENV_H_
 #define BSW_BASIC_HARDWARE_BASIC_ENV_H_
 
-#define   VREFHIX_EX_EN                1
+#define      GW_SAMPLE                                    0
+
+#define      VREFHIX_EX_EN                				1
 
 /*******GPIO hardware configuration *************/
 /*AGPIO - EPWM*/
@@ -68,12 +70,21 @@
 
 #define    HW_ADC_REF_VOLT										3.3f
 
+#if(GW_SAMPLE == 1)
+#define 	 FULL_RANGE_VIN_L										466.3633f
+#define 	 FULL_RANGE_VIN_N                    				466.3633f
+#define 	 FULL_RANGE_VPFC										512.66f
+#define 	 HW_OFFSET_VPFC                      						0.0f
+#else
 #define 	 FULL_RANGE_VIN_L										525.436 //535.182f
-
 #define 	 FULL_RANGE_VIN_N								    525.436 //535.182f
-
 #define 	 FULL_RANGE_VPFC										509.465f
 #define 	 HW_OFFSET_VPFC                      						0.0f
+#endif
+
+
+
+
 
 #define 	 FULL_RANGE_CUR_INDUCTOR_L							35.455f
 #define 	 HW_OFFSET_CUR_INDUCTOR_L								0.064f

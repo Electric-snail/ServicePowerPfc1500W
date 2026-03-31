@@ -35,10 +35,10 @@ float                        g_f32PowerOpenSet;
 float 						f32DutyForwared;
 
 void 	pfc_controller_init(void){
-		gs_stVpfcPiCtrl.stCoff.f32IntegrateMax		= 3000.0f;   //output is the input power£¬maximum the input power
+		gs_stVpfcPiCtrl.stCoff.f32IntegrateMax		= 4600.0f;   //output is the input power£¬maximum the input power
 		gs_stVpfcPiCtrl.stCoff.f32IntegrateMin		= -1000.0f;
 
-		gs_stVpfcPiCtrl.stCoff.f32OutMax				= 3000.0f;   //output is the input power,maximum the input power
+		gs_stVpfcPiCtrl.stCoff.f32OutMax				= 4600.0f;   //output is the input power,maximum the input power
 		gs_stVpfcPiCtrl.stCoff.f32OutMin				= -1000.0f;
 
 	//	g_f32VpfcPiKpFast									    = 100;
@@ -50,7 +50,7 @@ void 	pfc_controller_init(void){
 		g_f32VpfcPiKpDcSlow                              = 50.0f;
 		g_f32VpfcPiKiTsDcSlow							=  0.015f;//0.005f;  //6.2 * 2 * 3.1415926f * 5 * CTR_PERIOD;
 
-		g_f32VpfcPiGain                                        = 0.4f;
+		g_f32VpfcPiGain                                        = 1.0f;
 
 		gs_stVpfcPiCtrl.stIn.f32Fb                          = 0.0f;
 		gs_stVpfcPiCtrl.stIn.f32Ref                        = 0.0f;
@@ -67,8 +67,8 @@ void 	pfc_controller_init(void){
 
 	//	gs_stIacPiGainCtrl.stCoff.f32Kp						= 0.02 * 380f;
 	//	gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.2f * 666.6 * 380f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
-		gs_stIacPiGainCtrl.stCoff.f32Kp						= 15.0f;
-		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 20.0f * 8000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
+		gs_stIacPiGainCtrl.stCoff.f32Kp						= 3.0f;
+		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 1.0f; //20.0f * 8000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
 
@@ -118,7 +118,7 @@ void 	pfc_controller(void){
 				  gs_stVpfcPiCtrl.stCoff.f32KiTs	   = g_f32VpfcPiKiTsSlow;
 			}
 			//in case of the vpfc overshoot too high
-			f32Temp	   = f32VpfcFastLpf -  25.0f;
+			f32Temp	   = f32VpfcFastLpf -  35.0f;
 		}else{
 			//fast jump from the integration saturation status.
 			if ((f32VpfcFastLpf <= 395.0f)&&(PWR_STATUS_RUN == u16_get_pwr_status())){
@@ -134,7 +134,7 @@ void 	pfc_controller(void){
 			f32Temp	   = f32VpfcFastLpf -  10.0f;
 		}
 
-		if((f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref)||(f32VpfcFastLpf >= 455.0f)){
+		if((f32Temp >= gs_stVpfcPiCtrl.stIn.f32Ref)||(f32VpfcFastLpf >= 465.0f)){
 			gs_stVpfcPiCtrl.stInner.f32Integrate 				= -500.0f;
 			gs_stIacPiGainCtrl.stInner.f32Integrate			= -1.0f;
 		}

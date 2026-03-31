@@ -40,7 +40,7 @@ typedef struct {
 #define        LOOP_CLOSE_MODE 				  	    3
 
 extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
-extern 	volatile SOGI_OBJ_T   						gs_stSogi;
+extern 	volatile SOGI_PLL_OBJ_T   						gs_stSogi;
 extern 	volatile NOTCH_OBJ_T					gs_stVpfcNotchFilt;
 extern 	volatile ORTH_PLL_OBJ_T  				gs_stOrthPll;
 extern 	unsigned short										g_u16LoopWorkMode;
