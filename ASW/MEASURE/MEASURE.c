@@ -53,6 +53,8 @@ void measure_init(void)
 
 	g_stMeasureOut.f32VpfcSlowLpf                            = 0.0f;
 	g_stMeasureOut.f32Temperature                        		  = 0.0f;
+
+	g_stMeasureOut.u16VinVersion 									= VAC_220V_VERSION;
 }
 
 /*************************************************
@@ -152,6 +154,11 @@ void measure_10ms_task(void)
 	s_f32VinRmsSum += g_stMeasureOut.stVinRmsObj.stOut.f32Rms - f32Temp;
 	g_stMeasureOut.f32VinRmsLpf = s_f32VinRmsSum * 0.0625f;
 
+	if(g_stMeasureOut.stVinRmsObj.stOut.f32Rms > 175.0f){
+		g_stMeasureOut.u16VinVersion = VAC_220V_VERSION;
+	}else if(g_stMeasureOut.stVinRmsObj.stOut.f32Rms < 170.0f){
+		g_stMeasureOut.u16VinVersion = VAC_120V_VERSION;
+	}
 	f32Temp = s_f32IinRmsSum * 0.125f;
 	s_f32IinRmsSum += g_stMeasureOut.stIinRmsObj.stOut.f32Rms - f32Temp;
 

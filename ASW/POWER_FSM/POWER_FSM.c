@@ -152,28 +152,28 @@ void  power_run_exe(void) {
 	static unsigned short s_u16DelayCnt = 0;
 	static unsigned short s_u16VpfcFsmStatus = 0;
 	f32VpfcRef = f32_get_vpfc_adjust();
-	if(s_u16VpfcFsmStatus == 0){
-		if(f32_get_vpfc_isr_lpf() < 385.0f){
-			f32VpfcRefBasedOnVol = 420.0f;
-			s_u16VpfcFsmStatus      = 1;
-			s_u16DelayCnt = 0;
+	if(u16_get_vac_version() >= VAC_220V_VERSION){
+		if(s_u16VpfcFsmStatus == 0){
+			if(f32_get_vpfc_isr_lpf() < 385.0f){
+				f32VpfcRefBasedOnVol = 420.0f;
+				s_u16VpfcFsmStatus      = 1;
+				s_u16DelayCnt = 0;
+			}else{
+				f32VpfcRefBasedOnVol =  400.0f;
+			}
 		}else{
-			f32VpfcRefBasedOnVol =  400.0f;
+			s_u16DelayCnt++;
+			if(s_u16DelayCnt >= 400){
+				s_u16VpfcFsmStatus       = 0;
+				f32VpfcRefBasedOnVol  = 400.0f;
+			}else{
+				f32VpfcRefBasedOnVol = 420.0f;
+			}
 		}
-	}else{
-		s_u16DelayCnt++;
-		if(s_u16DelayCnt >= 400){
-			s_u16VpfcFsmStatus       = 0;
-			f32VpfcRefBasedOnVol  = 400.0f;
-		}else{
-			f32VpfcRefBasedOnVol = 420.0f;
-		}
+		if(f32VpfcRefBasedOnVol  > f32VpfcRef)
+			f32VpfcRef = f32VpfcRefBasedOnVol;
 	}
-	if(f32VpfcRefBasedOnVol  >= f32VpfcRef){
-		g_stPwrFsmOut.f32VpfcSet = f32VpfcRefBasedOnVol;
-	}else{
-		g_stPwrFsmOut.f32VpfcSet = f32VpfcRef;
-	}
+	g_stPwrFsmOut.f32VpfcSet = f32VpfcRef;
 
 	if (u16_get_fault_flag() == TRUE) {
 		   EMIT_FSM(POWER_FSM, PWR_FAULT_EVEN);

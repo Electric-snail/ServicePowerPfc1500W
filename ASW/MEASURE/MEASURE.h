@@ -10,6 +10,13 @@
 
 #include "PUBLIC_INC/POWER_CALC.H"
 /******macros definition region**************/
+#define  VAC_100V_VERSION               0
+#define  VAC_110V_VERSION               1
+#define  VAC_120V_VERSION               2
+#define  VAC_220V_VERSION               3
+#define  VAC_230V_VERSION               4
+#define  VAC_240V_VERSION               5
+
 #define VDC_BUSAVG_FC_HZ            10.0f
 #define VDC_OUTAVG_FC_HZ            10.0f
 #define IDC_OUTAVG_FC_HZ            10.0f
@@ -23,9 +30,10 @@
 
 /*****data type definition region ***************/
 typedef struct {
+	unsigned short     						u16VinVersion;
 	RMS_CALC_OBJ_T          		stVinRmsObj;
 	RMS_CALC_OBJ_T          		stIinRmsObj;
-	POL_FRQ_CALC_OBJ_T      stVinPolFrqObj;
+	POL_FRQ_CALC_OBJ_T      	stVinPolFrqObj;
 	float f32Temperature;
 	float f32VpfcSlowLpf;
 	float f32VinRmsLpf;
@@ -50,14 +58,15 @@ extern		MEASURE_OUT_T					    		g_stMeasureOut;
 
 #define       f32_get_pin_lpf()									g_stMeasureOut. f32PinLpf
 
-#define     u16_get_vin_type()              					g_stMeasureOut.stVinPolFrqObj.stOut.u16Type
-#define     u16_get_vin_pol()              					g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol
-#define     f32_get_vin_freq()              					g_stMeasureOut.stVinPolFrqObj.stOut.f32Frq
-#define     f32_get_vin_sin_omgt()                         g_stMeasureOut.stVinPolFrqObj.stOut.f32SinOmegT
-#define     f32_get_vin_sin_2omgt()                       g_stMeasureOut.stVinPolFrqObj.stOut.f32Sin2OmegT
-#define     f32_get_vin_cos_omgt()                        g_stMeasureOut.stVinPolFrqObj.stOut.f32CosOmegT
-#define     f32_get_vin_cos_2omgt()                      g_stMeasureOut.stVinPolFrqObj.stOut.f32Cos2OmegT
+#define       u16_get_vin_type()              				g_stMeasureOut.stVinPolFrqObj.stOut.u16Type
+#define       u16_get_vin_pol()              					g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol
+#define       f32_get_vin_freq()              					g_stMeasureOut.stVinPolFrqObj.stOut.f32Frq
+#define       f32_get_vin_sin_omgt()                       g_stMeasureOut.stVinPolFrqObj.stOut.f32SinOmegT
+#define       f32_get_vin_sin_2omgt()                     g_stMeasureOut.stVinPolFrqObj.stOut.f32Sin2OmegT
+#define       f32_get_vin_cos_omgt()                      g_stMeasureOut.stVinPolFrqObj.stOut.f32CosOmegT
+#define       f32_get_vin_cos_2omgt()                    g_stMeasureOut.stVinPolFrqObj.stOut.f32Cos2OmegT
 
-#define     f32_get_vpfc_slow_lpf()						g_stMeasureOut.f32VpfcSlowLpf
+#define       u16_get_vac_version()							g_stMeasureOut.u16VinVersion
+#define     	f32_get_vpfc_slow_lpf()						g_stMeasureOut.f32VpfcSlowLpf
 
 #endif /* MEASURE_H_ */

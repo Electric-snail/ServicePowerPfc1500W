@@ -32,8 +32,10 @@ extern float g_f32VpfcPiKpDcSlow;
 extern    float			    gs_f32FeedCoff;
 extern    float             g_f32PowerOpenSet;
 extern    float             g_f32VpfcTestTarget;
+extern    float             g_f32IacRmsRef;
 //-----------------------------------------var_name,					var,																		attr,					  def,				  										 min,															max
 REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    						VAR_WR,		     		0,						  										0,																1);
+REG_CFG_ITEM_F32(IAC_REF_RMS,					g_f32IacRmsRef,						    								VAR_RD,		      		0,						  										0,																0.0f);
 REG_CFG_ITEM_F32(OPEN_DUTY,					    g_f32OpenDuty,						    								VAR_WR,		      		0,						  										0,																1.0f);
 //REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    						VAR_WR,		      	0,						  								    	0,																2000.0f);
 REG_CFG_ITEM_F32(VPFC_SET,					   		g_f32VpfcTestTarget,						    						VAR_WR,		      		0,						  										0,																450.0f);
@@ -70,7 +72,7 @@ REG_CFG_ITEM_F32(VPFC_KI_DC,				      g_f32VpfcPiKiTsDcSlow,						              
 REG_CFG_ITEM_F32(PLL_KP,					   		   gs_stOrthPll.stCoff.f32Kp,						    		VAR_WR,		      0.01f,				 										0.001,														0.1f);
 
 REG_CFG_ITEM_F32(IL_KP,					   		 gs_stIacPiGainCtrl.stCoff.f32Kp,						    		VAR_WR,		      10.0f,				 										0.01,														500.0f);
-REG_CFG_ITEM_F32(IL_KI,					       	 gs_stIacPiGainCtrl.stCoff.f32KiTs,						    	VAR_WR,		      (10.0f * 2000.0f/ 65000.0f),			      (10.0f * 10.0f/ 65000.0f),						 (10.0f * 10000.0f/ 65000.0f));
+REG_CFG_ITEM_F32(IL_KI,					       	 gs_stIacPiGainCtrl.stCoff.f32KiTs,						    	VAR_WR,		      (10.0f * 2000.0f/ 65000.0f),			      (10.0f * 10.0f/ 65000.0f),						 (10.0f * 100000.0f/ 65000.0f));
 REG_CFG_ITEM_F32(IL_FEED,					 gs_f32FeedCoff,						    									VAR_WR,		      0.8,			      										  0,						 										 1.0f);
 
 REG_CFG_ITEM_F32(VIN_FRQ,			         g_stMeasureOut. stVinPolFrqObj.stOut.f32Frq,			VAR_RD,		      	0,			      										 -10000.0f,						 								10000.0f);

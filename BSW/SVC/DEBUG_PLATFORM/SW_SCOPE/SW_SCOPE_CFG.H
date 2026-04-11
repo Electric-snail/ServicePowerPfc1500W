@@ -14,6 +14,7 @@
 #include "MEASURE/MEASURE.H"
 #include "POWER_FSM/POWER_FSM.H"
 #include "DIAGNOSTIC/DIAGNOSTIC.H"
+#include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 #include "PUBLIC_INC/POWER_CALC.H"
 
 extern 	volatile ANA_PHY_VALUE_T 			g_stAnaPhyRaw;
@@ -51,6 +52,6 @@ extern    VIN_DROP_DIG_OBJ_T       				g_stVinDropDiag;
 SW_SCOPE_START(PFC_SCOPE,		 STARTUP_MODE,  SW_SCOPE_CASH_SIZE)
 SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Ref)
 SW_SCOPE_ITEM(gs_stVpfcPiCtrl.stIn.f32Fb)
-SW_SCOPE_ITEM(g_f32VpfcIsrLpf)
+SW_SCOPE_ITEM(g_stPfcLlcCommOut.f32VpfcRef)
 SW_SCOPE_END()
 
