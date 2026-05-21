@@ -34,28 +34,28 @@ extern    float             g_f32PowerOpenSet;
 extern    float             g_f32VpfcTestTarget;
 extern    float             g_f32IacRmsRef;
 //-----------------------------------------var_name,					var,																		attr,					  def,				  										 min,															max
-REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    						VAR_WR,		     		0,						  										0,																1);
-REG_CFG_ITEM_F32(IAC_REF_RMS,					g_f32IacRmsRef,						    								VAR_RD,		      		0,						  										0,																0.0f);
-REG_CFG_ITEM_F32(OPEN_DUTY,					    g_f32OpenDuty,						    								VAR_WR,		      		0,						  										0,																1.0f);
-//REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    						VAR_WR,		      	0,						  								    	0,																2000.0f);
-REG_CFG_ITEM_F32(VPFC_SET,					   		g_f32VpfcTestTarget,						    						VAR_WR,		      		0,						  										0,																450.0f);
-REG_CFG_ITEM_F32(VPFC_FILT_DC,			   		gs_stVpfcNotchFilt.stCoff.f32Width0,						VAR_WR,		      		0.001f,			      									0.00001,						 							0.1);
-REG_CFG_ITEM_F32(VPFC_FILT_AC,			   		gs_stVpfcNotchFilt.stCoff.f32Width1,						VAR_WR,		      		0.0083,			      								    0.000083f,						 						0.83);
+REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    		   VAR_WR,		     		0,						  										0,																1);
+REG_CFG_ITEM_F32(IAC_REF_RMS,					g_f32IacRmsRef,						    				   VAR_RD,		      		0,						  										0,																0.0f);
+REG_CFG_ITEM_F32(OPEN_DUTY,					    g_f32OpenDuty,						    				   VAR_WR,		      		0,						  										0,																1.0f);
+//REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    			   VAR_WR,		      	    0,						  								    	0,																2000.0f);
+REG_CFG_ITEM_F32(VPFC_SET,					    g_f32VpfcTestTarget,						    		   VAR_WR,		      		0,						  										0,																450.0f);
+REG_CFG_ITEM_F32(VPFC_FILT_DC,			   		gs_stVpfcNotchFilt.stCoff.f32Width0,					   VAR_WR,		      		0.001f,			      									        0.00001f,						 							    0.1f);
+REG_CFG_ITEM_F32(VPFC_FILT_AC,			   		gs_stVpfcNotchFilt.stCoff.f32Width1,					   VAR_WR,		      		0.0083f,			      								        0.000083f,						 						        0.83f);
 
-REG_CFG_ITEM_U16(HISTORY_AUTO_FAULT, 		g_stDiagHisStatus.unAutoRecvFault.u16All,     VAR_WR,     0,    								 0,    				0xFFFF);
-REG_CFG_ITEM_U16(HISTORY_NO_FAULT,   			g_stDiagHisStatus.unNoRecvFault.u16All,      	VAR_WR,     0,     							 0,    				0xFFFF);
-REG_CFG_ITEM_U16(CURRENT_AUTO_FAULT, 		g_stDiagStatus.unAutoRecvFault.u16All,       		VAR_RD,     0,     							 0,    				0xFFFF);
+REG_CFG_ITEM_U16(HISTORY_AUTO_FAULT, 		    g_stDiagHisStatus.unAutoRecvFault.u16All,                  VAR_WR,                  0,    								                            0,    				                                            0xFFFF);
+REG_CFG_ITEM_U16(HISTORY_NO_FAULT,   			g_stDiagHisStatus.unNoRecvFault.u16All,      	           VAR_WR,                  0,     							 0,    				0xFFFF);
+REG_CFG_ITEM_U16(CURRENT_AUTO_FAULT, 		    g_stDiagStatus.unAutoRecvFault.u16All,       		VAR_RD,     0,     							 0,    				0xFFFF);
 REG_CFG_ITEM_U16(CURRENT_NO_FAULT,   			g_stDiagStatus.unNoRecvFault.u16All,         		VAR_RD,     0,     							 0,    				0xFFFF);
 
 REG_CFG_ITEM_U16(PWR_FSM,	   					fsm_obj_POWER_FSM.u8CurStateId,						VAR_RD,			  0,						  										0,																4);
 
-REG_CFG_ITEM_F32(VPFC_KP_LV,					   g_f32VpfcPiKpLv,						    					VAR_WR,		      5.0f,				 														1,												2000.0f);
-REG_CFG_ITEM_F32(VPFC_KI_LV,					   g_f32VpfcPiKiTsLv,						    					VAR_WR,		     0.0025f,																	(0.01f / 65000.0f	),					(5000.0f / 65000.0f));
-REG_CFG_ITEM_F32(VPFC_KG_LV,				   g_f32VpfcPiGainLv,						    			    VAR_WR,		     0.1f,																	    0,												10.0f);
+REG_CFG_ITEM_F32(VPFC_KP_LV,					g_f32VpfcPiKpLv,						    					VAR_WR,		      5.0f,				 														1,												2000.0f);
+REG_CFG_ITEM_F32(VPFC_KI_LV,					g_f32VpfcPiKiTsLv,						    					VAR_WR,		     0.0025f,																	(0.01f / 65000.0f	),					(5000.0f / 65000.0f));
+REG_CFG_ITEM_F32(VPFC_KG_LV,				    g_f32VpfcPiGainLv,						    			    VAR_WR,		     0.1f,																	    0,												10.0f);
 
-REG_CFG_ITEM_F32(VPFC_KP_MV,				   g_f32VpfcPiKpMv,						    					VAR_WR,		      5.0f,				 														1,												2000.0f);
-REG_CFG_ITEM_F32(VPFC_KI_MV,				   g_f32VpfcPiKiTsMv,						    				VAR_WR,		      0.002f,																	(0.01f / 65000.0f	),					(5000.0f / 65000.0f));
-REG_CFG_ITEM_F32(VPFC_KG_MV,				   g_f32VpfcPiGainMv,						    			    VAR_WR,		     0.1f,																	    0,												10.0f);
+REG_CFG_ITEM_F32(VPFC_KP_MV,				    g_f32VpfcPiKpMv,						    					VAR_WR,		      5.0f,				 														1,												2000.0f);
+REG_CFG_ITEM_F32(VPFC_KI_MV,				    g_f32VpfcPiKiTsMv,						    				VAR_WR,		      0.002f,																	(0.01f / 65000.0f	),					(5000.0f / 65000.0f));
+REG_CFG_ITEM_F32(VPFC_KG_MV,				    g_f32VpfcPiGainMv,						    			    VAR_WR,		     0.1f,																	    0,												10.0f);
 
 REG_CFG_ITEM_F32(VPFC_KP_HV,				   g_f32VpfcPiKpHv,						    					VAR_WR,		      5.0f,				 														1,												2000.0f);
 REG_CFG_ITEM_F32(VPFC_KI_HV,					   g_f32VpfcPiKiTsHv,						    				VAR_WR,		      0.001f,																	(0.01f / 65000.0f	),					(5000.0f / 65000.0f));

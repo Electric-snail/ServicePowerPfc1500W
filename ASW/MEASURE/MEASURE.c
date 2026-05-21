@@ -6,6 +6,7 @@
  */
 #include "PUBLIC_INC/DF_MATH.h"
 #include "MEASURE/MEASURE.h"
+#include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 #include "PFC_CTR/PFC_CTR.H"
 #include "ISR_INC/BSW_ISR_ADC.h"
 
@@ -88,11 +89,15 @@ void measure_fast_task(void)
 			g_stMeasureOut.stVinRmsObj.stIn.i16Pol = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
 			rms_calc(&g_stMeasureOut.stVinRmsObj);
 
-		    g_stMeasureOut.stIinRmsObj.stIn.f32Var      = f32_get_iin_low_raw();
+			g_stMeasureOut.stVinRmsObj.stOut.f32Rms = g_stPfcLlcCommOut.stVinCalib.f32K * g_stMeasureOut.stVinRmsObj.stOut.f32Rms + g_stPfcLlcCommOut.stVinCalib.f32Offset;
+		    g_stMeasureOut.stIinRmsObj.stIn.f32Var  = f32_get_iin_low_raw();
 		  //  LPF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum, (g_stMeasureOut.stIinRmsObj.stIn.f32Var * g_stMeasureOut.stIinRmsObj.stIn.f32Var), 0.3f, (CTR_PERIOD));
 		  //  g_stMeasureOut.stIinRmsObj.stOut.f32Rms          = SQRTF(g_stMeasureOut.stIinRmsObj.stInner.f32SqartSum);
-		    g_stMeasureOut.stIinRmsObj.stIn.i16Pol      = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
+		    g_stMeasureOut.stIinRmsObj.stIn.i16Pol  = g_stMeasureOut.stVinPolFrqObj.stOut.u16Pol;
 		    rms_calc(&g_stMeasureOut.stIinRmsObj);
+
+            g_stMeasureOut.stIinRmsObj.stOut.f32Rms = g_stPfcLlcCommOut.stIinCalib.f32K * g_stMeasureOut.stIinRmsObj.stOut.f32Rms + g_stPfcLlcCommOut.stIinCalib.f32Offset;
+
     }
 
 

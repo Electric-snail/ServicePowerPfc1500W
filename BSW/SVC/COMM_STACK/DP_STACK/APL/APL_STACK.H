@@ -50,7 +50,7 @@ typedef struct
     {PERFOR_TEST_CMD_SET,   PerformaceCmdSetLink}, \
 /*    {COMM_TEST_CMD_SET,     CommTestCmdSetLink},  */      \
 /*    {SFRA_CMD_SET,          SfraCmdSetLink},    */        \
-	{PARAM_CALIB_CMD_SET,   ParamCalibCmdSetLink},\
+/*	{PARAM_CALIB_CMD_SET,   ParamCalibCmdSetLink},*/\
 }
 
 extern void apl_init(void);

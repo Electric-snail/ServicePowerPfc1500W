@@ -22,8 +22,12 @@ PFC_LLC_COMM_OUT    g_stPfcLlcCommOut;
 float g_f32VpfcTestTarget = 0.0f;
 void pfc_llc_comm_init(void)
 {
-	g_stPfcLlcCommOut.f32VpfcRef 		= 400;
-	g_stPfcLlcCommOut.u16BootReq 	    = 0;
+	g_stPfcLlcCommOut.f32VpfcRef 		   = 400;
+	g_stPfcLlcCommOut.u16BootReq 	       = 0;
+	g_stPfcLlcCommOut.stVinCalib.f32K      = 1.0f;
+	g_stPfcLlcCommOut.stVinCalib.f32Offset = 0.0f;
+    g_stPfcLlcCommOut.stIinCalib.f32K      = 1.0f;
+    g_stPfcLlcCommOut.stIinCalib.f32Offset = 0.0f;
 }
 
 
@@ -31,9 +35,9 @@ void pfc_llc_msg_20ms_task(void)
 {
 	unsigned short ua16AppTxBuff[PFC_TO_LLC_MSG_LEN >> 1] 	= {0};
 	unsigned short u16Temp;
-    u16Temp																					= (unsigned short)(f32_get_vin_rms() * 10.0f);
+    u16Temp																					= (unsigned short)(f32_get_vin_rms_flt() * 10.0f);
     ua16AppTxBuff[0]																	=    u16Temp;
-    u16Temp																					= (unsigned short)(f32_get_iin_rms() * 100.0f);
+    u16Temp																					= (unsigned short)(f32_get_iin_rms_flt() * 100.0f);
     ua16AppTxBuff[1]																	=    u16Temp;
 
     u16Temp																					= (unsigned short)(f32_get_pin_lpf() * 10.0f);
@@ -52,21 +56,32 @@ void pfc_llc_msg_20ms_task(void)
 }
 
 void app_rx_msg_handle(void){
-	 unsigned short u16Iout;
-	 u16Iout		  = g_ua16RxData[0];
-	 g_stPfcLlcCommOut.u16LlcIout = u16Iout;
-	 if(u16Iout <= 25){
-		 g_stPfcLlcCommOut.f32VpfcRef = 400;
-	 }else if((u16Iout > 25)&&(u16Iout <= 30)){
-		 g_stPfcLlcCommOut.f32VpfcRef = 400.0f +(u16Iout -25);
-	 }else if((u16Iout > 30)&&(u16Iout  <= 93)){
-		 g_stPfcLlcCommOut.f32VpfcRef = 405.0f;
-	 }else if(u16Iout > 109){
-		 g_stPfcLlcCommOut.f32VpfcRef = 422.5f;
-	 }else{
-		 g_stPfcLlcCommOut.f32VpfcRef = 405.0f +1.09375f*(u16Iout -93);
+	 unsigned short u16Temp;
+	 signed short   *p_i16Temp = (signed short *)g_ua16RxData;
+	 unsigned char  u8Cmd = g_ua16RxData[0] & 0x00ff;
+	 if(u8Cmd == CYC_DATA_ID){
+	     g_stPfcLlcCommOut.u16BootReq      = g_ua16RxData[0] >> 8;
+	     u16Temp                           = g_ua16RxData[1];
+         if(u16Temp <= 25){
+             g_stPfcLlcCommOut.f32VpfcRef = 400;
+         }else if((u16Temp > 25)&&(u16Temp <= 30)){
+             g_stPfcLlcCommOut.f32VpfcRef = 400.0f +(u16Temp -25);
+         }else if((u16Temp > 30)&&(u16Temp  <= 93)){
+             g_stPfcLlcCommOut.f32VpfcRef = 405.0f;
+         }else if(u16Temp > 109){
+             g_stPfcLlcCommOut.f32VpfcRef = 422.5f;
+         }else{
+             g_stPfcLlcCommOut.f32VpfcRef = 405.0f +1.09375f*(u16Temp -93);
+         }
+	 }else if(u8Cmd == VIN_CALIB_ID){
+	     p_i16Temp++;
+	     g_stPfcLlcCommOut.stVinCalib.f32K      = *p_i16Temp++ * 0.00390625f;
+         g_stPfcLlcCommOut.stVinCalib.f32Offset = *p_i16Temp * 0.00390625f;
+	 }else if(u8Cmd == IIN_CALIB_ID){
+         p_i16Temp++;
+	     g_stPfcLlcCommOut.stIinCalib.f32K      = *p_i16Temp++ * 0.00390625f;
+	     g_stPfcLlcCommOut.stIinCalib.f32Offset = *p_i16Temp * 0.00390625f;
 	 }
-	  g_stPfcLlcCommOut.u16BootReq      = g_ua16RxData[1];
 }
 
 

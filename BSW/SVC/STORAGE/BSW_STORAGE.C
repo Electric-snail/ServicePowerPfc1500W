@@ -24,7 +24,7 @@ void storage_init(void){
      UINT16 *p_u16DestAddr = (UINT16 *)&g_stStoreData;
      UINT16 *p_u16SrcAddr  =  (UINT16 *)&gc_stStoreData;
      if(ReadStorageData(p_u16DestAddr, p_u16SrcAddr, sizeof(STORAGE_DATA_T)) == 1){
-         for(i = 0; i < (sizeof(STORAGE_DATA_T) - 2); i++)  {
+         for(i = 0; i < (sizeof(STORAGE_DATA_T) - 1); i++)  {
              u16Temp      = p_u16DestAddr[i] & 0x00FF;
              u8CrcData   = crc_table[u8CrcData ^ u16Temp];
              u16Temp      = p_u16DestAddr[i] >> 8;

@@ -13,9 +13,9 @@
 //Y表示 校准的数据类型，如果是浮点型用F32, 如果是有符号整型，用I16, 不支持其他类型
 //PARAME_CALIB_X_ITEM_Y     (name,              K_MAX,      K_MIN,       B_MAX,     B_MIN)
 PARAME_CALIB_START()
-PARAME_CALIB_ITEM_F32(VOUT_CALIB,         1.2f,           0.8f,             5.0f,             -5.0f)
-PARAME_CALIB_ITEM_I16(IOUT_CALIB,            307,           204,             1280,             -1280)
-PARAME_CALIB_RVS_ITEM_F32(VREF_CALIB, 	1.2f, 	        0.8f,             5.0f,  	        -5.0f)
-PARAME_CALIB_RVS_ITEM_I16(IREF_CALIB,     307,           204,             1280,             -1280)
+//PARAME_CALIB_ITEM_F32(VOUT_CALIB,         1.2f,           0.8f,             5.0f,             -5.0f)
+//PARAME_CALIB_ITEM_I16(IOUT_CALIB,            307,           204,             1280,             -1280)
+//PARAME_CALIB_RVS_ITEM_F32(VREF_CALIB, 	1.2f, 	        0.8f,             5.0f,  	        -5.0f)
+//PARAME_CALIB_RVS_ITEM_I16(IREF_CALIB,     307,           204,             1280,             -1280)
 PARAME_CALIB_END()
 

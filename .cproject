@@ -112,7 +112,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="PUBLIC/PUBLIC_SRC/CLARK_PARK.C|BSW/CHIP_PACK/driverlib|ASW/SYS_FSM" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="BSW/SVC/DEBUG_PLATFORM/PARAMETER_CALIB|BSW/SVC/STORAGE|PUBLIC/PUBLIC_SRC/CLARK_PARK.C|BSW/CHIP_PACK/driverlib|ASW/SYS_FSM" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

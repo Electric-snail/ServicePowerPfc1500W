@@ -24,7 +24,7 @@ typedef struct
   {bsw_svc_vScheInit,			1},\
   {apl_init,                    			1},\
   {param_core_init,             	1},\
-  {storage_init,                		1},\
+/*  {storage_init,                		1},*/\
 /*  {sfra_init,                   1},*/\
   {sw_scope_init,               	1},\
 }
