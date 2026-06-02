@@ -50,7 +50,8 @@ void parame_calib_wr_data_cmd(void *p_vAplDm){
 		
 	}else{
         u16ParamNum      = u16DataTemp >> 8;
-		p_stI16CalibItem  += u16ParamNum;
+		p_stI16CalibItem        += u16ParamNum;
+		p_stI16CalibLimitItem   += u16ParamNum;
 		p_u16DataTemp   = (UINT16 *)&stI16CalibItem;
 		for(i = 0; i < sizeof(I16_CALIB_ITEM_T)/sizeof(UINT16); i++)
 		  *p_u16DataTemp++ = *p_u16Data++;
@@ -58,7 +59,7 @@ void parame_calib_wr_data_cmd(void *p_vAplDm){
 		  &&(stI16CalibItem.i16Q8Offset <= p_stI16CalibLimitItem->i16Q8Bmax)&&(stI16CalibItem.i16Q8Offset >= p_stI16CalibLimitItem->i16Q8Bmin)){
 			 p_stI16CalibItem->i16Q8K      = stI16CalibItem.i16Q8K;
 			 p_stI16CalibItem->i16Q8Offset = stI16CalibItem.i16Q8Offset;
-			 u16IsCalibDataOk = 1;
+			 u16IsCalibDataOk              = 1;
 	    }
 	}
 	st_CalibDataRespFrame.stNwmDm.unNwmAddr.bits.ul8DestAddr  = PC_NODE_ADDR;   						
@@ -182,6 +183,7 @@ void param_calib_init(void){
 		   }
 		   p_stF32CalibItemDst++;
 		   p_stF32CalibItemSrc++;
+           p_stF32CalibLimitItem++;
 		}
 		for(i = 0; i < (sizeof(I16_CALIB_DATA_OBJ_T)/sizeof(I16_CALIB_ITEM_T)); i++){
 		   if((p_stI16CalibItemSrc->i16Q8K <= p_stI16CalibLimitItem->i16Q8Kmax)&&(p_stI16CalibItemSrc->i16Q8K >= p_stI16CalibLimitItem->i16Q8Kmin)\
@@ -194,6 +196,7 @@ void param_calib_init(void){
 		   }
 		   p_stI16CalibItemDst++;
 		   p_stI16CalibItemSrc++;
+		   p_stI16CalibLimitItem++;
 		}
 	}else{
 		for(i = 0; i < (sizeof(F32_CALIB_DATA_OBJ_T)/sizeof(F32_CALIB_ITEM_T)); i++){
