@@ -53,7 +53,7 @@ extern void BSW_SVC_ScheExcuTask(void);
 {\
 	{apl_main,                  					"apl_main",                   	1,          3,                  2},\
     {sys_fsm_5ms_task,                              "sys_fsm_5ms_task",             1,          5,                  1},\
-    {led_ctrl_500ms_task,                           "led_ctrl_500ms_task",          1,          500,                199},\
+    {led_ctrl_500ms_task,                           "led_ctrl_500ms_task",          1,          200,                199},\
 }
 
 

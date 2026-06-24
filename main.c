@@ -20,7 +20,6 @@
 #include "SYS_FSM/SYS_FSM.H"
 #include "BOOT_PROCE/BOOT_PROCE.H"
 
-#pragma DATA_SECTION(gc_u32AppEraseTest,   ".APP_TEST");
 
 const unsigned long gc_u32AppEraseTest = 0xaa55aa55;
 

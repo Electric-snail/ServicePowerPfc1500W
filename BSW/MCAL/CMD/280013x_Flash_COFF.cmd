@@ -3,11 +3,15 @@ MEMORY
 PAGE 0:
    RAMLS0_1                 		: origin = 0x00009800,   length = 0x00000800
 
-   /* without user bootloader, set 1, otherwise configure to 0*/
-   BEGIN_BOOT                    	: origin = 0x00080000,   length = 0x00000002
-   BOOT_FLASH                 		: origin = 0x00080002,   length = 0x00003FFE
-
-   APP_FLASH                        : origin = 0x00084000,   length = 0x0000C000
+#if(1)
+   BEGIN_APP                   	    : origin = 0x00084000,   length = 0x00000002
+   APP_FLASH                        : origin = 0x00084002,   length = 0x0000BFFE
+#else
+ /* without user bootloader, set 1, otherwise configure to 0*/
+   BEGIN_APP                   	    : origin = 0x00080000,   length = 0x00000002
+   APP_FLASH                        : origin = 0x00080002,   length = 0x0000FFFC
+   APP_CRC_FLASH                    : origin = 0x0008FFFE,   length = 0x00000002, fill = 0xffff
+#endif
    /***any reset vector entry, in this place, branch to the boot code ********/
    RESET                    		: origin = 0x003FFFC0,  length = 0x00000002
    /* Reserve and do not use for code as per the errata advisory "Memory: Prefetching Beyond Valid Memory" */
@@ -32,21 +36,19 @@ SECTIONS
 						       		RUN_SIZE(_HWI_STKSIZE),
 						       		RUN_END(_HWI_STKTOP),
 						       		PAGE = 1
-//  .jumpboot                : > JumpBoot_Data,   PAGE = 0, ALIGN(8)
    /*
     * ROM sections
     */
-   codestart       		   : > BEGIN_BOOT,			 									PAGE = 0
-   .reset           	   : > RESET,                  									PAGE = 0,  TYPE = DSECT /* not used, */
-   .cinit                  : > BOOT_FLASH,  											PAGE = 0, ALIGN(8)
-   .pinit              	   : > BOOT_FLASH, 												PAGE = 0, ALIGN(8)
-//   .econst          	   : >> CONSTANTS, 	     									    PAGE = 0, ALIGN(8)
-   .econst          	   : > BOOT_FLASH, 				    							PAGE = 0, ALIGN(8)
-   .text               	   : > BOOT_FLASH, 												PAGE = 0, ALIGN(8)
-   .switch           	   : > BOOT_FLASH,  											PAGE = 0, ALIGN(8)
+   codestart       		   : > BEGIN_APP,			 									PAGE = 0
+   .reset           	   : > RESET,                  									PAGE = 0,   TYPE = DSECT /* not used, */
+   .cinit                  : > APP_FLASH,  												PAGE = 0, 	ALIGN(8)
+   .pinit              	   : > APP_FLASH, 												PAGE = 0, 	ALIGN(8)
+   .econst          	   : > APP_FLASH, 				    							PAGE = 0, 	ALIGN(8)
+   .text               	   : > APP_FLASH, 												PAGE = 0, 	ALIGN(8)
+   .switch           	   : > APP_FLASH,  												PAGE = 0, 	ALIGN(8)
 
    /* LSRAM0 */
-   .SCOPE_BUFF_SECTION  :>RAMLS0_0,  	    											PAGE = 1
+   .SCOPE_BUFF_SECTION  					:>RAMLS0_0,  	    											PAGE = 1
    /* LSRAM1 */
    .ebss              	   					: >  RAMLS0_0,  							PAGE = 1
    .esysmem     		   					: >  RAMLS0_0,   							PAGE = 1
@@ -54,12 +56,11 @@ SECTIONS
   .RING_BUFF_SECTION       					: >  RAMLS1,   								PAGE = 1
   .APP_UPDATA_FLAG     						: >  RAMGS_APP_FLAG,       					PAGE = 1
 
-  .APP_TEST							        : > APP_FLASH,								PAGE = 0, ALIGN(8)
   GROUP
    {
        .TI.ramfunc
- //      { -l FAPI_F280013x_COFF_v2.00.10.lib}
-   }                      LOAD 	 = BOOT_FLASH,
+       { -l FAPI_F280013x_COFF_v2.00.10.lib}
+   }                       LOAD 	 = APP_FLASH,
                            RUN		 = RAMLS0_1,
                            LOAD_START(_RamfuncsLoadStart),
                            LOAD_SIZE(_RamfuncsLoadSize),
@@ -68,21 +69,21 @@ SECTIONS
                            RUN_SIZE(_RamfuncsRunSize),
                            RUN_END(_RamfuncsRunEnd),
                            PAGE = 0, ALIGN(4)
-   .RING_REG_SECTION     : LOAD = BOOT_FLASH,
+   .RING_REG_SECTION     : LOAD = APP_FLASH,
                            LOAD_START(_RingRegLoadStart),
                            LOAD_SIZE(_RingRegLoadSize),
                            LOAD_END(_RingRegLoadEnd),
                            PAGE = 0, ALIGN(4)
 
 
-   .TASK_REG_SECTION     : LOAD = BOOT_FLASH,
+   .TASK_REG_SECTION     : LOAD = APP_FLASH,
                            LOAD_START(_TaskRegLoadStart),
                            LOAD_SIZE(_TaskRegLoadSize),
                            LOAD_END(_TaskRegLoadEnd),
                            PAGE = 0, ALIGN(4)
 
 
-   .AUTO_REG_SECTION     : LOAD = BOOT_FLASH,
+   .AUTO_REG_SECTION     : LOAD = APP_FLASH,
                       	   LOAD_START(_AutoRegLoadStart),
                       	   LOAD_SIZE(_AutoRegLoadSize),
                       	   LOAD_END(_AutoRegLoadEnd),
