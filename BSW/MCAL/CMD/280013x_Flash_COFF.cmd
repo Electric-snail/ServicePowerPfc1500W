@@ -5,7 +5,8 @@ PAGE 0:
 
 #if(1)
    BEGIN_APP                   	    : origin = 0x00084000,   length = 0x00000002
-   APP_FLASH                        : origin = 0x00084002,   length = 0x0000BFFE
+   APP_FLASH                        : origin = 0x00084002,   length = 0x0000BFFC
+   APP_CRC_FLASH                    : origin = 0x0008FFFE,   length = 0x00000002, fill = 0xffff
 #else
  /* without user bootloader, set 1, otherwise configure to 0*/
    BEGIN_APP                   	    : origin = 0x00080000,   length = 0x00000002
