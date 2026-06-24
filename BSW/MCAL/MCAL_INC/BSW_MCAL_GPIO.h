@@ -11,9 +11,8 @@ File name:       BSW_MCAL_GPIO.h
 extern "C" {
 #endif
 
-#include "../MCAL/BSW_MCAL_BASIC.h"
-#include "../MCAL/MCAL_INC/BSW_MCAL_GPIO_DEF.h"
-#include "../CHIP_PACK/common/include/F28x_Project.h"
+#include "MCAL_INC/BSW_MCAL_GPIO_DEF.h"
+#include "CHIP_PACK/common/include/F28x_Project.h"
 enum GPIO_OUTPUT_DATA
 {
     GPIO_LOW  = 0,
@@ -98,11 +97,11 @@ struct GPIO_CFG_PARAM{
     enum GPIO_NUM         emGpioNum;
     enum GPIO_CORE        emGpioCore;
     enum GPIO_DIR         emGpioDirect;
-    UINT16                u16CtrlValue;
-    UINT16                flag;
-    UINT16                u16GpioMux;
-    UINT16                u16IntEnable;
-    UINT16                u16AnalogEnable;
+    unsigned short        u16CtrlValue;
+    unsigned short        flag;
+    unsigned short        u16GpioMux;
+    unsigned short        u16IntEnable;
+    unsigned short        u16AnalogEnable;
     enum GPIO_INT_Type    emIntType;
     enum GPIO_OUTPUT_DATA emOutputDataType;
 };
@@ -112,17 +111,7 @@ struct GPIO_CFG_PARAM{
 {\
 	 {GPIO_SCIB_RX,                  					GPIO_CORE_CPU1,     		GPIO_IN,                		0,         	GPIO_PULLUP,     								  	GPIO_MUX_SCIB_RX,                  0,             0,          GPIO_INT_INVALID,         GPIO_LOW},\
 	 {GPIO_SCIB_TX,                  					GPIO_CORE_CPU1,     		GPIO_OUT,            			0,         	GPIO_PUSHPULL,     							  GPIO_MUX_SCIB_TX,                  0,             0,           GPIO_INT_INVALID,       GPIO_LOW},\
-	 {GPIO_LED_YELLOW,         					GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							  GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      GPIO_HIGH},\
-	 {RELAY_IN_LATCH ,         						GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							  GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      GPIO_LOW},\
-	 {RELAY_IN_CTR,         							GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							  GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      GPIO_LOW},\
-     {GPIO_PWM_PFC_DRV,      					GPIO_CORE_CPU1,  			GPIO_OUT,   			 		0,  		  	GPIO_PUSHPULL,             					  GPIO_MUX_EPWM1_A,               0,             0,           GPIO_INT_INVALID,       GPIO_LOW},\
-     {GPIO_ADC_PRI_TEMP,      					GPIO_CORE_CPU1, 		 	GPIO_IN,					    0,  			GPIO_PULLUP,                 					  	GPIO_IO,         								 0,       		 1,     		GPIO_INT_INVALID,   		GPIO_LOW},\
-	 {GPIO_ADC_VIN_L,    							GPIO_CORE_CPU1, 		 	GPIO_IN,					    0,  			GPIO_PULLUP,                 					  	GPIO_IO,         								 0,       		 1,     		GPIO_INT_INVALID,   		GPIO_LOW},\
-	 {GPIO_ADC_VIN_N,     							GPIO_CORE_CPU1, 		 	GPIO_IN,					    0,  			GPIO_PULLUP,                 					  	GPIO_IO,         								 0,       			1,     	GPIO_INT_INVALID,   		GPIO_LOW},\
-	 {GPIO_ADC_PFC_I_SENSE_L,    			GPIO_CORE_CPU1, 		 	GPIO_IN,					    0,  			GPIO_PULLUP,                 					  	GPIO_IO,         								 0,       		 1,     		GPIO_INT_INVALID,   		GPIO_LOW},\
-	 {GPIO_ADC_PFC_I_SENSE_H,     		    GPIO_CORE_CPU1, 		 	GPIO_IN,					    0,  			GPIO_PULLUP,                 					  	GPIO_IO,         								 0,       			1,     	GPIO_INT_INVALID,   		GPIO_LOW},\
-	 {P_BUCK_OK,         									GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      	 GPIO_LOW},\
-	 {P_ALERT,         									    GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      	 GPIO_LOW},\
+	 {GPIO_LED_YELLOW,         					        GPIO_CORE_CPU1,     		GPIO_OUT,            			0,          	GPIO_PUSHPULL,     							  GPIO_IO,                                          0,             0,           GPIO_INT_INVALID,      GPIO_HIGH},\
 }
 
 #define PIN_AIO_224           224

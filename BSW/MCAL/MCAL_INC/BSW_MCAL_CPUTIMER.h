@@ -13,7 +13,6 @@ extern "C" {
 #endif
 
 #include "CHIP_PACK/common/include/F28x_Project.h"
-#include "MCAL/BSW_MCAL_BASIC.h"
 
 enum CPU_TIMER_NUM
 {
@@ -31,8 +30,8 @@ typedef enum{
 struct CPU_TIMER_CFG_PARAM{
     enum CPU_TIMER_NUM  emTimerNum;
     CPU_TIMER_MODE emMode;
-    UINT8  u8IntEna;
-    float  f32Period;
+    unsigned char  u8IntEna;
+    float          f32Period;
 };
 //---emTimerNum ---------emMode---------u8IntEna---------f32Period
 #define CPU_TIMER_CFG_TAB \

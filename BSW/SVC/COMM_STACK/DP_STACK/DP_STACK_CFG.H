@@ -9,7 +9,7 @@
 #define BSW_SVC_COMMSTACK_DPSTACK_DPSTACKCFG_H_
 
 #define PC_COMM_INF_MODULE        SCIB_MODULE
-#define LLC_COMM_INF_MODULE      SCIB_MODULE
+#define LLC_COMM_INF_MODULE       SCIB_MODULE
 //DP_x_ENABLE        Whether the communication enable
 //x_LINK_RX_ROUTE    Whether the recive data need to be route from this communication port
 #if(PC_COMM_INF_MODULE == SCIA_MODULE)
@@ -109,25 +109,34 @@
 #endif
 
 #define     NODE_ROUTE_ENABLE                                         0
-#define     DLL_TX_RING_BYTE_LEN                                    2048
-#define     DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN         512
 
-#if(NODE_ROUTE_ENABLE == 1)
-#define     DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN         DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN
+#ifdef BOOT_MODE
+#define     DLL_TX_RING_BYTE_LEN                                    (2048 + 128 + 4)
+#define     DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN                        (2048 + 4)
+#define     DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN                        DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN
+
 #else
-#define     DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN         64
+//    #define     DLL_TX_RING_BYTE_LEN                                    2048
+//    #define     DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN                        512
+//    #if(NODE_ROUTE_ENABLE == 1)
+//            #define     DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN         DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN
+//    #else
+//            #define     DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN         64
+//    #endif
+//
+//    #if(DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN < 128)
+//    #error "The Maximum App data length is little,should be >= 128"
+//    #elif(DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN > 1024)
+//    #error "The Maximum App data length is large,should be <= 1024"
+//    #endif
+//    #if(DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN < 64)
+//    #error "The Maximum App data length is little,should be >= 64"
+//    #elif(DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN > 512)
+//    #error "The Maximum App data length is large,should be <= 512"
+//    #endif
 #endif
 
-#if(DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN < 128)
-#error "The Maximum App data length is little,should be >= 128"
-#elif(DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN > 1024)
-#error "The Maximum App data length is large,should be <= 1024"
-#endif
-#if(DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN < 64)
-#error "The Maximum App data length is little,should be >= 64"
-#elif(DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN > 512)
-#error "The Maximum App data length is large,should be <= 512"
-#endif
+
 
 #define     DP_APL_SIG_FRAME_RX_MAX_BYTE_LEN       (DP_APP_SIG_FRAME_RX_MAX_BYTE_LEN + sizeof(APL_DOMAIN)*TYPE_8_BYTE_SIZE)
 #define     DP_APL_SIG_FRAME_TX_MAX_BYTE_LEN       (DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN + sizeof(APL_DOMAIN)*TYPE_8_BYTE_SIZE)

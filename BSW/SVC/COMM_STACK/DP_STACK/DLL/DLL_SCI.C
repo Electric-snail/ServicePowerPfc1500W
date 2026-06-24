@@ -10,7 +10,6 @@
 #include"DP_STACK/DP_STACK_BASIC.H"
 #include "DP_STACK/DP_STACK_CFG.H"
 #include"DP_STACK/DLL/DLL_STACK.h"
-#include "PFC_LLC_COMM/PFC_LLC_COMM.h"
 
 /*---- The extern valible declaration zoon ****/
 extern const UINT8 crc_table[];                   // CRC table.
@@ -207,33 +206,6 @@ UINT16  g_au16DllScibRxMsgBuff[(DP_NWM_SIG_FRAME_RX_MAX_BYTE_LEN >> 1)] = {0};
 
 REG_RING_ENTITY(SCIB_RING_TX, DLL_TX_RING_LEN)
 
-INT16 dll_scib_frame_write1(UINT16 *p_u16TxData,  UINT16 u16TxWordSize){
-	 UINT16 u16WordSize,  i,  u16DataTemp;
-	 UINT16   ua16DllHead[2] = {0x55aa,   0x66aa};
-	    //Later consider using the global variable.
-	UINT8   u8CrcByte = 0;
-	UINT8   u8DataTemp;
-
-	 u16WordSize = u16TxWordSize + 3;
-	  if(u16WordSize > (Get_Ring_Idel_Size(SCIB_RING_TX)))   return -1;
-
-	  Load_Data_To_Ring(SCIB_RING_TX,		ua16DllHead,		2);
-
-	  u8CrcByte  = 77;   //the crc result of head is 77
-
-	  Load_Data_To_Ring(SCIB_RING_TX,		p_u16TxData,		u16TxWordSize);
-
-	 for(i = 0; i < u16TxWordSize; i++){
-	         u16DataTemp = p_u16TxData[i];
-	         u8DataTemp  = u16DataTemp & 0x00FF;
-	         u8CrcByte   = crc_table[u8CrcByte ^ u8DataTemp];
-	         u8DataTemp  = u16DataTemp >> 8;
-	         u8CrcByte   = crc_table[u8CrcByte ^ u8DataTemp];
-	  }
-	  Load_OneData_To_Ring(SCIB_RING_TX, 		u8CrcByte);
-	  return 1;
-}
-
 //Forbid to be called in the interrupt functions
 INT16 dll_scib_frame_write(void *p_vHalFrameInfo)
 {
@@ -395,9 +367,6 @@ INT16 dll_scib_frame_read(UINT16 *p_u16Data)
         	   s_u8CrcData   = crc_table[s_u8CrcData ^ u8DataTemp];
                if(u8DataTemp == 0x55){
             	   s_enDllRxFsm = DLC_BYTE0_FMS;
-               }else if(u8DataTemp == 0x66){
-            	   s_enDllRxFsm = DATA1_BYTE_FMS;
-            	   s_u16DataCnt  = 0;
                }else{
             	   s_enDllRxFsm   = HEAD_BYTE0_FMS;
                }break;
@@ -435,24 +404,6 @@ INT16 dll_scib_frame_read(UINT16 *p_u16Data)
 				   s_u16DataCnt++;
 			   }
 		   break;
-           case DATA1_BYTE_FMS:
-        	   s_u8CrcData   = crc_table[s_u8CrcData ^ u8DataTemp];
-			   if(s_u16DataCnt >= LLC_TO_PFC_MSG_LEN){
-				   if(s_u8CrcData == 0){
-					     app_rx_msg_handle();
-				   }
-				   s_enDllRxFsm = HEAD_BYTE0_FMS;
-			   }else{
-				   if((s_u16DataCnt & 0x01) == 0){       //Low byte
-						s_u16Data = u8DataTemp;
-				   }else{                                //High  byte
-					    p_u16Data = u16_get_app_buff_pointer();
-						s_u16Data |= ((UINT16)u8DataTemp << 8);
-						 p_u16Data[s_u16DataCnt >> 1] = s_u16Data;
-				   }
-				   s_u16DataCnt++;
-			   }
-           break;
             default:break;
          }
         if(i16FrameReciveStatus == DLL_RX_FRAME_SUCCESS) //If one frame has been recived, we should return this function to call back the frame recive handle in NWM layer.

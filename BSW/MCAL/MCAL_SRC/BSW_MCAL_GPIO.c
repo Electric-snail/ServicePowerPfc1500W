@@ -4,7 +4,8 @@ Purpose :
  *  Created on: 2022-07-13
  *      Author: Hongbo.jiang
 **********************************************************************/
-#include "../MCAL/MCAL_INC/BSW_MCAL_GPIO.h"
+#include "MCAL_INC/BSW_MCAL_GPIO.h"
+#include "ENV_CFG/HARDWARE_ENV_CFG.h"
 
 const struct GPIO_CFG_PARAM gc_stGpioCfgParam[] = GPIO_CFG_PARAM_TAB;
 
@@ -55,7 +56,7 @@ void AIO_SetupPinOption(enum GPIO_NUM emGpioNum,unsigned int flags,unsigned int 
 
 void GPIO_SetupSamplePeriod(enum GPIO_NUM emGpioNum,Uint16 QualiSamplingPeriod)
 {
-    UINT32 pin32, qualprdx;
+    unsigned long pin32, qualprdx;
 
     pin32 = emGpioNum % 32;
     qualprdx = pin32 >> 3;
@@ -77,15 +78,15 @@ void GPIO_SetupSamplePeriod(enum GPIO_NUM emGpioNum,Uint16 QualiSamplingPeriod)
 
 }
 void bsw_mcal_gpio_init(void){
-    UINT16 i = 0;
+    unsigned short i = 0;
 
     enum GPIO_DIR emGpioDirect = gc_stGpioCfgParam[i].emGpioDirect;
     enum GPIO_NUM emGpioNum   = gc_stGpioCfgParam[i].emGpioNum;
     enum GPIO_CORE emGpioCore = gc_stGpioCfgParam[i].emGpioCore;
 
-    UINT16 u16TempData0;
+    unsigned short u16TempData0;
    // UINT16 u16TempData1;
-    UINT16 u16TempData2;
+    unsigned short u16TempData2;
 
     for(i = 0;i < (sizeof(gc_stGpioCfgParam)/sizeof(struct GPIO_CFG_PARAM)); i++)
     {

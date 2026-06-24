@@ -12,7 +12,6 @@ File name:       BSW_MCAL_INT_CTRL.h
 extern "C" {
 #endif
 #include "CHIP_PACK/common/include/F28x_Project.h"
-#include "MCAL/BSW_MCAL_BASIC.h"
 
 
 enum INT_VECT_X{
@@ -69,7 +68,6 @@ typedef struct{
 #define REG_INT_PARAM_CFG_TAB                               \
 {\
     {&IsrCpuTimer2,     INT_X14,      INT_Y_INVALID},     	\
-    {&adcA1ISR,              INT_X1,         INT_Y1},            \
 }
 
 extern void bsw_mcal_pie_ctrl_init(void);

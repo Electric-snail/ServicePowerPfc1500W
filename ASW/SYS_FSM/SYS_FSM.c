@@ -3,273 +3,77 @@
  *
  *  Created on: 2022.9.19
  */
-#include "BOOTLOADER/BOOTLOAD.h"
-#include "HAL_INC/BSW_HAL_GPIO.h"
-#include "HAL_INC/BSW_HAL_ADC.h"
-#include "SVC/BSW_SVC_BASIC.h"
-#include "ASW_BASIC.h"
+#include "MCAL_INC/BSW_MCAL_FLASH.H"
 #include "SYS_FSM/SYS_FSM.h"
-#include "SYS_FSM/SYS_FSM_INF.h"
-#include "POWER_FSM/POWER_FSM.h"
-#include "PUBLIC_INC/mem_handle.h"
+#include "BOOT_PROCE/BOOT_PROCE.H"
+#include "PUBLIC_INC/MEM_HANDLE.H"
+#include "PUBLIC_INC/CRC_TAB.H"
+#include "DEBUG_PLATFORM/BOOTLOAD/BOOTLOAD.H"
 
 #ifndef DLLX64
-#pragma DATA_SECTION(g_u32CLLCJumpBoot,".jumpboot");
+#include "MCAL_INC/BSW_MCAL_WDG.h"
+#include "DEBUG_PLATFORM/BOOTLOAD/BOOTLOAD.h"
+extern void ExitBoot(UINT32 EntryAddr);
 #endif
 
-UINT32 g_u32CLLCJumpBoot;
+#pragma DATA_SECTION(g_u16AppUpdataFlag,".APP_UPDATA_FLAG");
 
-extern void ExitBoot(UINT32 EntryAddr);
+unsigned short g_u16AppUpdataFlag;
 
-SYS_FSM_OUT_T g_stSysFsmOut;
-
-static UINT16 gs_u16NextStatusHold = SYS_STATUS_INVALID;
-static UINT16 gs_u16MoniTimerCnt   = 0;
-
-void  sys_init_in(void);
-void  sys_init_exe(void);
-UINT8 sys_init_cond(UINT16 u16TrigEven);
-
-void  sys_standby_in(void);
-void  sys_standby_exe(void);
-UINT8 sys_standby_cond(UINT16 u16TrigEven);
-
-void  sys_buck_const_volt_in(void);
-void  sys_buck_const_volt_exe(void);
-UINT8 sys_buck_const_volt_cond(UINT16 u16TrigEven);
-
-void  sys_buck_const_curr_in(void);
-void  sys_buck_const_curr_exe(void);
-UINT8 sys_buck_const_curr_cond(UINT16 u16TrigEven);
-
-void  sys_fault_in(void);
-void  sys_fault_exe(void);
-UINT8 sys_fault_cond(UINT16 u16TrigEven);
-
-void  sys_bootloader_exe(void);
-
-void  sys_sleep_in(void);
-void  sys_sleep_exe(void);
-
-//----------FSM name--------initial status id---------------------
-REG_FSM_OBJ(SYS_FSM,        SYS_STATUS_INIT,\
-//---fsm status id----------fsm_in_func-------------fsm_exe_func-------------fsm_out_func----------fsm_cond_func;
-{SYS_STATUS_INIT,           sys_init_in,            sys_init_exe,            NULL,                  sys_init_cond},\
-{SYS_STATUS_STANDBY,  		sys_standby_in, 	    sys_standby_exe,  		 NULL,          		sys_standby_cond},\
-{SYS_STATUS_BUCK_CONST_V,   sys_buck_const_volt_in, sys_buck_const_volt_exe, NULL,  		        sys_buck_const_volt_cond},\
-{SYS_STATUS_BUCK_CONST_I,   sys_buck_const_curr_in, sys_buck_const_curr_exe, NULL,                  sys_buck_const_curr_cond},\
-{SYS_STATUS_FAULT,          sys_fault_in,           sys_fault_exe,           NULL,   	            sys_fault_cond},\
-{SYS_STATUS_SLEEP,          sys_sleep_in,           sys_sleep_exe,           NULL,                  NULL},\
-{SYS_STATUS_BOOTLOADER, 	NULL,   			    sys_bootloader_exe,      NULL,   	            NULL},\
-)
+unsigned short g_u16SysFsmCnt =	0;
 
 void sys_fsm_init(void) {
-	FSM_INIT_CALL(SYS_FSM)
 }
+
+unsigned short app_flash_check(void){
+    unsigned long u32CrcResult;
+    unsigned long *p_u32Data;
+    unsigned short *p_u16AppStartAddr = (unsigned short *)APP_START_ADDR;
+    u32CrcResult = check_crc32_tab_u16(p_u16AppStartAddr, (APP_FLASH_WORD_SIZE - 2));
+    p_u32Data    = (unsigned long *)(APP_START_ADDR + APP_FLASH_WORD_SIZE - 2);
+    if(u32CrcResult == *p_u32Data){
+        return FLASH_CHECK_PASS;
+    }else{
+        return FLASH_CHECK_FAIL;
+    }
+}
+
+
+unsigned short g_u16SysFsmStatus = 0;
 
 void sys_fsm_5ms_task(void){
-    FSM_OBJ_CALL(SYS_FSM)
+    bsw_mcal_service_wdg();
+    
+    switch(g_u16SysFsmStatus){
+       case BOOT_CHECK_STATUS:{ //��������Ҫ����������APP���pass��������һ��״̬�ж��Ƿ���Ҫǿ������ģʽ
+           if((g_u16AppUpdataFlag != 0xAA55)&&(app_flash_check() == FLASH_CHECK_PASS)){
+               g_u16SysFsmStatus = BOOT_WAIT_STATUS;
+               g_u16SysFsmCnt = 0;
+           }else{ //�������bootloader ģʽ
+               g_u16SysFsmStatus = BOOT_UPDATA_STATUS;
+               g_u16SysFsmCnt = 0;
+           }
+       }break;
+       case BOOT_WAIT_STATUS:{
+          if(u16_get_enter_boot_flag() == 1){
+              clr_enter_boot_flag();
+              g_u16SysFsmStatus = BOOT_UPDATA_STATUS;
+              g_u16SysFsmCnt    = 0;
+          }else{
+              g_u16SysFsmCnt++;     //Over 50ms,enter the flash mode
+              if(g_u16SysFsmCnt > 50){
+                  ExitBoot(0x86000);
+              }
+          }
+       }break;
+       case BOOT_UPDATA_STATUS:{
+           boot_proce();
+           if(u16_get_enter_app_flag() == 1){
+               g_u16AppUpdataFlag = 0x0000;
+               while(1);//wait for the watch dog over time to reset.
+           }
+       }break;
+       default:break;
+    }
 }
-
-void  sys_init_in(void)
-{
-}
-
-void  sys_init_exe(void)
-{
-}
-UINT8 sys_init_cond(UINT16 u16TrigEven)
-{
-}
-
-/*************************************************
-*  Function:       sys_standby_in
-*  Description:    clear the system FSM output variable, and initial some key parameter.
-*  Calls:          when entry STANDBY status,the sys_standby_in function will be call in once
-*  Input:          NONE
-*  Quoted Variable:
-*  Modified Variable: g_stSysFsmOut: the system fsm module output
-*  Return:         NONE
-*  Autor:          Hongbo.jiang
-*  Date:           2022/11/09
-*************************************************/
-
-void sys_standby_in(void)
-{
-}
-
-/*************************************************
-*  Function:       		sys_standby_exe
-*  Description:    		
-*  Calls:          		
-*  Input:          		
-*  Quoted Variable:
-*  Modified Variable:   g_stSysFsmOut: the system fsm module output;
-*  Return:         		NONE
-*  Autor:          		Hongbo.jiang
-*  Date:           		2022/11/09
-*************************************************/
-void  sys_standby_exe(void)
-{
-}
-
-/*************************************************
-*  Function:       		sys_standby_cond
-*  Description:    		
-*  Calls:          		
-*  Input:          		
-*  Quoted Variable:
-*  Modified Variable:
-*  Return:         		The next status.
-*  Author:              Hongbo.jiang
-*  Date:           		
-*************************************************/
-
-UINT8 sys_standby_cond(UINT16 u16TrigEven){
-}
-
-
-/*************************************************
-*  Function:       		sys_BuckConstVolt_in
-*  Description:    		
-*  Calls:          		
-*  Input:          		NONE
-*  Quoted Variable:
-*  Modified Variable:   
-*  Return:         		NONE
-*  Author:              Hongbo.jiang
-*  Date:           		
-*************************************************/
-void  sys_buck_const_volt_in(void)
-{
-}
-
-/*************************************************
-*  Function:       		sys_BuckConstVolt_exe
-*  Description:    		
-*  Calls:          		
-*  Input:          		
-*  Quoted Variable:
-*  Modified Variable:  
-*  Return:         		NONE
-*  Author:              Hongbo.jiang
-*  Date:           		
-*************************************************/
-void sys_buck_const_volt_exe(void){
-}
-
-/*************************************************
-*  Function:       		
-*  Description:    		
-*  Calls:          		
-*  Input:          		
-*  Quoted Variable:
-*  Modified Variable:
-*  Return:         		
-*  Author:
-*  Date:
-*************************************************/
-
-UINT8 sys_buck_const_volt_cond(UINT16 u16TrigEven){
-}
-
-
-/*************************************************
-*  Function:            
-*  Description:        
-*  Calls:             
-*  Input:               NONE
-*  Quoted Variable:
-*  Modified Variable:  
-*  Return:              NONE
-*  Author:
-*  Date:
-*************************************************/
-void  sys_buck_const_curr_in(void)
-{
-}
-
-/*************************************************
-*  Function:           
-*  Description:         
-*  Calls:               
-*  Input:               
-*  Quoted Variable:
-*  Modified Variable:   
-*  Return:              NONE
-*  Author:
-*  Date:
-*************************************************/
-void sys_buck_const_curr_exe(void){
-}
-
-/*************************************************
-*  Function:            
-*  Description:         
-*  Calls:               
-*  Input:               
-*  Quoted Variable:
-*  Modified Variable:
-*  Return:              
-*  Author:
-*  Date:
-*************************************************/
-
-UINT8 sys_buck_const_curr_cond(UINT16 u16TrigEven){
-}
-
-/*************************************************
-*  Function:       		
-*  Description:    		
-*  Calls:          		
-*  Input:          		
-*  Quoted Variable:
-*  Modified Variable:   
-*  Return:         		
-*  Author:              Hongbo.jiang
-*  Date:           		
-*************************************************/
-void sys_fault_in(void){
-}
-
-/*************************************************
-*  Function:       		
-*  Description:    		
-*  Calls:          		
-*  Input:          		
-*  Quoted Variable:
-*  Modified Variable:   
-*  Return:         		NONE
-*  Author:
-*  Date:
-***************************************************/
-
-void sys_fault_exe(void){
-}
-
-UINT8 sys_fault_cond(UINT16 u16TrigEven){
-}
-
-void  sys_sleep_in(void)
-{
-}
-void  sys_sleep_exe(void)
-{
-}
-
-
-/*************************************************
-*  Function:       		
-*  Description:    		
-*  Calls:          		
-*  Input:
-*  Quoted Variable:
-*  Modified Variable:
-*  Return:         	
-*  Author:          	Hongbo.jiang
-*  Date:           		
-***************************************************/
-void  sys_bootloader_exe(void){
-}  
-
 

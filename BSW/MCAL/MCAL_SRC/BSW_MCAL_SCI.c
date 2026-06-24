@@ -4,10 +4,9 @@
  *  Created on: 2022.07.25
  *      Author: Hongbo.jiang
  */
-#include "../CHIP_PACK/common/include/F28x_Project.h"
-#include "../MCAL/BSW_MCAL_BASIC.h"
-#include "../MCAL/MCAL_INC/BSW_MCAL_SCI.h"
-#include "../MCAL/MCAL_INC/BSW_MCAL_SYS_CLOCK.h"
+#include "CHIP_PACK/common/include/F28x_Project.h"
+#include "MCAL_INC/BSW_MCAL_SCI.h"
+#include "MCAL_INC/BSW_MCAL_SYS_CLOCK.h"
 
 volatile struct SCI_REGS * const p_stSciModue[] = {&SciaRegs,&ScibRegs};
 
@@ -17,9 +16,9 @@ float g_f32LspClkFreq;
 
 void bsw_mcal_sci_init(void)
 {
-    UINT16 i = 0;
+    unsigned short i = 0;
     const SCI_ITEM_CFG *p_stSciItemCfg = NULL;
-    UINT16 u16BaudTemp;
+    unsigned short u16BaudTemp;
 
     g_f32LspClkFreq = SYS_CLK_GetLpsClkFreq()*1000000.0f;
 
@@ -41,19 +40,19 @@ void bsw_mcal_sci_init(void)
         p_stSciModue[p_stSciItemCfg->emSciId]->SCICCR.bit.SCICHAR       		= 7;  //Default set 8 char bits
         switch(p_stSciItemCfg->emSciBaud){
             case BAUD_4800:
-                u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*4800.0f) - 1);
+                u16BaudTemp  = (unsigned short)((float)g_f32LspClkFreq/(8*4800.0f) - 1);
             break;
             case BAUD_9600:
-                u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*9600.0f) - 1);
+                u16BaudTemp  = (unsigned short)((float)g_f32LspClkFreq/(8*9600.0f) - 1);
             break;
             case BAUD_19200:
-                u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*19200.0f) - 1);
+                u16BaudTemp  = (unsigned short)((float)g_f32LspClkFreq/(8*19200.0f) - 1);
             break;
             case BAUD_38400:
-                u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*38400.0f) - 1);
+                u16BaudTemp  = (unsigned short)((float)g_f32LspClkFreq/(8*38400.0f) - 1);
             break;
             case BAUD_115200:
-                u16BaudTemp  = (UINT16)((float)g_f32LspClkFreq/(8*115200.0f) - 1);
+                u16BaudTemp  = (unsigned short)((float)g_f32LspClkFreq/(8*115200.0f) - 1);
             break;
             default:
                continue;
@@ -79,15 +78,15 @@ void bsw_mcal_sci_init(void)
     }
 }
 
-UINT8 Get_Scia_Send_Aly_Send_FIFO(void)
+unsigned char Get_Scia_Send_Aly_Send_FIFO(void)
 {
   if(SciaRegs.SCIFFTX.bit.SCIFFENA == 0)
         return 0;
   return(FIFO_16_WORD - SciaRegs.SCIFFTX.bit.TXFFST);
 }
 
-INT8 Scia_Send_Byte(UINT8 u8Data){
-    UINT16 u16TempData;
+char Scia_Send_Byte(unsigned char u8Data){
+    unsigned short u16TempData;
    if(SciaRegs.SCIFFTX.bit.SCIFFENA == 0){ //FIFO enable
        if(SciaRegs.SCICTL2.bit.TXRDY == 1) SciaRegs.SCITXBUF.all = u8Data;
        else return -1;
@@ -100,9 +99,9 @@ INT8 Scia_Send_Byte(UINT8 u8Data){
    return 1;
 }
 
-INT16 Scia_Send_Bytes_FIFO(UINT8 *p_u8SrcData, UINT16 u16Len)
+signed short Scia_Send_Bytes_FIFO(unsigned char *p_u8SrcData, unsigned short u16Len)
 {
-    UINT16 u16TempData, i;
+    unsigned short u16TempData, i;
     if(SciaRegs.SCIFFTX.bit.SCIFFENA == 0)
         return -1;
     u16TempData = SciaRegs.SCIFFTX.bit.TXFFST;
@@ -116,15 +115,15 @@ INT16 Scia_Send_Bytes_FIFO(UINT8 *p_u8SrcData, UINT16 u16Len)
 }
 
 
-UINT8 Get_Scib_Send_Aly_Send_FIFO(void)
+unsigned char Get_Scib_Send_Aly_Send_FIFO(void)
 {
   if(ScibRegs.SCIFFTX.bit.SCIFFENA == 0)
         return 0;
   return(FIFO_16_WORD - ScibRegs.SCIFFTX.bit.TXFFST);
 }
 
-INT8 Scib_Send_Byte(UINT8 u8Data){
-    UINT16 u16TempData;
+char Scib_Send_Byte(unsigned char u8Data){
+   unsigned short u16TempData;
    if(ScibRegs.SCIFFTX.bit.SCIFFENA == 0){ //FIFO enable
        if(ScibRegs.SCICTL2.bit.TXRDY == 1) ScibRegs.SCITXBUF.all = u8Data;
        else return -1;
@@ -137,9 +136,9 @@ INT8 Scib_Send_Byte(UINT8 u8Data){
    return 1;
 }
 
-INT16 Scib_Send_Bytes_FIFO(UINT8 *p_u8SrcData, UINT16 u16Len)
+signed short Scib_Send_Bytes_FIFO(unsigned char *p_u8SrcData, unsigned short u16Len)
 {
-    UINT16 u16TempData, i;
+    unsigned short u16TempData, i;
     if(ScibRegs.SCIFFTX.bit.SCIFFENA == 0)
         return -1;
     u16TempData = ScibRegs.SCIFFTX.bit.TXFFST;

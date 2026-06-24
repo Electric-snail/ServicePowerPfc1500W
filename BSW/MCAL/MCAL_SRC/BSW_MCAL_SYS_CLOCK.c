@@ -72,11 +72,11 @@ void InitPeripheralClocksUser(void)
 
 void bsw_mcal_sys_clock_init(void)
 {
-    UINT16 u16clock_source;
-    UINT16 u16SysDivReg = 0;
-    UINT16 u16OdivReg     = 0;
-    UINT16 u16ImultReg    = 0;
-    UINT16 u16RefDivReg = 0;
+    unsigned short u16clock_source;
+    unsigned short u16SysDivReg = 0;
+    unsigned short u16OdivReg     = 0;
+    unsigned short u16ImultReg    = 0;
+    unsigned short u16RefDivReg = 0;
     float f32SrcClkFrq = gc_stSysClkParamCfg.f32ClkSrcFreq;
     //Add the u16imult,u16fmult,u16divsel the calculate based on clock_source.  jiang
     ASSERT_RETURN(f32SrcClkFrq   <   4.0);
@@ -117,8 +117,8 @@ void bsw_mcal_sys_clock_init(void)
         default:
             break;
     }
-    u16SysDivReg       = (UINT16)(gs_f32PllRawFreq/(gs_f32SysClkFreq * 2.0f));
-    u16OdivReg          = ((UINT16)(gs_f32PllVcoFreq/gs_f32PllRawFreq)) - 1;
+    u16SysDivReg       = (unsigned short)(gs_f32PllRawFreq/(gs_f32SysClkFreq * 2.0f));
+    u16OdivReg          = ((unsigned short)(gs_f32PllVcoFreq/gs_f32PllRawFreq)) - 1;
     u16ImultReg 			= gs_f32PllVcoFreq/gs_f32IntClkFreq;
 
     InitSysPll(u16clock_source,  		 u16ImultReg, 			u16RefDivReg, 			u16OdivReg, 			u16SysDivReg, 			SYSCTL_DCC_BASE0);

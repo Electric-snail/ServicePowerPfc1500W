@@ -2,10 +2,9 @@
 File name:       BSW_MCAL_WDG.c 
 Purpose :
 **********************************************************************/
-#include "../CHIP_PACK/common/include/F28x_Project.h"
-#include "../MCAL/BSW_MCAL_BASIC.h"
-#include "../MCAL/MCAL_INC/BSW_MCAL_INT_CTRL.h"
-#include "../MCAL/MCAL_INC/BSW_MCAL_WDG.h"
+#include "CHIP_PACK/common/include/F28x_Project.h"
+#include "MCAL_INC/BSW_MCAL_INT_CTRL.h"
+#include "MCAL_INC/BSW_MCAL_WDG.h"
 #if(EXTERN_WATCHDOG_ENABLE == 1)
 #include "WD/Wdg_driver/ex_wdg.h"
 #endif
@@ -19,22 +18,24 @@ Input: none
 Output: none
 Return: none
 ----------------------------------------------------------------------*/
-void bsw_mcal_watchdog_init(void)
+void bsw_mcal_wdg_init(void)
 {
 #if (EXTERN_WATCHDOG_ENABLE == 0)
-    UINT16 u16WdCr_val       = 0;
+    unsigned short u16WdCr_val       = 0;
 
      EALLOW;
 
-         WdRegs.SCSR.all = (gc_stWdgParamCfg.emWdgActType == WDG_RESET_TYPE)? 0x00:0x02;
+     WdRegs.SCSR.all = (gc_stWdgParamCfg.emWdgActType == WDG_RESET_TYPE)? 0x00:0x02;
 
      /*--WDPRECLKDIV[11-8]= gc_stWdgParamCfg.emWdgPeriod_ms;RSV[7]= 0;WDDIS[6]= 0;WDCHK[5-3]= 101; WDPS[2-0] = 111;*/
-     u16WdCr_val = ((UINT16)gc_stWdgParamCfg.emWdgPeriod_ms)<<8 | 0b101111;
+     u16WdCr_val = ((unsigned short)gc_stWdgParamCfg.emWdgPeriod_ms)<<8 | 0b101111;
      //WdRegs.WDCR.all  = 0;//Enable the WDG
      WdRegs.WDCR.all  = u16WdCr_val;
-     EDIS;
 
-    bsw_mcal_feed_watchdog();
+     //feed watchdog
+     WdRegs.WDKEY.bit.WDKEY = 0x55;
+     WdRegs.WDKEY.bit.WDKEY = 0xAA;
+     EDIS;
 #else
      extern_watchdog_init();
 #endif
@@ -44,7 +45,7 @@ void bsw_mcal_watchdog_init(void)
 // ServiceDog - This function resets the watchdog timer.
 // Enable this function for using ServiceDog in the application
 //
-void bsw_mcal_feed_watchdog(void)
+void bsw_mcal_service_wdg(void)
 {
     EALLOW;
     WdRegs.WDKEY.bit.WDKEY = 0x55;

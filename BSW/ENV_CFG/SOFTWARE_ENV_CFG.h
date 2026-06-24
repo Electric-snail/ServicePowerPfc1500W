@@ -10,14 +10,14 @@
 
 #include "stdint.h"
 #ifndef      DLLX64
-#define      SQRT(INT32_A)						__builtin_sqrtf(INT32_A)
-#define      SQRTF(float_A)                        __builtin_sqrtf(float_A)
-#define     ABSF(float_A)                           __builtin_fabsf(float_A)
-#define     ABS(INT32_A)                           __builtin_fabs(INT32_A)
-#define      INTERRUPT                      			 __interrupt
-#define 	   INLINE 		                 					__inline
-#define 	  STATIC
-#define 	  VOLATILE                                  volatile
+#define      SQRT(INT32_A)                          __builtin_sqrtf(INT32_A)
+#define      SQRTF(float_A)                         __builtin_sqrtf(float_A)
+#define      ABSF(float_A)                          __builtin_fabsf(float_A)
+#define      ABS(INT32_A)                           __builtin_fabs(INT32_A)
+#define      INTERRUPT                              __interrupt
+#define        INLINE                               __inline
+#define       STATIC
+#define       VOLATILE                              volatile
 #define     bsw_mcal_enable_global_int()     EINT
 #define     bsw_mcal_disable_global_int()    DINT
 #else
@@ -25,15 +25,19 @@
 #define     SQRTF(A)                        sqrtf(A)
 #define     ABSF(A)                         fabs(A)
 #define     INTERRUPT
-#define 	  STATIC
-#define 	  VOLATILE
-#define     bsw_mcal_enable_global_int()     
-#define     bsw_mcal_disable_global_int()    
+#define       STATIC
+#define       VOLATILE
+#define     bsw_mcal_enable_global_int()
+#define     bsw_mcal_disable_global_int()
 #define     bsw_mcal_disable_watchdog()
 #endif
 
+#define INLINE __inline
+
 #ifndef NULL
+
 #define NULL    ((void *)0x0)
+
 #endif
 
 #ifndef NOP
@@ -52,21 +56,21 @@
 #define TRUE  1
 #endif
 
-/* Define variable type */
+ /* Define variable type */
 
-typedef short               				INT8;
-typedef unsigned short      			UINT8;
+typedef short               INT8;
+typedef unsigned short      UINT8;
 
-typedef short               				INT16;
-typedef unsigned short      			UINT16;
-typedef long                				INT32;
-typedef unsigned long       			UINT32;
-typedef unsigned long long  		UINT64;
-typedef signed long long    		INT64;
-typedef float               				FLOAT32;
+typedef short               INT16;
+typedef unsigned short      UINT16;
+typedef long                INT32;
+typedef unsigned long       UINT32;
+typedef unsigned long long  UINT64;
+typedef signed long long    INT64;
+typedef float               FLOAT32;
 
-typedef void*               				HANDLE;
-typedef unsigned short      			BOOLEAN;
+typedef void* HANDLE;
+typedef unsigned short      BOOLEAN;
 
 typedef enum
 {
@@ -75,14 +79,14 @@ typedef enum
 }BOOL;
 
 #if defined(__TMS320C28XX_CLA__)
-    #define HWREG(x)                                                          \
+#define HWREG(x)                                                          \
             (*((volatile uint32_t *)((uintptr_t)(x))))
-    #define HWREGH(x)                                                         \
+#define HWREGH(x)                                                         \
             (*((volatile uint16_t *)((uintptr_t)(x))))
 #else
-    #define HWREG(x)                                                          \
+#define HWREG(x)                                                          \
             (*((volatile uint32_t *)(x)))
-    #define HWREGH(x)                                                         \
+#define HWREGH(x)                                                         \
             (*((volatile uint16_t *)(x)))
 #endif
 
@@ -91,61 +95,30 @@ typedef enum
 #define HWREGB(x)                                                             \
         __byte((int16_t *)(x),0)
 
-#define     LITTLE_END                      0
-#define     BIG_END                         1
+#define     LITTLE_END                                                  0
+#define     BIG_END                                                     1
 
-#define     TYPE_8_BYTE_SIZE                2
-#define     MCU_MEM_STORE_MODE              LITTLE_END
-#define     ENABLE_PARAM_CFG                (1)
-#define     STACK_LEN                       (1024)
+#define     TYPE_8_BYTE_SIZE                                            (2)
+#define     MCU_MEM_STORE_MODE                                          LITTLE_END
 
-//Unit --> us
-//120000/(2*65) = 923
-#define     PFC_PWM_TBPRD      			923UL
-#define     CTR_FRQ                         		65000.0f
-#define     CTR_PERIOD                        (1.0f/CTR_FRQ)
+#define     FLASH_SECTOR_SIZE                                           1024
+#define     STORAGE_WORD_SIZE                                           FLASH_SECTOR_SIZE
+#define     APP_START_ADDR                                              (unsigned long)0x00084000
+#define     APP_FLASH_WORD_SIZE                                         (unsigned long)0x0000C000
+#define     FLASH_CHECK_FAIL                                            0
+#define     FLASH_CHECK_PASS                                            1
 
-
-//Communication macro software definition
-#define 	  SCIA_MODULE          			1
-#define 	  SCIB_MODULE          			2
-#define 	  CANA_MODULE          	        3
-#define 	  CANB_MODULE          		   4
-#define     MCAN_MODULE                 5
-#define     FSIA_MODULE                    6
-#define     I2CA_MODULE                    7
-#define     PMBUS_MODULE               8
-
-//Whether to enable the CLA function in system.
-#define     CLA_ENABLE                      0
-
-#define 		DB_TOOL_ENABLE          			TRUE
-#define 		SFRA_ENABLED            				FALSE
-#define 		PARAM_CALIB_ENABLE      	    FALSE
-
-#if(DB_TOOL_ENABLE == TRUE)
-#define     ISR_CPU_LOAD_TEST               				0
-#define     TASK_CPU_LOAD_TEST              			0
-#define     NESTING_ISR_CPU_LOAD_TEST       	0
-#define     MEASURE_TIME_TEST               			1
-
-#if((ISR_CPU_LOAD_TEST == 1)&&(TASK_CPU_LOAD_TEST == 1))
-#error "Only one function can be done"
-#elif((ISR_CPU_LOAD_TEST == 1)&&(NESTING_ISR_CPU_LOAD_TEST == 1))
-#error "Only one function can be done"
-#elif((ISR_CPU_LOAD_TEST == 1)&&(MEASURE_TIME_TEST == 1))
-#error "Only one function can be done"
-#elif((TASK_CPU_LOAD_TEST == 1)&&(NESTING_ISR_CPU_LOAD_TEST == 1))
-#error "Only one function can be done"
-#elif((TASK_CPU_LOAD_TEST == 1)&&(MEASURE_TIME_TEST == 1))
-#error "Only one function can be done"
-#elif((NESTING_ISR_CPU_LOAD_TEST == 1)&&(MEASURE_TIME_TEST == 1))
-#error "Only one function can be done"
-#endif
-#endif
+#define     SCIA_MODULE                                                 1
+#define     SCIB_MODULE                                                 2
+#define     CANA_MODULE                                                 3
+#define     CANB_MODULE                                                 4
+#define     MCAN_MODULE                                                 5
+#define     FSIA_MODULE                                                 6
+#define     I2CA_MODULE                                                 7
+#define     PMBUS_MODULE                                                8
 
 
-#if(CLA_ENABLE == 1)
+#ifdef  CLA_ENABLE
 #define CTR_FUNC     __interrupt
 #else
 #define CTR_FUNC

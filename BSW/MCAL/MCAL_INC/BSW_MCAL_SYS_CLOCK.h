@@ -10,7 +10,6 @@
 
 #include "PUBLIC_INC/AUTO_REGISTER.H"
 #include "HARDWARE_ENV_CFG.h"
-#include "BSW_MCAL_BASIC.h"
 
 enum SYS_CLK_SRC
 {

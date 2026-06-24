@@ -11,7 +11,7 @@ volatile struct  CPUTIMER_REGS * const p_CpuTimer[] ={&CpuTimer0Regs,&CpuTimer1R
 
 const  struct CPU_TIMER_CFG_PARAM gc_stTimerCfgParam[] =  CPU_TIMER_CFG_TAB;
 
-void BSW_MCAL_ConfigCpuTimers(enum CPU_TIMER_NUM emTimerNum, float f32period, CPU_TIMER_MODE emTimerMode, UINT8 u8IntEna)
+void BSW_MCAL_ConfigCpuTimers(enum CPU_TIMER_NUM emTimerNum, float f32period, CPU_TIMER_MODE emTimerMode, unsigned char u8IntEna)
 {
     volatile struct  CPUTIMER_REGS *p_sTCpuTimer;
     Uint32 temp;
@@ -53,7 +53,7 @@ void BSW_MCAL_ConfigCpuTimers(enum CPU_TIMER_NUM emTimerNum, float f32period, CP
 
 void bsw_mcal_cpu_timer_init(void)
 {
-    UINT8 i = 0;
+    unsigned char i = 0;
     InitCpuTimers();
 
     for(i = 0;i < (sizeof(gc_stTimerCfgParam)/sizeof(struct CPU_TIMER_CFG_PARAM)); i++){

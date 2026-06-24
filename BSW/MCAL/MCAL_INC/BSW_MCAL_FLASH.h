@@ -12,6 +12,7 @@ extern "C" {
 #endif
 
 #include "SOFTWARE_ENV_CFG.H"
+#include "common/include/F28x_Project.h"
 
 typedef enum
 {
@@ -294,10 +295,46 @@ typedef enum
 #define STAT_CMDPASS                    0x0002u
 #define STAT_CMDMASK                    0x0003u
 
-extern void   	 	bsw_mcal_flash_init(void);
-extern void    		bsw_mcal_flash_read(UINT16 *p_u16DestAddr,UINT16 *p_u16SrcAddr, UINT16 u16Len);
-extern UINT16  	bsw_mcal_flash_erase(unsigned short *p_u16Addr, unsigned short u16Len);
-extern UINT16  	bsw_mcal_flash_write(UINT16 *p_u16FlashStartAddr, UINT16 *p_u16SrcAddr, UINT16 u16Len);
+
+//*********************************
+//
+//! Flash Trim Defines
+//
+//**********************************
+// Flash Configuration Base
+#define FLASHCONFIG_BASE                                            0x00051000U
+// Trim Control Register
+#define FLASH_O_TRIMCTL                                             0x1600U
+// Trim Lock Register
+#define FLASH_O_TRIMLOCK                                            0x1604U
+// Trim Commit Register
+#define FLASH_O_TRIMCOMMIT                                          0x1608U
+#define FLASH_TRIMCTL_ENABLE_M                                      0x1U
+#define FLASH_TRIMCTL_ENABLE_S                                      0x0U
+#define FLASH_TRIMLOCK_TRIMLOCKREAD_TRIMLOCKOTHER_M                 0x3U
+#define FLASH_TRIMLOCK_TRIMLOCKREAD_TRIMLOCKOTHER_S                 0x0U
+#define FLASH_TRIMCOMMIT_TRIMCOMMITREAD_TRIMCOMMITOTHER_M           0x3U
+#define FLASH_TRIMCOMMIT_TRIMCOMMITREAD_TRIMCOMMITOTHER_S           0x0U
+
+static inline void Flash_writeTrims(unsigned long reg_offset, unsigned long mask, unsigned long shift, unsigned long value)
+{
+
+    EALLOW;
+    //
+    // Set the requested bits to the value.
+    //
+    HWREG_BP(FLASHCONFIG_BASE + reg_offset) &= ~(unsigned long)mask;
+
+    HWREG_BP(FLASHCONFIG_BASE + reg_offset) |= ((unsigned long)value << shift);
+
+    EDIS;
+}
+
+extern void   	 	    bsw_mcal_flash_init(void);
+extern UINT16           bsw_mcal_flash_fsm_init(void);
+extern UINT16           bsw_mcal_flash_read(UINT16 *p_u16DestAddr,UINT16 *p_u16SrcAddr, UINT16 u16Len);
+extern UINT16           bsw_mcal_flash_erase(UINT32 u32SectorStartAddr, UINT16 u16SectorCnt);
+extern unsigned short   bsw_mcal_flash_write(unsigned long u32FlashStartAddr, unsigned short *p_u16SrcAddr, unsigned short  u16Len);
 #ifdef __cplusplus
 }
 #endif // extern "C"

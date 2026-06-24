@@ -11,10 +11,6 @@ Purpose :         Handle timer0/1/2...
 #include  "ISR_INC/BSW_ISR_CPUTIMER.h"
 #include  "HAL_INC/BSW_HAL_GPIO.H"
 
-#if(DB_TOOL_ENABLE == TRUE)
-#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.h"
-#endif
-
 #ifndef DLLX64
 #pragma CODE_SECTION(IsrCpuTimer2, ".TI.ramfunc");
 #endif
@@ -39,26 +35,9 @@ ISR_EXE_VAR_ENTITY(CPU_TIMER2_ISR)
 INTERRUPT void IsrCpuTimer2(void)   //200US
 {
 #ifndef DLLX64
- /*   PieCtrlRegs.PIEACK.all = PIEACK_GROUP1;
-    IER = M_INT1;
-    __asm("  NOP");
-    bsw_mcal_enable_global_int();        */                                 // Enable Global interrupt INTM
     CpuTimer2Regs.TCR.bit.TIF = 1;
 #endif
-    /*    #if(TASK_CPU_LOAD_TEST == 1)
-     UINT16 u16TaskTestTimerStatus = GetTaskTestTimerStatus();
-     StopTaskTestTimer();
-    #elif(ISR_CPU_LOAD_TEST == 1)
-     ResetTaskTestTimer();
-    #endif		*/
-
     g_u32SysTimerMs++;
-
-  /*   #if(TASK_CPU_LOAD_TEST == 1)
-      ReloadTaskTestTimerStatus(u16TaskTestTimerStatus);
-    #elif(ISR_CPU_LOAD_TEST == 1)
-      ISR_EXE_VAR_CALL(CPU_TIMER2_ISR)
-    #endif    */
 }
 
 

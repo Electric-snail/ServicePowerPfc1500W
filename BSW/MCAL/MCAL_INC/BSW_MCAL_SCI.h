@@ -10,7 +10,6 @@
 #include "common/include/F28x_Project.h"
 #include "HARDWARE_ENV_CFG.h"
 #include "PUBLIC_INC/auto_register.h"
-#include "BSW_MCAL_BASIC.h"
 
 #define     SCIB_FIFO_ENABLE                  1
 #define 	SCIB_FIFO_WORD_SIZE            FIFO_16_WORD
@@ -83,12 +82,12 @@ enum SCI_RX_MODE{
 
 typedef struct
 {
-    enum SCI_ID                 				emSciId;
-    enum SCI_BAUD               			emSciBaud;
+    enum SCI_ID                     emSciId;
+    enum SCI_BAUD               	emSciBaud;
     enum SCI_PARITY_MODE        	emSciParity;
-    enum SCI_STOP_BIT           		emSciStopBit;
-    enum SCI_RX_MODE            		emSciRxMode;
-    UINT16                      					u16FifoEnable;
+    enum SCI_STOP_BIT               emSciStopBit;
+    enum SCI_RX_MODE                emSciRxMode;
+    unsigned short                  u16FifoEnable;
     enum SCI_RX_FIFO_LEVEL      	emFifoLevel;
 }SCI_ITEM_CFG;
 
@@ -104,12 +103,12 @@ typedef struct
 //                                                            ScibRegs.SCICTL1.bit.SWRESET = 1;\
 //                                                  }while(0)
 
-extern INT16 Scia_Send_Bytes(UINT8 *p_u8SrcData, UINT16 u16Len);
+extern signed short Scia_Send_Bytes(unsigned char *p_u8SrcData, unsigned short  u16Len);
 
-extern INT8  Scia_Send_Byte(UINT8);
+extern char Scia_Send_Byte(unsigned char);
 
-extern INT16 Scib_Send_Bytes(UINT8 *p_u8SrcData, UINT16 u16Len);
-extern INT8  Scib_Send_Byte(UINT8);
+extern signed short Scib_Send_Bytes(unsigned char *p_u8SrcData, unsigned short u16Len);
+extern char  Scib_Send_Byte(unsigned char);
 
 extern void  bsw_mcal_sci_init(void);
 

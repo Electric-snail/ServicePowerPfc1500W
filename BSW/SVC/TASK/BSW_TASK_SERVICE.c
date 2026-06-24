@@ -7,20 +7,13 @@
 #include "TASK/BSW_TASK_SERVICE.h"
 #ifndef DLLX64
 #include "MCAL_INC/BSW_MCAL_INT_CTRL.h"
-#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
-#include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
 #include "COMM_STACK/DP_STACK/APL/APL_STACK.H"
-#include "HAL_INC/BSW_HAL_TIMER.H"
 #endif
 
 #include "ISR_INC/BSW_ISR_CPUTIMER.h"
 #include "PUBLIC_INC/ASSERT.H"
-#include "ASW_BASIC.h"
-#include "MEASURE/MEASURE.h"
-#include "DIAGNOSTIC/DIAGNOSTIC.h"
 #include "SYS_FSM/SYS_FSM.h"
-#include "POWER_FSM/POWER_FSM.h"
-#include "PFC_LLC_COMM/PFC_LLC_COMM.H"
+#include "LED_CTRL/LED_CTRL.H"
 
 extern UINT32 TaskRegLoadStart;
 extern UINT16 TaskRegLoadSize;

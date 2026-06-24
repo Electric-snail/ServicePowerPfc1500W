@@ -41,12 +41,12 @@ typedef struct {
 /***emWdgPeriod_ms****emWdgActType***/
 #define  WDG_CFG_TAB        \
 {\
-    WDG_PERIOD_52MS,  WDG_RESET_TYPE    \
+    WDG_PERIOD_104MS,  WDG_RESET_TYPE    \
 }
 
-extern void bsw_mcal_feed_watchdog(void);
-extern void bsw_mcal_disable_watchdog(void);
-extern void bsw_mcal_watchdog_init(void);
+extern void bsw_mcal_service_wdg(void);
+extern void bsw_mcal_disable_wdg(void);
+extern void bsw_mcal_wdg_init(void);
 
 #ifdef __cplusplus
 }
