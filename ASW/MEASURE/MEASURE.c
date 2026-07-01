@@ -7,6 +7,7 @@
 #include "PUBLIC_INC/DF_MATH.h"
 #include "MEASURE/MEASURE.h"
 #include "PFC_LLC_COMM/PFC_LLC_COMM.H"
+#include "HAL_INC/BSW_HAL_ADC.h"
 #include "PFC_CTR/PFC_CTR.H"
 #include "ISR_INC/BSW_ISR_ADC.h"
 
@@ -156,6 +157,7 @@ void measure_10ms_task(void)
 {
 	static float s_f32VinRmsSum = 0;
 	static float s_f32IinRmsSum = 0;
+	static float s_f32PfcMosTempSum = 0;
     float f32PinTemp;
 	float f32Temp = s_f32VinRmsSum * 0.0625f;
 	s_f32VinRmsSum += g_f32VinRmsCalib - f32Temp;
@@ -172,6 +174,10 @@ void measure_10ms_task(void)
 	g_stMeasureOut.f32IinRmsLpf = s_f32IinRmsSum * 0.125f;
 
 	f32PinTemp = g_stMeasureOut.f32IinRmsLpf * g_stMeasureOut.f32VinRmsLpf;
+
+	f32Temp = s_f32PfcMosTempSum *  0.0625f;
+	s_f32PfcMosTempSum += bsw_hal_calc_pfc_mos_temp() - f32Temp;	
+	g_stMeasureOut.f32Temperature = s_f32PfcMosTempSum *  0.0625f;
 
 	if(g_stMeasureOut.f32VinRmsLpf < 150.0f){
 		if(f32PinTemp < 300.0f){

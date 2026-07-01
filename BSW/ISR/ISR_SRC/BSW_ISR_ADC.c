@@ -61,7 +61,7 @@ float										g_f32OpenDuty = 0.0f;
 void adc_isr_init(void)
 {
 /*	gs_stSogi.stCoff.f32Kp = 1.414f;
-	gs_stSogi.stCoff.u8Ena2nd = 0;   //¶ş½×½ûÖ¹
+	gs_stSogi.stCoff.u8Ena2nd = 0;   //äºŒé˜¶ç¦æ­¢
 	gs_stSogi.stCoff.f32Ts = CTR_PERIOD;
 	gs_stSogi.stInter.f32IntegOut = 0.0f;
 	gs_stSogi.stInter.f32IntegOutQ = 0.0f;
@@ -112,7 +112,7 @@ INTERRUPT void adcA1ISR(void)
 
             UINT16 	u16PwmCounter;
 
-			//²âÊÔCPU load ºÍÈÎÎñÖ´ĞĞÊ±¼äÊ±Ê¹ÓÃ
+			//æµ‹è¯•CPU load å’Œä»»åŠ¡æ‰§è¡Œæ—¶é—´æ—¶ä½¿ç”¨
 			#if(TASK_CPU_LOAD_TEST == 1)
 				 UINT16 u16TaskTestTimerStatus = get_performace_test_timer_status();
 				 stop_performace_test_timer();
@@ -120,7 +120,7 @@ INTERRUPT void adcA1ISR(void)
 				 reset_performace_test_timer();
 			#endif
 
-			 //¼ÆËã¸÷¸ö²ÉÑùÖµ.
+			 //è®¡ç®—å„ä¸ªé‡‡æ ·å€¼.
 			f32VinL 							= bsw_hal_calc_vin_l();
 			f32VinN 							= bsw_hal_calc_vin_n();
 			f32Vpfc 							= bsw_hal_calc_vpfc();
@@ -129,9 +129,9 @@ INTERRUPT void adcA1ISR(void)
 			f32IinL 							= bsw_hal_calc_iin_l();
 			f32IinH 							= bsw_hal_calc_iin_h();
 
-			//Ğ£×¼¸÷¸ö²ÉÑùÖµ
+			//æ ¡å‡†å„ä¸ªé‡‡æ ·å€¼
 			#if(PARAM_CALIB_ENABLE == TRUE)
-			//0~10£º low;  10-40 high
+			//0~10ï¼š low;  10-40 high
 				   f32CalibK 		= (float)i16_get_param_calib_k(VOUT_CALIB)*0.00390625f;
 				   f32CalibOffset	= (float)i16_get_param_calib_offset(VOUT_CALIB)*0.00390625f;
 				   g_stAnaPhyRaw.f32Vpfc= f32Vpfc * f32CalibK + f32CalibOffset;
@@ -153,7 +153,7 @@ INTERRUPT void adcA1ISR(void)
 				   g_stAnaPhyRaw.f32IinH        		= f32IinH;
 			#endif
 
-			//½«L,N¸÷²ÉÑùÖµ£¬×¼»»³ÉVin, ¸ù¾İ²ÉÑùĞÅºÅµÄ´óĞ¡£¬Ñ¡ÔñĞÅºÅÍ¨µÀ
+			//å°†L,Nå„é‡‡æ ·å€¼ï¼Œå‡†æ¢æˆVin, æ ¹æ®é‡‡æ ·ä¿¡å·çš„å¤§å°ï¼Œé€‰æ‹©ä¿¡å·é€šé“
 			g_stAnaPhyRaw.f32Vin = 	   g_stAnaPhyRaw.f32VinL -  g_stAnaPhyRaw.f32VinN;
 
 			if(g_stAnaPhyRaw.f32IlAveL  > 30.0f)
@@ -167,10 +167,10 @@ INTERRUPT void adcA1ISR(void)
 				g_stAnaPhyRaw.f32Iin  = g_stAnaPhyRaw.f32IinL;
 
 			LPF(g_f32VpfcIsrLpf, g_stAnaPhyRaw.f32Vpfc, 8000.0f, (float)CTR_PERIOD);
-			//Ö´ĞĞĞèÒªÔÚÖĞ¶ÏÖ´ĞĞµÄMEASUREµÄÈÎÎñ
+			//æ‰§è¡Œéœ€è¦åœ¨ä¸­æ–­æ‰§è¡Œçš„MEASUREçš„ä»»åŠ¡
 			measure_fast_task();
 
-			//¶ÔVPFCµçÑ¹½øĞĞÂË²¨´¦Àí
+			//å¯¹VPFCç”µå‹è¿›è¡Œæ»¤æ³¢å¤„ç†
 			if( u16_get_vin_type() == AC_TYPE){
 					#if(NOTICH_FILT_ENABLE == TRUE)
 					//	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
@@ -180,7 +180,7 @@ INTERRUPT void adcA1ISR(void)
 						gs_stVpfcNotchFilt.stIn.f32In 					 =   g_stAnaPhyRaw.f32Vpfc;
 						notch_filter(&gs_stVpfcNotchFilt);
 					#endif
-					//¶ÔÊäÈëµçÑ¹½øĞĞËøÏà»·
+					//å¯¹è¾“å…¥ç”µå‹è¿›è¡Œé”ç›¸ç¯
 					gs_stOrthPll.stIn.f32SigIn = g_stAnaPhyRaw.f32Vin;
 					if (g_u16PllFirstStart == 1)
 					{
@@ -201,9 +201,9 @@ INTERRUPT void adcA1ISR(void)
 				gs_stVpfcNotchFilt.stOut.f32Out = g_f32VpfcIsrLpf;
 				LPF(gs_stOrthPll.stOut.f32SigAlpha, g_stAnaPhyRaw.f32Vin, 8000.0f, (float)CTR_PERIOD);
 			}
-			//Ö´ĞĞ¿ìËÙ±£»¤ÈÎÎñ
+			//æ‰§è¡Œå¿«é€Ÿä¿æŠ¤ä»»åŠ¡
 			diagnostic_fast_task();
-			//¸ù¾İÄ£Ê½£¬ÔËĞĞ¿ØÖÆÆ÷
+			//æ ¹æ®æ¨¡å¼ï¼Œè¿è¡Œæ§åˆ¶å™¨
 #if defined OPEN_LOOP_CTR
 			if((g_u16FaultDetetFlag == 0)&&(u16_get_controller_cmd() == 1)){
 					 f32Duty        			=  0.2;
@@ -224,12 +224,12 @@ INTERRUPT void adcA1ISR(void)
 			}
 #endif
 		 #ifndef DLLX64
-			//µ÷ÓÃÈí¼şÊ¾²¨Æ÷¹¦ÄÜ
+			//è°ƒç”¨è½¯ä»¶ç¤ºæ³¢å™¨åŠŸèƒ½
 			#define GEN_SW_SCOPE_ISR_CALL
 			#include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE_CFG.H"
 			#undef GEN_SW_SCOPE_ISR_CALL
 
-			//µ÷ÓÃCPUload ºÍÈÎÎñÖ´ĞĞÊ±¼ä²âÊÔº¯Êı.
+			//è°ƒç”¨CPUload å’Œä»»åŠ¡æ‰§è¡Œæ—¶é—´æµ‹è¯•å‡½æ•°.
 			#if(TASK_CPU_LOAD_TEST == 1)
 				reload_performace_test_timer_status(u16TaskTestTimerStatus);
 			#elif(ISR_CPU_LOAD_TEST == 1)

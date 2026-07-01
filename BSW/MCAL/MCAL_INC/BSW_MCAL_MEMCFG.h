@@ -1,7 +1,7 @@
 /*
  * BSW_MCAL_MEMCFG.h
  *
- *  Created on: 2024Äê12ÔÂ22ÈÕ
+ *  Created on: 2024ï¿½ï¿½12ï¿½ï¿½22ï¿½ï¿½
  *      Author: xj8r1j
  */
 
@@ -12,8 +12,25 @@
 #define    CEINTEN_BIT                                0
 #define    CEINTCLR_BIT                               0
 
-#define    CPUWRPROT_PIEVECT_BIT                     1
-#define    LOCK_PIEVECT_BIT                          4
+#define    CPUWRPROT_PIEVECT_BIT                      1
+#define    LOCK_PIEVECT_BIT                           4
+
+//*****************************************************************************
+//
+// Values that can be passed to MemCfg_forceCorrErrorStatus(),
+// MemCfg_clearCorrErrorStatus(), and MemCfg_getCorrErrorAddress() as the
+// stsFlag(s) parameter and returned by MemCfg_getCorrErrorStatus().
+//
+//*****************************************************************************
+#define MEMCFG_CERR_CPUREAD      0x0001U //!< Correctable CPU read error
+//*****************************************************************************
+//
+// Values that can be passed to MemCfg_forceUncorrErrorStatus(),
+// MemCfg_clearUncorrErrorStatus(), and MemCfg_getUncorrErrorAddress() as the
+// stsFlag(s) parameter and returned by MemCfg_getUncorrErrorStatus().
+//
+//*****************************************************************************
+#define MEMCFG_UCERR_CPUREAD     0x0001U //!< Uncorrectable CPU read error
 
 extern void bsw_mcal_memcfg_init(void);
 

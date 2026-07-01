@@ -4,8 +4,8 @@
  *  Created on: 2024.12.22
  *      Author: hongbo.jiang
  */
-#include "../CHIP_PACK/common/include/F28x_Project.h"
-#include "../CHIP_PACK/driverlib/memcfg.h"
+#include "CHIP_PACK/common/include/F28x_Project.h"
+//#include "CHIP_PACK/driverlib/memcfg.h"
 #include "MCAL_INC/BSW_MCAL_MEMCFG.h"
 #define    LOCK_M1_BIT                               1
 #define    LOCK_M0_BIT                               0

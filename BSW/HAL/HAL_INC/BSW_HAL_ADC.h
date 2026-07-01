@@ -34,6 +34,8 @@
 #define 	IIN_H_KP             											(FULL_RANGE_IIN_H/4095)
 #define 	IIN_H_OFFSET           									(HW_OFFSET_IIN_H *  FULL_RANGE_IIN_H/ HW_ADC_REF_VOLT)
 
+extern signed short  i16Q0_get_pfc_mos_ntc(unsigned short u16Adc12Bits);
+
 #ifndef DLLX64
 #define 		bsw_hal_calc_vin_l()    							((FLOAT32)AdcaResultRegs.ADCRESULT2    * 	VIN_L_KP)
 #define 		bsw_hal_calc_vin_n()    							((FLOAT32)AdccResultRegs.ADCRESULT2    * 	VIN_N_KP)
@@ -42,8 +44,9 @@
 #define 		 bsw_hal_calc_iin_h()								((FLOAT32)AdccResultRegs.ADCRESULT1    * 	IIN_H_KP    -  IIN_H_OFFSET)
 
 #define 		bsw_hal_calc_vpfc()                     				((FLOAT32)AdcaResultRegs.ADCRESULT3    * 	VPFC_KP    -    VPFC_OFFSET)
-#define       bsw_hal_calc_cur_inductor_ave_l()      ((FLOAT32)AdcaResultRegs.ADCRESULT0    * 	CUR_INDUCTOR_L_KP    -    CUR_INDUCTOR_L_OFFSET)
-#define       bsw_hal_calc_cur_inductor_ave_h()      ((FLOAT32)AdccResultRegs.ADCRESULT0    * 	CUR_INDUCTOR_H_KP    -    CUR_INDUCTOR_H_OFFSET)
+#define         bsw_hal_calc_cur_inductor_ave_l()      ((FLOAT32)AdcaResultRegs.ADCRESULT0    * 	CUR_INDUCTOR_L_KP    -    CUR_INDUCTOR_L_OFFSET)
+#define         bsw_hal_calc_cur_inductor_ave_h()      ((FLOAT32)AdccResultRegs.ADCRESULT0    * 	CUR_INDUCTOR_H_KP    -    CUR_INDUCTOR_H_OFFSET)
+#define         bsw_hal_calc_pfc_mos_temp()             ((FLOAT32)i16Q0_get_pfc_mos_ntc(AdccResultRegs.ADCRESULT3))
 
 #else
 

@@ -6,7 +6,7 @@
 
 /**************************************************************************************************
   Function:       	sogi_fall_proc_1p
-  Description:    	based on input signal, to general the orth(Õı½»ĞÅºÅ) signal, which is on the fall of original singal
+  Description:    	based on input signal, to general the orth(æ­£äº¤ä¿¡å·) signal, which is on the fall of original singal
   Called By:
   Input:
   Output:
@@ -32,7 +32,7 @@ void sogi_fall_proc_1p(VOLATILE	SOGI_OBJ_T *pst_Sogi)
 
 /**************************************************************************************************
   Function:       	sogi_front_proc_1p
-  Description:    	based on input signal, to general the orth(Õı½»ĞÅºÅ) signal, which is on the fall of original singal
+  Description:    	based on input signal, to general the orth(æ­£äº¤ä¿¡å·) signal, which is on the fall of original singal
   Called By:
   Input:
   Output:
@@ -57,7 +57,7 @@ void sogi_front_proc_1p(VOLATILE	SOGI_OBJ_T* pst_Sogi)
 }
 /**************************************************************************************************
   Function:       sogi_init
-  Description:    ¶ÔsogiÏà¹Ø±äÁ¿½øĞĞ³õÊ¼»¯
+  Description:    å¯¹sogiç›¸å…³å˜é‡è¿›è¡Œåˆå§‹åŒ–
 
   Called By:
   Input:
@@ -68,7 +68,7 @@ void sogi_front_proc_1p(VOLATILE	SOGI_OBJ_T* pst_Sogi)
 /*void sogi_init(SOGI_OBJ_T *pst_sogi, float f32Ts)
 {
     pst_sogi->stCoff.f32Kp                		= 1.414f;
-    pst_sogi->stCoff.u8Ena2nd             		= 0;   //¶ş½×½ûÖ¹
+    pst_sogi->stCoff.u8Ena2nd             		= 0;   //äºŒé˜¶ç¦æ­¢
     pst_sogi->stCoff.f32Ts                			= f32Ts;
     pst_sogi->stInter.f32IntegOut       		= 0.0f;
     pst_sogi->stInter.f32IntegOutQ      		= 0.0f;
@@ -81,7 +81,7 @@ void sogi_front_proc_1p(VOLATILE	SOGI_OBJ_T* pst_Sogi)
 
 /**************************************************************************************************
   Function:       sogi_pll_proc_1p
-  Description:    sogi  µ¥ÏàËøÏàËã·¨£¬ÊµÏÖ¶ÔÊäÈëĞÅºÅµÄ¸ú×Ù£¬ÔÚµ÷ÓÃÖ®Ç°£¬Ğèµ÷ÓÃsogi_initº¯Êı
+  Description:    sogi  å•ç›¸é”ç›¸ç®—æ³•ï¼Œå®ç°å¯¹è¾“å…¥ä¿¡å·çš„è·Ÿè¸ªï¼Œåœ¨è°ƒç”¨ä¹‹å‰ï¼Œéœ€è°ƒç”¨sogi_initå‡½æ•°
   Called By:      
   Input:          
   Output:         
@@ -150,15 +150,15 @@ void sogi_pll_proc_1p(VOLATILE	SOGI_PLL_OBJ_T *pst_SogiPll)
 
 /**************************************************************************************************
   Function:       orth_pll_proc_1p
-  Description:   Vin = Vm*Cos(¦Øt + ¦È)£»  X = [¦Á,  ¦Â];    ¦Á = Vm*Cos(¦Øt + ¦È)£» ¦Â = Vm*Sin(¦Øt + ¦È)
-  	  	  	  	  	  	  x[k+1] = ¦µ¡¤x[k]£¬ÆäÖĞ ¦µ = e^(A¡¤Ts)
-  	  	  	  	  	  	  ¦µ = [cos(¦ØTs), -sin(¦ØTs);
-									sin(¦ØTs),  cos(¦ØTs)]
+  Description:   Vin = Vm*Cos(Ï‰t + Î¸)ï¼›  X = [Î±,  Î²];    Î± = Vm*Cos(Ï‰t + Î¸)ï¼› Î² = Vm*Sin(Ï‰t + Î¸)
+  	  	  	  	  	  	  x[k+1] = Î¦Â·x[k]ï¼Œå…¶ä¸­ Î¦ = e^(AÂ·Ts)
+  	  	  	  	  	  	  Î¦ = [cos(Ï‰Ts), -sin(Ï‰Ts);
+									sin(Ï‰Ts),  cos(Ï‰Ts)]
   Called By:
   Input:
   Output:
   Return:
-  Others:    Èç¹ûÓÃÖ±Á÷·ÖÁ¿ÔõÃ´°ì;
+  Others:    å¦‚æœç”¨ç›´æµåˆ†é‡æ€ä¹ˆåŠ;
 **************************************************************************************************/
 void orth_pll_proc_1p(VOLATILE	ORTH_PLL_OBJ_T  *pst_OrthPll)
 {
