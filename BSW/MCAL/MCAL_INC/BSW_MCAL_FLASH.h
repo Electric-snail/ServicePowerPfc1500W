@@ -335,6 +335,7 @@ extern UINT16           bsw_mcal_flash_fsm_init(void);
 extern UINT16           bsw_mcal_flash_read(UINT16 *p_u16DestAddr,UINT16 *p_u16SrcAddr, UINT16 u16Len);
 extern UINT16           bsw_mcal_flash_erase(UINT32 u32SectorStartAddr, UINT16 u16SectorCnt);
 extern unsigned short   bsw_mcal_flash_write(unsigned long u32FlashStartAddr, unsigned short *p_u16SrcAddr, unsigned short  u16Len);
+extern UINT16  bsw_mcal_flash_verify(UINT32 u32FlashStartAddr, UINT16 *p_u16DataBuff, UINT16 u16Len);
 #ifdef __cplusplus
 }
 #endif // extern "C"

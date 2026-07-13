@@ -92,8 +92,9 @@ unsigned short  bsw_mcal_flash_write(unsigned long u32FlashStartAddr, unsigned s
      UINT32 u32Index = 0;
      unsigned short i = 0;
      unsigned short u16Cnt = 0;
-     unsigned short u16SectorIndex;
      unsigned short u16SectorProgramSize;
+     unsigned short u16SectorIndex;
+     unsigned short u16TempIndex;
      Fapi_StatusType            oReturnCheck;
      Fapi_FlashStatusType       oFlashStatus;
 
@@ -136,8 +137,8 @@ unsigned short  bsw_mcal_flash_write(unsigned long u32FlashStartAddr, unsigned s
                 if(u16SectorIndex < 32){
                      Fapi_setupBankSectorEnable(FLASH_WRAPPER_PROGRAM_BASE+FLASH_O_CMDWEPROTA, ~(1UL << u16SectorIndex));
                 }else{
-                     u16SectorIndex = (u16SectorIndex - 32) >> 3;
-                     Fapi_setupBankSectorEnable(FLASH_WRAPPER_PROGRAM_BASE+FLASH_O_CMDWEPROTB, ~(1UL << u16SectorIndex));
+                    u16TempIndex = (u16SectorIndex - 32) >> 3;
+                    Fapi_setupBankSectorEnable(FLASH_WRAPPER_PROGRAM_BASE+FLASH_O_CMDWEPROTB, ~(1UL << u16TempIndex));
                 }
                 oReturnCheck = Fapi_issueProgrammingCommand((UINT32 *)u32Index,(unsigned int *)p_u16SrcAddr,8, 0, 0, Fapi_AutoEccGeneration);
                 u32Index += 8;

@@ -84,7 +84,7 @@ void boot_proce(void){
                 g_stFlashProgram.u16FlashCmd = FLASH_IDEL;
             }else{
                 s_u16TimeOutCnt++;
-                if(s_u16TimeOutCnt > 400){
+                if(s_u16TimeOutCnt > 500){
                     g_stFlashProgram.emFlashStatus      = FLASH_IDEL_STATUS; //升级中断,返回空闲状态;
                     g_stFlashProgram.u16FlashCmd        = FLASH_IDEL;        //清除命令;
                 }

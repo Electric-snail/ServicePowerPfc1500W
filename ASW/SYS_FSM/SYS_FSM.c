@@ -62,7 +62,7 @@ void sys_fsm_5ms_task(void){
           }else{
               g_u16SysFsmCnt++;     //Over 50ms,enter the flash mode
               if(g_u16SysFsmCnt > 50){
-                  ExitBoot(0x86000);
+                  ExitBoot(APP_START_ADDR);
               }
           }
        }break;
