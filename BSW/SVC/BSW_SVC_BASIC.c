@@ -13,7 +13,6 @@
 #include "STORAGE/BSW_STORAGE.h"
 #include "DEBUG_PLATFORM/COMM_TEST/COMM_TEST.H"
 #endif
-#include "SYS_FSM/SYS_FSM.H"
 #include "BSW_SVC_BASIC.h"
 #include "ISR_INC/BSW_ISR_ADC.h"
 #include "TASK/BSW_TASK_SERVICE.h"

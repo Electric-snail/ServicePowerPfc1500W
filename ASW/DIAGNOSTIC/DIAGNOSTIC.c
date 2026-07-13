@@ -15,7 +15,6 @@
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
 #include "ISR_INC/BSW_ISR_ADC.h"
 #include "MEASURE/MEASURE.h"
-#include "SYS_FSM/SYS_FSM_INF.h"
 #include "POWER_FSM/POWER_FSM.h"
 /********* function declaration region *************************************/
 

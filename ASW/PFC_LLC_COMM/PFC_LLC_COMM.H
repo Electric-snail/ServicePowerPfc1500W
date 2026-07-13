@@ -28,6 +28,7 @@ extern UINT16 g_SciCommTimeOutCnt;
 typedef struct{
 	  float               f32VpfcRef;
 	  unsigned short      u16BootReq;
+	  signed short        i16MosTemp;
 	  F32_CALIB_ITEM_T    stVinCalib;
 	  F32_CALIB_ITEM_T    stIinCalib;
 }PFC_LLC_COMM_OUT;

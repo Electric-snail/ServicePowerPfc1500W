@@ -37,7 +37,7 @@ typedef struct {
 }NO_RECV_FAULT_BITS;
 
 typedef struct {
-    unsigned short  b1VinOvw   			: 1;
+    unsigned short  b1VinOvw   			    : 1;
     unsigned short  b1VinUvw				: 1;
     unsigned short  b1VinDrop				: 1;
     unsigned short  b13Rvs         			: 13;

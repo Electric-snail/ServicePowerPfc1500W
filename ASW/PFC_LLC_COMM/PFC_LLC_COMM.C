@@ -36,21 +36,23 @@ void pfc_llc_msg_20ms_task(void)
 	unsigned short ua16AppTxBuff[PFC_TO_LLC_MSG_LEN >> 1] 	= {0};
 	unsigned short u16Temp;
     u16Temp																					= (unsigned short)(f32_get_vin_rms_flt() * 10.0f);
-    ua16AppTxBuff[0]																	=    u16Temp;
+    ua16AppTxBuff[0]																	    =    u16Temp;
     u16Temp																					= (unsigned short)(f32_get_iin_rms_flt() * 100.0f);
-    ua16AppTxBuff[1]																	=    u16Temp;
+    ua16AppTxBuff[1]																	    =    u16Temp;
 
     u16Temp																					= (unsigned short)(f32_get_pin_lpf() * 10.0f);
-    ua16AppTxBuff[2]																	=    u16Temp;
+    ua16AppTxBuff[2]																	    =    u16Temp;
 
     u16Temp																					= (unsigned short)(f32_get_vpfc_slow_lpf() * 10.0f);
-    ua16AppTxBuff[3]																	=   u16Temp;
+    ua16AppTxBuff[3]																	    =   u16Temp;
     u16Temp																					= (unsigned short)(f32_get_vin_freq()  * 100.0f);
-    ua16AppTxBuff[4]																	=  u16Temp;
+    ua16AppTxBuff[4]																	    =  u16Temp;
 
-    ua16AppTxBuff[5]                                                                 =  u16_get_auto_recv_diag();
-    ua16AppTxBuff[6]                                                                 =  u16_get_no_recv_diag();
-    ua16AppTxBuff[7]                                                                 =  u16_get_warn_diag();
+    ua16AppTxBuff[5]                                                                        =  u16_get_auto_recv_diag();
+    ua16AppTxBuff[6]                                                                        =  u16_get_no_recv_diag();
+    u16Temp                                                                                 =  ((signed short)f32_get_pfc_mos())&0x00ff;
+
+    ua16AppTxBuff[7]                                                                        =  (u16_get_warn_diag() << 8) | u16Temp;
 
     dll_scib_frame_write1(ua16AppTxBuff,     (PFC_TO_LLC_MSG_LEN >> 1));
 }

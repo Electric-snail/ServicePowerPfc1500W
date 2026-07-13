@@ -18,7 +18,6 @@
 #include "ASW_BASIC.h"
 #include "MEASURE/MEASURE.h"
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
-#include "SYS_FSM/SYS_FSM.h"
 #include "POWER_FSM/POWER_FSM.h"
 #include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 

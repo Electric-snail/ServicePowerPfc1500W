@@ -9,13 +9,11 @@
 #include "HAL/HAL_INC/BSW_HAL_GPIO.h"
 #include "SVC/BSW_SVC_BASIC.h"
 #include "SVC/FSM/BSW_FSM_CORE.h"
-#include "SYS_FSM/SYS_FSM.h"
 #include "POWER_FSM/POWER_FSM.h"
 #include "PFC_LLC_COMM/PFC_LLC_COMM.H"
 #include "DIAGNOSTIC/DIAGNOSTIC.h"
 #include "MEASURE/MEASURE.h"
 #include "VPFC_ADJUST/VPFC_ADJUST.h"
-#include "SYS_FSM/SYS_FSM_INF.h"
 
 void  power_standby_in(void);
 void  power_standby_exe(void);
