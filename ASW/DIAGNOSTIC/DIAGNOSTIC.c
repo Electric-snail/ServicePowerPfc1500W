@@ -161,6 +161,8 @@ void diag_10ms_task(void)
 		ASW_DiagSWFaultUnderRecv(g_stDiagStatus.unAutoRecvFault.bits.b1VinRmsUvp, f32TempValue, gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].f32PrtctThreshold, \
 			gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].f32RcvrThreshold, g_u16SwDiagCount[VIN_DC_RMS_UVP_ID], gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].u16ErrCnt, gc_stSwdiagCfgParam[VIN_DC_RMS_UVP_ID].u16RcvrCnt);
 
+		g_stDiagStatus.unAutoRecvFault.bits.b1VinOfp = 0;
+		g_stDiagStatus.unAutoRecvFault.bits.b1VinUfp = 0;
 	}
 
 	f32TempValue = f32_get_vpfc_slow_lpf();
