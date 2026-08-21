@@ -141,7 +141,7 @@ void vin_drop_diag(VIN_DROP_DIG_OBJ_T *p_stVinDropObj){
         	}
         }else{
         	p_stVinDropObj->stInner.u16DropN = 0;
-        	 if((1 == p_stVinDropObj->stOut.u16VinDropFaultFlag)||(p_stVinDropObj->stOut.u16VinDropWarnFlag == 1)){
+        	 if((1 == p_stVinDropObj->stOut.u16VinDropFaultFlag)||(1 == p_stVinDropObj->stOut.u16VinDropWarnFlag)){
         	 	 p_stVinDropObj->stInner.u16RecvN++;
         	 	 if(p_stVinDropObj->stInner.u16RecvN >= p_stVinDropObj->stCoff.u16DropRecvCntThrd){
         	 			   p_stVinDropObj->stOut.u16VinDropFaultFlag  = 0;

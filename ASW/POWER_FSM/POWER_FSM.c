@@ -98,10 +98,10 @@ UINT8 power_standby_cond(UINT16 u16TrigEven){
 }
 
 void  power_relay_dither_exe(void){
-	    g_u16PwrFsmTimerCnt ++;
-        if(g_u16PwrFsmTimerCnt > 100){
-			EMIT_FSM(POWER_FSM, 	PWR_RELAY_DITHER_CMP);
-        }
+    g_u16PwrFsmTimerCnt ++;
+    if(g_u16PwrFsmTimerCnt > 100){
+        EMIT_FSM(POWER_FSM, 	PWR_RELAY_DITHER_CMP);
+    }
 }
 
 UINT8 power_relay_dither_cond(UINT16 u16TrigEven){
@@ -110,9 +110,9 @@ UINT8 power_relay_dither_cond(UINT16 u16TrigEven){
 }
 
 void  power_softstart_in(void) {
-	g_stPwrFsmOut.u16CtrCmd = 1;
-	g_u16PwrFsmTimerCnt = 0;
-	g_stPwrFsmOut.f32VpfcSet = f32_get_vpfc_raw();
+	g_stPwrFsmOut.u16CtrCmd     = 1;
+	g_u16PwrFsmTimerCnt         = 0;
+	g_stPwrFsmOut.f32VpfcSet    = f32_get_vpfc_raw();
 }
 
 void  power_softstart_exe(void) {

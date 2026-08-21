@@ -36,6 +36,11 @@ float 										f32DutyForwared;
 float                                       g_f32IacKpDc;
 float                                       g_f32IacKiTsDc;
 float                                       g_f32IacFeedCoffDc;
+// 260 V以上交流输入电流环GUI调试参数
+float                                       g_stIacPiGainCtrlGuiKpHv;
+float                                       g_stIacPiGainCtrlGuiKiTsHv;
+float                                       g_f32FeedCoffGuiHv;
+
 void 	pfc_controller_init(void){
 		gs_stVpfcPiCtrl.stCoff.f32IntegrateMax		= 4600.0f;   //output is the input power，maximum the input power
 		gs_stVpfcPiCtrl.stCoff.f32IntegrateMin		= -1000.0f;
@@ -71,9 +76,12 @@ void 	pfc_controller_init(void){
 	//	gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.2f * 666.6 * 380f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		gs_stIacPiGainCtrl.stCoff.f32Kp						= 3.0f;
 		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.3f; //1.0f; //20.0f * 8000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
-		g_f32IacKpDc                                        = 2.5f;
-		g_f32IacKiTsDc                                      = 0.05f;
-		g_f32IacFeedCoffDc                                  = 0.5f;
+		g_f32IacKpDc                                        = 0.8f;
+		g_f32IacKiTsDc                                      = 0.00f;
+		g_f32IacFeedCoffDc                                  = 0.36f;
+		g_stIacPiGainCtrlGuiKpHv                            = 10.0f;
+		g_stIacPiGainCtrlGuiKiTsHv                          = 1.0f;
+		g_f32FeedCoffGuiHv                                  = 0.8f;
 		gs_stIacPiGainCtrl.stInner.f32Integrate			    = -1.0f;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
 		gs_f32FeedCoff										= 0.65f;
@@ -82,9 +90,9 @@ void 	pfc_controller_init(void){
 		g_f32IacRmsRef                                              = 0.0f;
 }
 
+
 void 	pfc_controller(void){
-	//	static unsigned short s_u16VpfcFeedFlag = 0;
-	//	static unsigned short s_u16VpfcPiCoffLevel = 0;
+        static unsigned short s_u16VinRmsForILoop = 0;
 		float f32Duty;
 	    float f32VacPll		= f32_get_vac_volt_pll();
 		float f32VpfcNpf    = f32_get_vpfc_npf();
@@ -93,7 +101,6 @@ void 	pfc_controller(void){
 		float f32VpfcErr0, f32VpfcErr1;
 		float f32Temp;
 		float f32IlRefTemp;
-	//	float f32VpfcErrAbs;
 		float f32VpfcFastLpf = f32_get_vpfc_isr_lpf();
 
 		gs_stVpfcPiCtrl.stIn.f32Ref = f32_get_vpfc_set();
@@ -119,7 +126,7 @@ void 	pfc_controller(void){
 			}
 			else {
 				  gs_stVpfcPiCtrl.stCoff.f32Kp	   = g_f32VpfcPiKpSlow;
-				  gs_stVpfcPiCtrl.stCoff.f32KiTs	   = g_f32VpfcPiKiTsSlow;
+				  gs_stVpfcPiCtrl.stCoff.f32KiTs   = g_f32VpfcPiKiTsSlow;
 			}
 			//in case of the vpfc overshoot too high
 			f32Temp	   = f32VpfcFastLpf -  35.0f;
@@ -177,37 +184,49 @@ void 	pfc_controller(void){
 
 		gs_stIacPiGainCtrl.stIn.f32Gain = 1/f32VpfcFastLpf;
 
-        f32Temp = f32_get_vin_rms();
-
 		if(u16_get_vin_type() == AC_TYPE){
+	        f32Temp = f32_get_vin_rms();
 	        if(f32Temp > 175.0f){
 	                gs_stVpfcPiCtrl.stCoff.f32IntegrateMax      = 4500.0f;   //output is the input power，maximum the input power
 	                gs_stVpfcPiCtrl.stCoff.f32IntegrateMin      = -1000.0f;
-	                gs_stVpfcPiCtrl.stCoff.f32OutMax                = 4500.0f;   //output is the input power,maximum the input power
-	                gs_stVpfcPiCtrl.stCoff.f32OutMin                = -1000.0f;
+	                gs_stVpfcPiCtrl.stCoff.f32OutMax            = 4500.0f;   //output is the input power,maximum the input power
+	                gs_stVpfcPiCtrl.stCoff.f32OutMin            = -1000.0f;
 	        }else if(f32Temp < 170.0f){
-	            gs_stVpfcPiCtrl.stCoff.f32IntegrateMax      = 2000.0f;   //output is the input power，maximum the input power
-	            gs_stVpfcPiCtrl.stCoff.f32IntegrateMin      = -500.0f;
+	            gs_stVpfcPiCtrl.stCoff.f32IntegrateMax          = 2000.0f;   //output is the input power，maximum the input power
+	            gs_stVpfcPiCtrl.stCoff.f32IntegrateMin          = -500.0f;
 	            gs_stVpfcPiCtrl.stCoff.f32OutMax                = 2000.0f;   //output is the input power,maximum the input power
 	            gs_stVpfcPiCtrl.stCoff.f32OutMin                = -500.0f;
 	        }
-	        f32Temp = 33.0f - g_f32IacRmsRef * 3.0f;
-	        gs_stIacPiGainCtrl.stCoff.f32Kp     = LIMIT(f32Temp,        10.0f,      33.0f);
-	        if(g_f32IacRmsRef < 0.25f){
-	            gs_stIacPiGainCtrl.stCoff.f32KiTs  = 1.0f;
-	        }else if(g_f32IacRmsRef > 0.45f){
-	            f32Temp = 0.1f + g_f32IacRmsRef  * 0.4f;
-	            gs_stIacPiGainCtrl.stCoff.f32KiTs  = LIMIT(f32Temp,             0.3f,       1.0f);
+	        if(s_u16VinRmsForILoop == 0){
+	            if(f32Temp >= 240.0f){
+	                s_u16VinRmsForILoop = 1;
+	            }
+               f32Temp = 33.0f - g_f32IacRmsRef * 3.0f;
+               gs_stIacPiGainCtrl.stCoff.f32Kp     = LIMIT(f32Temp,        10.0f,      33.0f);
+               if(g_f32IacRmsRef < 0.25f){
+                   gs_stIacPiGainCtrl.stCoff.f32KiTs  = 1.0f;
+               }else if(g_f32IacRmsRef > 0.45f){
+                   f32Temp = 0.1f + g_f32IacRmsRef  * 0.4f;
+                   gs_stIacPiGainCtrl.stCoff.f32KiTs  = LIMIT(f32Temp,             0.3f,       1.0f);
+               }
+               f32Temp = 0.2f + g_f32IacRmsRef  * 0.3f;
+               gs_f32FeedCoff  = LIMIT(f32Temp,        0.20f,      0.8f);
+	        }else{
+	             if(f32Temp < 236.0f){
+	                 s_u16VinRmsForILoop = 0;
+	             }
+	             gs_stIacPiGainCtrl.stCoff.f32Kp   = g_stIacPiGainCtrlGuiKpHv;
+	             gs_stIacPiGainCtrl.stCoff.f32KiTs = g_stIacPiGainCtrlGuiKiTsHv;
+	             gs_f32FeedCoff                    = g_f32FeedCoffGuiHv;
 	        }
-	        f32Temp = 0.2f + g_f32IacRmsRef  * 0.3f;
-	        gs_f32FeedCoff  = LIMIT(f32Temp,        0.20f,      0.8f);
 		}else{
-		    if(f32Temp > 200.0f){
+            f32Temp = f32_get_vin_rms();
+		    if(f32Temp > 195.0f){
                 gs_stVpfcPiCtrl.stCoff.f32IntegrateMax      = 4500.0f;   //output is the input power，maximum the input power
                 gs_stVpfcPiCtrl.stCoff.f32IntegrateMin      = -1000.0f;
                 gs_stVpfcPiCtrl.stCoff.f32OutMax            = 4500.0f;   //output is the input power,maximum the input power
                 gs_stVpfcPiCtrl.stCoff.f32OutMin            = -1000.0f;
-            }else if(f32Temp < 195.0f){
+            }else if(f32Temp < 190.0f){
                 gs_stVpfcPiCtrl.stCoff.f32IntegrateMax      = 3000.0f;   //output is the input power，maximum the input power
                 gs_stVpfcPiCtrl.stCoff.f32IntegrateMin      = -500.0f;
                 gs_stVpfcPiCtrl.stCoff.f32OutMax            = 3000.0f;   //output is the input power,maximum the input power
