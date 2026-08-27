@@ -36,6 +36,10 @@ extern    float             g_f32IacRmsRef;
 extern    float             g_f32IacKpDc;
 extern    float             g_f32IacKiTsDc;
 extern    float             g_f32IacFeedCoffDc;
+extern    unsigned short    g_u16IacCtrlTuneEnable;
+extern    float             g_f32IacKpAc;
+extern    float             g_f32IacKiTsAc;
+extern    float             g_f32IacFeedCoffAc;
 extern    float             g_stIacPiGainCtrlGuiKpHv;
 extern    float             g_stIacPiGainCtrlGuiKiTsHv;
 extern    float             g_f32FeedCoffGuiHv;
@@ -81,6 +85,11 @@ REG_CFG_ITEM_F32(PLL_KP,					 gs_stOrthPll.stCoff.f32Kp,						    		VAR_WR,		   
 REG_CFG_ITEM_F32(IL_KP,					   	 gs_stIacPiGainCtrl.stCoff.f32Kp,						    VAR_RD,		        10.0f,				 										0.01,														500.0f);
 REG_CFG_ITEM_F32(IL_KI,					     gs_stIacPiGainCtrl.stCoff.f32KiTs,						    VAR_RD,		        (10.0f * 2000.0f/ 65000.0f),			      (10.0f * 10.0f/ 65000.0f),						 (10.0f * 100000.0f/ 65000.0f));
 REG_CFG_ITEM_F32(IL_FEED,					 gs_f32FeedCoff,						    				VAR_RD,		        0.8,			      										  0,						 										 1.0f);
+
+REG_CFG_ITEM_U16(IL_AC_TUNE_EN,              g_u16IacCtrlTuneEnable,                                      VAR_WR,             0,                                                          0,                                                          1);
+REG_CFG_ITEM_F32(IL_KP_AC,                   g_f32IacKpAc,                                                VAR_WR,             3.0f,                                                       0.01f,                                                      500.0f);
+REG_CFG_ITEM_F32(IL_KI_AC,                   g_f32IacKiTsAc,                                              VAR_WR,             0.3f,                                                       0.0f,                                                       30.0f);
+REG_CFG_ITEM_F32(IL_FEED_AC,                 g_f32IacFeedCoffAc,                                          VAR_WR,             0.65f,                                                      0.0f,                                                       1.0f);
 
 REG_CFG_ITEM_F32(IL_KP_DC,                   g_f32IacKpDc,                                              VAR_WR,             0.8f,                                                      0.03,                                                       300.0f);
 REG_CFG_ITEM_F32(IL_KI_DC,                   g_f32IacKiTsDc,                                            VAR_WR,             0.0f,                                                      0.00000,                                                     30.0f);

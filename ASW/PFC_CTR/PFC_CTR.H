@@ -14,6 +14,7 @@ typedef struct {
 }PFC_CTR_OUT;
 
 extern PFC_CTR_OUT				g_stPfcOut;
+extern float                    g_f32IacRmsRef;
 
 #define             	NOTICH_FILT_ENABLE				TRUE
 #define				f32_get_pwm_duty()             			g_stPfcOut.f32Duty

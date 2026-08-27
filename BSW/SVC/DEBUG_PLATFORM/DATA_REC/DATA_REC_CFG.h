@@ -23,6 +23,6 @@ extern         UINT16   		g_u16RestartCnt;
 
 //the data record group must be less than 3, the maximum variable counter is defined by DATA_REC_MAX_CNT
 DATA_REC_START(PFC_DATA,  0x00)
-DATA_REC_ITEM(eu_fp32,	    g_stPfcLlcCommOut.f32VpfcRef)
+DATA_REC_ITEM(eu_fp32,	    g_f32IacRmsRef)
 DATA_REC_END()
 

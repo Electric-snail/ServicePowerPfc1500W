@@ -147,14 +147,15 @@
 	#define PARAME_CALIB_START()                  void parame_calib_item(void){\
 												  float f32Temp;\
 												  UINT16     *p_u16Temp;\
-                                                  UINT16  	 ua16RecBuf[DP_APL_SIG_FRAME_RX_MAX_BYTE_LEN >> 1]={0};     \
+												  UINT16  	 ua16RecBuf[DP_APP_SIG_FRAME_TX_MAX_BYTE_LEN / TYPE_8_BYTE_SIZE]={0}; \
                                                   FRAME_PROTOCOL_FORMAT st_ParamCalibItemFrame = {0};  		  \
                                                   UINT16    i 					        =    0;                           \
                                                   UINT16  max_var_item 		    = 0;                              \
                                                   UINT16  rec_w_index  		    = 0;     					        \
-                                                  UINT16  u16CharNum    		= 0;							    \
-												  UINT16  u16TempData;                                              \
-                                                  const char *p_u8PackName;\
+												  UINT16  u16CharNum    		= 0;							    \
+																				  UINT16  u16TempData;                                              \
+												  const UINT16 u16RecBufWordNum = sizeof(ua16RecBuf) / sizeof(ua16RecBuf[0]); \
+												  const char *p_u8PackName;\
                                                   st_ParamCalibItemFrame.stNwmDm.unNwmAddr.bits.ul8DestAddr = PC_NODE_ADDR; \
                                                   st_ParamCalibItemFrame.stAplDm.unAplCmd.bits.ul8CmdSet         = PARAM_CALIB_CMD_SET; \
                                                   st_ParamCalibItemFrame.stAplDm.unAplCmd.bits.uh8CmdId         = PARAM_CALIB_ITEM_CMD_ID;  \
@@ -163,7 +164,8 @@
    #define PARAME_CALIB_RVS_ITEM_F32(name, K_MAX, K_MIN, B_MAX, B_MIN)\
 												  p_u8PackName                   = #name;       \
 		                                          u16CharNum					    = strlen(p_u8PackName);	    \
-                                                  if((rec_w_index + ((u16CharNum + 1) >> 1)) >= (DP_APL_SIG_FRAME_RX_MAX_BYTE_LEN >> 1)) return;   \
+		                                          if((rec_w_index + 2U + ((u16CharNum + 1U) >> 1) + \
+		                                              sizeof(F32_CALIB_LIMIT_ITEM_T) / sizeof(UINT16)) > u16RecBufWordNum) return; \
 											      ua16RecBuf[rec_w_index++]      = CALIB_RVS_METHOD + ((UINT16)eu_fp32 << 8);\
 												  ua16RecBuf[rec_w_index++]      = max_var_item + ((UINT16)u16CharNum<< 8);\
 											      for(i = 0; i < u16CharNum;i+= 2){\
@@ -187,7 +189,8 @@
    #define PARAME_CALIB_ITEM_F32(name,K_MAX, K_MIN, B_MAX, B_MIN)\
                                                   p_u8PackName  = #name;\
                                                   u16CharNum					     = strlen(p_u8PackName);\
-                                                  if((rec_w_index + ((u16CharNum + 1) >> 1)) >=( DP_APL_SIG_FRAME_RX_MAX_BYTE_LEN >> 1)) return; \
+												  if((rec_w_index + 2U + ((u16CharNum + 1U) >> 1) + \
+												      sizeof(F32_CALIB_LIMIT_ITEM_T) / sizeof(UINT16)) > u16RecBufWordNum) return; \
                                                   ua16RecBuf[rec_w_index++]      = CALIB_FWD_METHOD + ((UINT16)eu_fp32 << 8);\
                                                   ua16RecBuf[rec_w_index++]      = max_var_item + ((UINT16)u16CharNum<< 8);\
                                                   for(i = 0; i < u16CharNum;i+= 2){\
@@ -212,7 +215,8 @@
     #define PARAME_CALIB_RVS_ITEM_I16(name,K_MAX, K_MIN, B_MAX, B_MIN)\
                                                p_u8PackName  = #name;                                                        \
                                                u16CharNum                    = strlen(p_u8PackName);      \
-                                               if((rec_w_index + ((u16CharNum + 1) >> 1)) >=( DP_APL_SIG_FRAME_RX_MAX_BYTE_LEN >> 1)) return; \
+											   if((rec_w_index + 2U + ((u16CharNum + 1U) >> 1) + \
+											       sizeof(I16_CALIB_LIMIT_ITEM_T) / sizeof(UINT16)) > u16RecBufWordNum) return; \
                                                ua16RecBuf[rec_w_index++]      = CALIB_RVS_METHOD + ((UINT16)eu_int16 << 8);\
                                               ua16RecBuf[rec_w_index++]      = max_var_item + ((UINT16)u16CharNum<< 8);\
                                               for(i = 0; i < u16CharNum;i+= 2){\
@@ -228,7 +232,8 @@
    #define PARAME_CALIB_ITEM_I16(name,K_MAX, K_MIN, B_MAX, B_MIN)\
                                                 p_u8PackName  = #name;                                                        \
                                                 u16CharNum                    = strlen(p_u8PackName);      \
-                                                if((rec_w_index + ((u16CharNum + 1) >> 1)) >=( DP_APL_SIG_FRAME_RX_MAX_BYTE_LEN >> 1)) return; \
+												if((rec_w_index + 2U + ((u16CharNum + 1U) >> 1) + \
+												    sizeof(I16_CALIB_LIMIT_ITEM_T) / sizeof(UINT16)) > u16RecBufWordNum) return; \
                                                 ua16RecBuf[rec_w_index++]      = CALIB_FWD_METHOD + ((UINT16)eu_int16 << 8);\
                                                ua16RecBuf[rec_w_index++]      = max_var_item + ((UINT16)u16CharNum<< 8);\
                                                for(i = 0; i < u16CharNum;i+= 2){\

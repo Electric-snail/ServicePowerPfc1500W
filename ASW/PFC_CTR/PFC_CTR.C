@@ -36,6 +36,10 @@ float 										f32DutyForwared;
 float                                       g_f32IacKpDc;
 float                                       g_f32IacKiTsDc;
 float                                       g_f32IacFeedCoffDc;
+unsigned short                              g_u16IacCtrlTuneEnable;
+float                                       g_f32IacKpAc;
+float                                       g_f32IacKiTsAc;
+float                                       g_f32IacFeedCoffAc;
 // 260 V以上交流输入电流环GUI调试参数
 float                                       g_stIacPiGainCtrlGuiKpHv;
 float                                       g_stIacPiGainCtrlGuiKiTsHv;
@@ -79,8 +83,12 @@ void 	pfc_controller_init(void){
 		g_f32IacKpDc                                        = 0.8f;
 		g_f32IacKiTsDc                                      = 0.00f;
 		g_f32IacFeedCoffDc                                  = 0.36f;
+		g_u16IacCtrlTuneEnable                              = 0;
+		g_f32IacKpAc                                        = 3.0f;
+		g_f32IacKiTsAc                                      = 0.3f;
+		g_f32IacFeedCoffAc                                  = 0.65f;
 		g_stIacPiGainCtrlGuiKpHv                            = 10.0f;
-		g_stIacPiGainCtrlGuiKiTsHv                          = 1.0f;
+		g_stIacPiGainCtrlGuiKiTsHv                          = 0.3f;
 		g_f32FeedCoffGuiHv                                  = 0.8f;
 		gs_stIacPiGainCtrl.stInner.f32Integrate			    = -1.0f;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
@@ -201,23 +209,36 @@ void 	pfc_controller(void){
 	            if(f32Temp >= 240.0f){
 	                s_u16VinRmsForILoop = 1;
 	            }
-               f32Temp = 33.0f - g_f32IacRmsRef * 3.0f;
-               gs_stIacPiGainCtrl.stCoff.f32Kp     = LIMIT(f32Temp,        10.0f,      33.0f);
-               if(g_f32IacRmsRef < 0.25f){
-                   gs_stIacPiGainCtrl.stCoff.f32KiTs  = 1.0f;
-               }else if(g_f32IacRmsRef > 0.45f){
-                   f32Temp = 0.1f + g_f32IacRmsRef  * 0.4f;
-                   gs_stIacPiGainCtrl.stCoff.f32KiTs  = LIMIT(f32Temp,             0.3f,       1.0f);
-               }
-               f32Temp = 0.2f + g_f32IacRmsRef  * 0.3f;
-               gs_f32FeedCoff  = LIMIT(f32Temp,        0.20f,      0.8f);
 	        }else{
 	             if(f32Temp < 236.0f){
 	                 s_u16VinRmsForILoop = 0;
 	             }
-	             gs_stIacPiGainCtrl.stCoff.f32Kp   = g_stIacPiGainCtrlGuiKpHv;
-	             gs_stIacPiGainCtrl.stCoff.f32KiTs = g_stIacPiGainCtrlGuiKiTsHv;
-	             gs_f32FeedCoff                    = g_f32FeedCoffGuiHv;
+	        }
+	        if(s_u16VinRmsForILoop == 0){
+	            if(g_f32IacRmsRef < 0.5f){
+	                f32Temp = 40;
+	                gs_stIacPiGainCtrl.stCoff.f32KiTs  = 0.8f;
+	            }else if(g_f32IacRmsRef < 0.75f){
+	                f32Temp = 80.0f - g_f32IacRmsRef * 80.0f;
+                    gs_stIacPiGainCtrl.stCoff.f32KiTs  = 0.7f;
+	            }else{
+                    f32Temp = 20.43875f - g_f32IacRmsRef * 0.585f;
+                    gs_stIacPiGainCtrl.stCoff.f32KiTs  = 0.6f;
+	            }
+                gs_stIacPiGainCtrl.stCoff.f32Kp     = LIMIT(f32Temp,        15.0f,      40.0f);
+
+                f32Temp = 0.03f + g_f32IacRmsRef  * 0.55f;
+                gs_f32FeedCoff  = LIMIT(f32Temp,        0.50f,      0.95f);
+	        }else{
+                gs_stIacPiGainCtrl.stCoff.f32Kp   = g_stIacPiGainCtrlGuiKpHv;
+                gs_stIacPiGainCtrl.stCoff.f32KiTs = g_stIacPiGainCtrlGuiKiTsHv;
+                gs_f32FeedCoff                    = g_f32FeedCoffGuiHv;
+	        }
+	        // GUI调试使能时，交流电流环参数由在线配置值接管
+	        if(g_u16IacCtrlTuneEnable != 0U){
+	            gs_stIacPiGainCtrl.stCoff.f32Kp     = g_f32IacKpAc;
+	            gs_stIacPiGainCtrl.stCoff.f32KiTs   = g_f32IacKiTsAc;
+	            gs_f32FeedCoff                      = g_f32IacFeedCoffAc;
 	        }
 		}else{
             f32Temp = f32_get_vin_rms();
