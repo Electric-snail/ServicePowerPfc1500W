@@ -272,7 +272,7 @@ void bsw_mcal_gpio_init(void){
             if((gc_stGpioCfgParam[i].u16AnalogEnable == 0) && (gc_stGpioCfgParam[i].emGpioNum == AGPIO242_NUM))
             {
                 EALLOW;
-                GpioCtrlRegs.GPHAMSEL.bit.GPIO230 = 0;
+                GpioCtrlRegs.GPHAMSEL.bit.GPIO242 = 0;
                 EDIS;
             }
             else if((gc_stGpioCfgParam[i].u16AnalogEnable == 1) && (gc_stGpioCfgParam[i].emGpioNum == AGPIO242_NUM))

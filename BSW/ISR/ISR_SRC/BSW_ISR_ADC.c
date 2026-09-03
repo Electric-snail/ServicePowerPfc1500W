@@ -107,7 +107,6 @@ void adc_isr_init(void)
 INTERRUPT void adcA1ISR(void)
 {
             float 		f32VinL,		f32VinN,		f32Vpfc,			f32CurInductorAveH, 			f32CurInductorAveL,		f32IinL,		f32IinH;
-            float        f32CalibK,   f32CalibOffset;
             float       f32Duty;
 
             UINT16 	u16PwmCounter;
