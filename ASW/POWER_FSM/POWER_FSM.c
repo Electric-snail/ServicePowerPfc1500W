@@ -4,6 +4,7 @@
  *  Created on: 2022.9.19
  */
 #include "ISR_INC/BSW_ISR_ADC.h"
+#include "HAL_INC/BSW_HAL_CMPSS.H"
 #include "HAL_INC/BSW_HAL_PWM.h"
 #include "HAL/HAL_INC/BSW_HAL_ADC.h"
 #include "HAL/HAL_INC/BSW_HAL_GPIO.h"
@@ -110,7 +111,12 @@ UINT8 power_relay_dither_cond(UINT16 u16TrigEven){
 }
 
 void  power_softstart_in(void) {
-	g_stPwrFsmOut.u16CtrCmd     = 1;
+    unsigned short u16PwmCounter;
+    set_pfc_pwm_duty(0.0f,   u16PwmCounter);
+    clr_vpfc_hw_cmpss_ovp_flag();
+    clr_pfc_drv_deaevt1_flag();
+    pfc_drv_turn_on();
+    g_stPwrFsmOut.u16CtrCmd     = 1;
 	g_u16PwrFsmTimerCnt         = 0;
 	g_stPwrFsmOut.f32VpfcSet    = f32_get_vpfc_raw();
 }
@@ -190,8 +196,25 @@ void  power_fault_in(void) {
 }
 
 void  power_fault_exe(void) {
+	static unsigned short s_u16VinDropCnt = 0;
 	float f32VpfcLpf						= f32_get_vpfc_isr_lpf();
 	g_u16PwrFsmTimerCnt ++;
+
+	if(g_stDiagStatus.unAutoRecvFault.bits.b1VinDrop == 1){
+		/* 计数在201 ms处饱和，用于区分“等于200 ms”和“超过200 ms”。 */
+		if(s_u16VinDropCnt <= 200){
+			s_u16VinDropCnt++;
+		}
+	}else{
+		if(s_u16VinDropCnt > 200){
+			/* 输入恢复后再清除故障；历史故障记录保持不变。 */
+			bsw_mcal_disable_global_int();
+			clr_no_recv_diag_fault();
+			g_u16RestartCnt = 0;
+			bsw_mcal_enable_global_int();
+		}
+		s_u16VinDropCnt = 0;
+	}
 
 	if((u16_get_no_recv_diag() != 0x0000)&&(g_u16RestartCnt < 3)){
 			if(g_u16PwrFsmTimerCnt > 3000){ //1mS * 3000 = 3s{

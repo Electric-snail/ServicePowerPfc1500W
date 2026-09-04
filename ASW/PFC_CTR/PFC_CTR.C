@@ -10,7 +10,7 @@
 #include "ASW_BASIC.H"
 #include "POWER_FSM/POWER_FSM.H"
 #include "MEASURE/MEASURE.h"
-#include "PUBLIC_INC/DC_MATH.H"
+
 
 #define     XCAP_COMP_EN											0
 #define 	 Cx																		2.22e-6
@@ -85,7 +85,7 @@ void 	pfc_controller_init(void){
 		gs_stIacPiGainCtrl.stCoff.f32Kp						= 3.0f;
 		gs_stIacPiGainCtrl.stCoff.f32KiTs					= 0.3f; //1.0f; //20.0f * 8000.0f/ 65000.0f; //0.02f*2*pi*1000/65000.0f
 		g_f32IacKpDc                                        = 0.8f;
-		g_f32IacKiTsDc                                      = 0.00f;
+		g_f32IacKiTsDc                                      = 0.000002f;
 		g_f32IacFeedCoffDc                                  = 0.36f;
 		g_f32IacKpDcLv                                      = 1.2f;
 		g_f32IacKiTsDcLv                                    = 0.0001f;
@@ -97,7 +97,7 @@ void 	pfc_controller_init(void){
 		g_stIacPiGainCtrlGuiKpHv                            = 10.0f;
 		g_stIacPiGainCtrlGuiKiTsHv                          = 0.3f;
 		g_f32FeedCoffGuiHv                                  = 0.8f;
-		gs_stIacPiGainCtrl.stInner.f32Integrate			    = -1.0f;
+		gs_stIacPiGainCtrl.stInner.f32Integrate			    = 0.0f;
 		gs_stIacPiGainCtrl.stInner.f32Err					= 0;
 		gs_f32FeedCoff										= 0.65f;
 		g_stPfcOut.f32Duty									= 0.0f;

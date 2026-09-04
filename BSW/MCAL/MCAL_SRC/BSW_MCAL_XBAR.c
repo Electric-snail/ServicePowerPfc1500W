@@ -202,17 +202,17 @@ void bsw_mcal_xbar_init(void)
 
     for(i = 0;		i < (sizeof(gc_stXbarInputCfgParam)/sizeof( struct XBAR_INPUT_CFG_PARAM)); 		i++)
     {
-    		input_xbar_cfg(&gc_stXbarInputCfgParam[i]);
+    	input_xbar_cfg(&gc_stXbarInputCfgParam[i]);
     }
 
     for(i = 0;		i < (sizeof(gc_stXbarEpwmCfgParam)/sizeof(struct XBAR_EPWM_CFG_PARAM)); 	i++)
     {
-        	epwm_xbar_cfg(&gc_stXbarEpwmCfgParam[i]);
+        epwm_xbar_cfg(&gc_stXbarEpwmCfgParam[i]);
     }
 
     for(i = 0;		i < (sizeof(gc_stXbarOutputCfgParam)/sizeof(struct XBAR_OUTPUT_CFG_PARAM)); 		i++)
     {
-    		output_xbar_cfg(&gc_stXbarOutputCfgParam[i]);
+    	output_xbar_cfg(&gc_stXbarOutputCfgParam[i]);
     }
 
     XbarRegs.XBARCLR1.all = 0xFFFFFFFF;  //Clear all the flag

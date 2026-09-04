@@ -9,11 +9,11 @@
 #include "SVC/FSM/BSW_FSM_CORE.h"
 
 
-#define		PWR_STATUS_STANDBY                    0
-#define       PWR_STATUS_RELAY_DITHER        1
-#define 		PWR_STATUS_SOFTSTART                 2
+#define		    PWR_STATUS_STANDBY                          0
+#define         PWR_STATUS_RELAY_DITHER                     1
+#define 		PWR_STATUS_SOFTSTART                        2
 #define 		PWR_STATUS_RUN                              3
-#define 		PWR_STATUS_FAULT                          4
+#define 		PWR_STATUS_FAULT                            4
 
 #define 		PWR_PRE_CHG_CMP							1
 #define 		PWR_RELAY_DITHER_CMP				2

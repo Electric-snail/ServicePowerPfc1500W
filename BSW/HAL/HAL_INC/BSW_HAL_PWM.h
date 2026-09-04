@@ -22,9 +22,9 @@
 #define     read_pfc_drv_dcaevt2_flag()												    gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFLG.bit.DCAEVT2
 #define     clr_pfc_drv_deaevt2_flag()                                                  do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.DCAEVT2 = 1;EDIS;}while(0)
 
-#define     read_pfc_drv_dcaevt1_flag()												    gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFLG.bit.DCAEVT2
-#define     clr_pfc_drv_deaevt1_flag()                                                  do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.DCAEVT1 = 0;\
-																													gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
+#define     read_pfc_drv_dcaevt1_flag()												    gp_stPwmChannel[PFC_PWM_CHANNEL]->TZFLG.bit.DCAEVT1
+#define     clr_pfc_drv_deaevt1_flag()                                                  do{EALLOW; gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.DCAEVT1 = 1;\
+																						gp_stPwmChannel[PFC_PWM_CHANNEL]->TZCLR.bit.OST = 1;EDIS;}while(0)
 
 #else
 

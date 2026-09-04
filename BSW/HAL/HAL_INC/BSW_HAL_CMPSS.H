@@ -13,9 +13,9 @@
 #include "common/include/F28x_Project.h"
 #include "MCAL_INC/BSW_MCAL_CMPSS.h"
 
-#define     read_vpfc_hw_ovp_flag()					CmpssLite3Regs.COMPSTS.bit.COMPLLATCH
+#define     read_vpfc_hw_cmpss_ovp_flag()					     CmpssLite3Regs.COMPSTS.bit.COMPLLATCH
 
-#define     clr_vpfc_hw_ovp_flag()                      g_stCmpss3.f32LatchOut	= 0
+#define     clr_vpfc_hw_cmpss_ovp_flag()                         do{EALLOW; CmpssLite3Regs.COMPSTSCLR.bit.LLATCHCLR = 1; EDIS;}while(0)
 
 #else
 

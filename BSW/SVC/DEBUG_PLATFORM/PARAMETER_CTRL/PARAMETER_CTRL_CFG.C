@@ -47,11 +47,13 @@ extern    float             g_stIacPiGainCtrlGuiKpHv;
 extern    float             g_stIacPiGainCtrlGuiKiTsHv;
 extern    float             g_f32FeedCoffGuiHv;
 //-----------------------------------------var_name,					var,																		attr,					  def,				  										 min,															max
-REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    		VAR_WR,		     		0,						  										0,																1);
+REG_CFG_ITEM_U16(FAULT_FLAG,					g_u16FaultDetetFlag,						    		VAR_RD,		     		0,						  										0,																1);
+REG_CFG_ITEM_U16(PFC_CTR_CMD,                   g_stPwrFsmOut.u16CtrCmd,                                VAR_RD,                 0,                                                              0,                                                              1);
+
 REG_CFG_ITEM_F32(IAC_REF_RMS,					g_f32IacRmsRef,						    				VAR_RD,		      		0,						  										0,																0.0f);
 REG_CFG_ITEM_F32(OPEN_DUTY,					    g_f32OpenDuty,						    				VAR_WR,		      		0,						  										0,																1.0f);
 //REG_CFG_ITEM_F32(POWER_SET,					g_f32PowerOpenSet,						    			VAR_WR,		      	    0,						  								    	0,																2000.0f);
-REG_CFG_ITEM_F32(VPFC_SET,					    g_f32VpfcTestTarget,						    		VAR_WR,		      		0,						  										0,																450.0f);
+//REG_CFG_ITEM_F32(VPFC_SET,					    g_f32VpfcTestTarget,						    		VAR_WR,		      		0,						  										0,																450.0f);
 REG_CFG_ITEM_F32(VPFC_FILT_DC,			   		gs_stVpfcNotchFilt.stCoff.f32Width0,					VAR_WR,		      		0.001f,			      									        0.00001f,						 							    0.1f);
 REG_CFG_ITEM_F32(VPFC_FILT_AC,			   		gs_stVpfcNotchFilt.stCoff.f32Width1,					VAR_WR,		      		0.0083f,			      								        0.000083f,						 						        0.83f);
 

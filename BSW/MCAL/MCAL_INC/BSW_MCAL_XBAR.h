@@ -209,8 +209,8 @@ struct XBAR_OUTPUT_CFG_PARAM{
 /*--emInputSelect------------------u16OutInvEnable-------------------emXbarEpwmSrc0--------------------emXbarEpwmSrc1----------------emXbarEpwmSrc2-----------------emXbarEpwmSrc3------------*/
 #define EPWM_XBAR_CFG_TAB  \
 {\
-	{XBAR_EPWM_TRIP4,						0,										EPWM_CMPSS3_CTRIPL,			EPWM_SRC_INVALID ,				EPWM_SRC_INVALID ,				EPWM_SRC_INVALID },\
-	{XBAR_EPWM_TRIP5,						0,										EPWM_CMPSS1_CTRIPL,			EPWM_SRC_INVALID ,				EPWM_SRC_INVALID ,				EPWM_SRC_INVALID },\
+	{XBAR_EPWM_TRIP4,						0,						EPWM_CMPSS3_CTRIPL,			EPWM_SRC_INVALID ,				EPWM_SRC_INVALID ,				EPWM_SRC_INVALID },\
+	{XBAR_EPWM_TRIP5,						0,						EPWM_CMPSS1_CTRIPL,			EPWM_SRC_INVALID ,				EPWM_SRC_INVALID ,				EPWM_SRC_INVALID },\
 }
 
 #define INPUT_XBAR_CFG_TAB \

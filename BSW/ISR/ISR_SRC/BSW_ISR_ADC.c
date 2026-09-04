@@ -57,7 +57,7 @@ volatile float                  		g_f32VpfcIsrLpf = 0.0f;
 unsigned short				         g_u16PllFirstStart;
 unsigned short						g_u16LoopWorkMode =  LOOP_INVALID_MODE;
 float										g_f32OpenDuty = 0.0f;
-
+unsigned short                      g_u16TestCnt = 0;
 void adc_isr_init(void)
 {
 /*	gs_stSogi.stCoff.f32Kp = 1.414f;
@@ -214,9 +214,8 @@ INTERRUPT void adcA1ISR(void)
 				 pfc_controller();
 				 f32Duty 		        = f32_get_pwm_duty();
 				 set_pfc_pwm_duty(f32Duty,   u16PwmCounter);
-				 pfc_drv_turn_on();
+				 g_u16TestCnt++;
 			}else{
-		//		BSW_HAL_ALERT_SET();
 				pfc_controller_init();
 				f32Duty 				= 0;
 				 pfc_drv_turn_off();

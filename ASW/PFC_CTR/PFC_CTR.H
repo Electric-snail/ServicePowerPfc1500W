@@ -7,6 +7,7 @@
 
 #ifndef ASW_PFC_CTR_PFC_CTR_H_
 #define ASW_PFC_CTR_PFC_CTR_H_
+#include "PUBLIC_INC/DC_MATH.H"
 
 typedef struct {
 	float f32VinPll;
@@ -15,6 +16,7 @@ typedef struct {
 
 extern PFC_CTR_OUT				g_stPfcOut;
 extern float                    g_f32IacRmsRef;
+extern    PI_GAIN_POS_T                                 gs_stIacPiGainCtrl;
 
 #define             	NOTICH_FILT_ENABLE				TRUE
 #define				f32_get_pwm_duty()             			g_stPfcOut.f32Duty
