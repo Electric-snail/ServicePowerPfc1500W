@@ -15,7 +15,6 @@ Copyright Notice:
 #include "MCAL_INC/BSW_MCAL_GPIO.h"
 #include "DEBUG_PLATFORM/SW_SCOPE/SW_SCOPE.H"
 #include "DEBUG_PLATFORM/PERFORMACE_TEST/PERFORMACE_TEST.H"
-#include "DEBUG_PLATFORM/PARAMETER_CALIB/PARAMETER_CALIB.H"
 #endif
 
 #include "HAL_INC/BSW_HAL_PWM.h"
@@ -34,9 +33,9 @@ ISR_EXE_VAR_ENTITY(adcA1ISR)
 
 #ifndef  DLLX64
 #pragma  CODE_SECTION(adcA1ISR, 					".TI.ramfunc");
-#pragma  DATA_SECTION(g_stAnaPhyRaw, 			".CtrlVariableSector");
+#pragma  DATA_SECTION(g_stAnaPhyRaw, 			    ".CtrlVariableSector");
 //#pragma  DATA_SECTION(gs_stSogi, 					".CtrlVariableSector");
-#pragma  DATA_SECTION(gs_stVpfcNotchFilt, 		".CtrlVariableSector");
+#pragma  DATA_SECTION(gs_stVpfcNotchFilt, 		    ".CtrlVariableSector");
 #pragma  DATA_SECTION(gs_stOrthPll, 				".CtrlVariableSector");
 #endif
 
@@ -174,9 +173,9 @@ INTERRUPT void adcA1ISR(void)
 					#if(NOTICH_FILT_ENABLE == TRUE)
 					//	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
 					//	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT = 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
-						gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT =   f32_get_vin_cos_2omgt();
+						gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT  =   f32_get_vin_cos_2omgt();
 						gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT  =   f32_get_vin_sin_2omgt();
-						gs_stVpfcNotchFilt.stIn.f32In 					 =   g_stAnaPhyRaw.f32Vpfc;
+						gs_stVpfcNotchFilt.stIn.f32In 			=   g_stAnaPhyRaw.f32Vpfc;
 						notch_filter(&gs_stVpfcNotchFilt);
 					#endif
 					//对输入电压进行锁相环

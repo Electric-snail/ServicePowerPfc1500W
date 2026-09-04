@@ -135,6 +135,11 @@ void measure_1ms_task(void)
     if(g_stMeasureOut.stVinPolFrqObj.stOut.u16Type == DC_TYPE){
     	f32Temp = ABSF(f32_get_vin_raw());
     	LPF(g_stMeasureOut.stVinRmsObj.stOut.f32Rms,  f32Temp,     50.0f,  0.001f);
+        g_f32VinRmsCalib = g_stPfcLlcCommOut.stVinCalib.f32K * g_stMeasureOut.stVinRmsObj.stOut.f32Rms + g_stPfcLlcCommOut.stVinCalib.f32Offset;
+
+        f32Temp = f32_get_iin_low_raw();
+        LPF(g_stMeasureOut.stIinRmsObj.stOut.f32Rms,  f32Temp,     50.0f,  0.001f);
+        g_f32IinRmsCalib = g_stPfcLlcCommOut.stIinCalib.f32K * g_stMeasureOut.stIinRmsObj.stOut.f32Rms + g_stPfcLlcCommOut.stIinCalib.f32Offset;
     }
 
 }
