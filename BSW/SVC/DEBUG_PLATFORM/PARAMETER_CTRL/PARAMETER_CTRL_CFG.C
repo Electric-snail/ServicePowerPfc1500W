@@ -110,7 +110,7 @@ REG_CFG_ITEM_F32(IL_FEED_HV,                 g_f32FeedCoffGuiHv,                
 REG_CFG_ITEM_F32(VIN_FRQ,			         g_stMeasureOut. stVinPolFrqObj.stOut.f32Frq,			    VAR_RD,		      	0,			      										 -10000.0f,						 								10000.0f);
 REG_CFG_ITEM_U16(VIN_TYPE,			         g_stMeasureOut. stVinPolFrqObj.stOut.u16Type,			    VAR_RD,		        0xFF,			      										        0,						 							0xFF);
 
-REG_CFG_ITEM_F32(VIN_RMS,			         g_stMeasureOut.stVinRmsObj.stOut.f32Rms,			        VAR_RD,		        0,			      										  -10000.0f,						 							10000.0f);
+REG_CFG_ITEM_F32(VIN_RMS,			         g_f32VinRmsCalib,			                                VAR_RD,		        0,			      										  -10000.0f,						 							10000.0f);
 
 REG_CFG_ITEM_F32(VIN_RMS_FLT,			     g_stMeasureOut.f32VinRmsLpf,			        	        VAR_RD,		        0,			      										 -10000.0f,						 								10000.0f);
 

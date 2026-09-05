@@ -50,11 +50,15 @@ extern void measure_init(void);
 
 extern		MEASURE_OUT_T					    		g_stMeasureOut;
 
+/* Vin/Iin RMS校准结果，供控制、诊断和调试接口统一使用。 */
+extern float g_f32VinRmsCalib;
+extern float g_f32IinRmsCalib;
+
 #define		  f32_get_vin_rms_flt()							g_stMeasureOut.f32VinRmsLpf
-#define		  f32_get_vin_rms()					   			g_stMeasureOut.stVinRmsObj.stOut.f32Rms
+#define		  f32_get_vin_rms()					   			g_f32VinRmsCalib
 
 #define		  f32_get_iin_rms_flt()							g_stMeasureOut.f32IinRmsLpf
-#define       f32_get_iin_rms()					    		g_stMeasureOut.stIinRmsObj.stOut.f32Rms
+#define       f32_get_iin_rms()					    		g_f32IinRmsCalib
 
 #define       f32_get_pin_lpf()								g_stMeasureOut. f32PinLpf
 

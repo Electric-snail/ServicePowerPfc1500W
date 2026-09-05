@@ -17,8 +17,8 @@
 
 void rms_calc(RMS_CALC_OBJ_T *p_stRmsObj){
     float f32Temp;
-    if(p_stRmsObj->stIn.i16Pol != p_stRmsObj->stInner.i16LastPol){ //»»ÏàÁË£»
-        if(p_stRmsObj->stInner.u16N >= AC_MAX_FRQ_CNT){  //Ð¡ÓÚ1/4¸öÖÜÆÚ£¬ÉáÈ¥
+    if(p_stRmsObj->stIn.i16Pol != p_stRmsObj->stInner.i16LastPol){ //æ¢ç›¸äº†ï¼›
+        if(p_stRmsObj->stInner.u16N >= AC_MAX_FRQ_CNT){  //å°äºŽ1/4ä¸ªå‘¨æœŸï¼ŒèˆåŽ»
             p_stRmsObj->stOut.f32Rms = SQRTF(p_stRmsObj->stInner.f32SqartSum / p_stRmsObj->stInner.u16N);
         }
         p_stRmsObj->stInner.u16N             = 0;
@@ -41,8 +41,8 @@ void rms_calc(RMS_CALC_OBJ_T *p_stRmsObj){
 #endif
 
 void average_calc(AVE_CALC_OBJ_T* p_stAveObj) {
-    if (p_stAveObj->stIn.i16Pol != p_stAveObj->stInner.i16LastPol) { //»»ÏàÁË£»
-        if (p_stAveObj->stInner.u16N >= AC_MAX_FRQ_CNT) {  //Ð¡ÓÚ1/4¸öÖÜÆÚ£¬ÉáÈ¥
+    if (p_stAveObj->stIn.i16Pol != p_stAveObj->stInner.i16LastPol) { //æ¢ç›¸äº†ï¼›
+        if (p_stAveObj->stInner.u16N >= AC_MAX_FRQ_CNT) {  //å°äºŽ1/4ä¸ªå‘¨æœŸï¼ŒèˆåŽ»
             p_stAveObj->stOut.f32Ave = p_stAveObj->stInner.f32Sum / p_stAveObj->stInner.u16N;
         }
         p_stAveObj->stInner.u16N        = 0;
@@ -123,6 +123,8 @@ void pol_freq_calc(POL_FRQ_CALC_OBJ_T 	*p_stPolFrqObj){
         }
         if((p_stPolFrqObj->stInner.u16NegN > AC_MIN_FRQ_CNT)	||	(p_stPolFrqObj->stInner.u16PosN > AC_MIN_FRQ_CNT)){
         	p_stPolFrqObj->stOut.u16Type = DC_TYPE;
+			/* ç›´æµè¾“å…¥æ— é¢‘çŽ‡ï¼Œæ¸…é™¤äº¤æµæ£€æµ‹ä¿ç•™å€¼ã€‚ */
+			p_stPolFrqObj->stOut.f32Frq = 0.0f;
         }
 }
 

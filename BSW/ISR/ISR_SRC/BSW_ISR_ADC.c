@@ -56,7 +56,6 @@ volatile float                  		g_f32VpfcIsrLpf = 0.0f;
 unsigned short				         g_u16PllFirstStart;
 unsigned short						g_u16LoopWorkMode =  LOOP_INVALID_MODE;
 float										g_f32OpenDuty = 0.0f;
-unsigned short                      g_u16TestCnt = 0;
 void adc_isr_init(void)
 {
 /*	gs_stSogi.stCoff.f32Kp = 1.414f;
@@ -171,8 +170,6 @@ INTERRUPT void adcA1ISR(void)
 			//对VPFC电压进行滤波处理
 			if( u16_get_vin_type() == AC_TYPE){
 					#if(NOTICH_FILT_ENABLE == TRUE)
-					//	gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT = 0.99995328034455258936414796865385f;   		//Cos(2*pi*100/fs)
-					//	gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT = 0.00966628823119899249250527769323f;   		//Sin(2*pi*100/fs)
 						gs_stVpfcNotchFilt.stCoff.f32Cos1OmegT  =   f32_get_vin_cos_2omgt();
 						gs_stVpfcNotchFilt.stCoff.f32Sin1OmegT  =   f32_get_vin_sin_2omgt();
 						gs_stVpfcNotchFilt.stIn.f32In 			=   g_stAnaPhyRaw.f32Vpfc;
@@ -192,8 +189,6 @@ INTERRUPT void adcA1ISR(void)
 					}
 					gs_stOrthPll.stCoff.f32CosOmegT =  f32_get_vin_cos_omgt();
 					gs_stOrthPll.stCoff.f32SinOmegT =   f32_get_vin_sin_omgt();
-				//	gs_stOrthPll.stCoff.f32CosOmegT =  0.999990539f;
-				//	gs_stOrthPll.stCoff.f32SinOmegT =   0.004488344f;
 					orth_pll_proc_1p(&gs_stOrthPll);
 			}else{
 				gs_stVpfcNotchFilt.stOut.f32Out = g_f32VpfcIsrLpf;
@@ -213,7 +208,6 @@ INTERRUPT void adcA1ISR(void)
 				 pfc_controller();
 				 f32Duty 		        = f32_get_pwm_duty();
 				 set_pfc_pwm_duty(f32Duty,   u16PwmCounter);
-				 g_u16TestCnt++;
 			}else{
 				pfc_controller_init();
 				f32Duty 				= 0;

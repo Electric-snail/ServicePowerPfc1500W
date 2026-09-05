@@ -83,8 +83,9 @@ void  power_standby_exe(void){
 		f32VpfcPrechargeThrd	= 0.85f * 1.414f * f32_get_vin_rms_flt();
 	}
 	f32VpfcLpf	=  f32_get_vpfc_slow_lpf();
-	g_u16PwrFsmTimerCnt++;
 
+	g_u16PwrFsmTimerCnt++;
+    //Delay time must over 100ms
 	if ((g_u16PwrFsmTimerCnt > 800)&&(1 == u16PolRvsFlag)&&(f32VpfcLpf > f32VpfcPrechargeThrd)&&(0x0000 == u16_get_auto_recv_diag())){
 			BSW_HAL_RELAY_ON();
 			u16_clr_fault_flag();
