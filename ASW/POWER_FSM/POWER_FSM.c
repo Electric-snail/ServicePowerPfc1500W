@@ -123,7 +123,7 @@ void  power_softstart_in(void) {
 
 void  power_softstart_exe(void) {
 	float f32VpfcSetTarget = f32_get_vpfc_adjust();
-	g_stPwrFsmOut.f32VpfcSet += 0.2f;
+	g_stPwrFsmOut.f32VpfcSet += 0.1f;
 	if (g_stPwrFsmOut.f32VpfcSet > f32VpfcSetTarget) {
 		g_stPwrFsmOut.f32VpfcSet = f32VpfcSetTarget;
 		if (f32_get_vpfc_raw() > (f32VpfcSetTarget - 10.0f)) {
